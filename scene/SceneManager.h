@@ -38,6 +38,30 @@ struct LineTraceScene
     PID pid;
 };
 
+struct MoveScene
+{
+    int sceneId;
+    int targetDistance;
+    Direction direction;
+    int speed;
+    Color finishColor;
+    PID pid;
+};
+
+struct TrunScene
+{
+    int sceneId;
+    float targetAngle;
+    PID pid;
+};
+
+struct BottleDetectScene
+{
+    int sceneId;
+    Color detectColor;
+};
+
+
 class SceneManager
 {
 public:
