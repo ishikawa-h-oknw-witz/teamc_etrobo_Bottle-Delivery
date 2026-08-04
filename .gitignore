@@ -1,0 +1,33 @@
+# ETロボコン関連
+app
+asp
+*.asp
+currentapp
+*.status
+__race/
+*.log
+log.txt
+*.md5sum
+result.json
+
+# ビルド生成物
+build/
+
+# オブジェクトファイル
+*.o
+*.d
+*.elf
+*.bin
+*.map
+
+# Windows
+*:Zone.Identifier
+Thumbs.db
+Desktop.ini
+
+# VS Code
+.vscode/
+
+# 一時ファイル
+*.tmp
+*.swp
