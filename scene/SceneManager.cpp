@@ -30,9 +30,9 @@ LineTraceScene lineTraceScenes[] =
 
 MoveScene moveScenes[] =
 {
-    {0, 100, Direction::front,  70, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlv青スルー
-    {1, 300, Direction::front, 100, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
-    {1, 300, Direction::back,  100, Color::None, {1.0f, 0.0f, 0.0f}}  // Dlv線まで帰還
+    {0, Direction::front, {30.0f, 70.0f,  30.0f, 100.0f}, 100, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlv青スルー
+    {1, Direction::front, {50.0f, 100.0f, 50.0f, 300.0f}, 300, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
+    {1, Direction::back,  {50.0f, 100.0f, 50.0f, 300.0f}, 300, Color::None, {1.0f, 0.0f, 0.0f}}  // Dlv線まで帰還
 };
 
 TrunScene trunScenes[] =
@@ -86,6 +86,11 @@ bool SceneManager::SceneExecute()
     setParameter(mSceneId);
 
     mDistanceCalculator.reset();
+
+    if (mActionType == ActionType::BottoleDetect)
+    {
+        return mEventDetector->judge();
+    }
     
     while(!mEventDetector->judge())
     {
@@ -96,7 +101,6 @@ bool SceneManager::SceneExecute()
             mLineTraceRunner.run();
             break;
 
-        /*
         case ActionType::Move:
             mGyroTraceRunner.move();
             break;
@@ -104,11 +108,10 @@ bool SceneManager::SceneExecute()
         case ActionType::Turn:
             mGyroTraceRunner.turn();
             break;
-        */
+
         default:
             break;
         }
-        //tslp_tsk(10 * 1000);
     }
 
     // シーン終了
@@ -121,6 +124,7 @@ void SceneManager::setParameter(int sceneId)
     switch(mActionType)
     {
     case ActionType::LineTrace:
+    {
         const LineTraceScene& linetracescene = lineTraceScenes[mSceneId];
 
         // ライントレース
@@ -142,14 +146,54 @@ void SceneManager::setParameter(int sceneId)
             mEventDetector = &mTargetDistanceDetector;
         }
         break;
+    }
+    case ActionType::Move:
+    {
+        const MoveScene& movescene = moveScenes[mSceneId];
 
+        //向き
+        mGyroTraceRunner.setDirection(movescene.direction);
+
+        //台形計算
+        mTrapezoidCalculator.setParameter(movescene.trapezoidParameter);
+
+        //PID
+        mPIDCalculator.setGain(
+            movescene.pid.kp,
+            movescene.pid.ki,
+            movescene.pid.kd);
+        break;
+
+        if (movescene.targetDistance != 0)
+        {
+            mTargetDistanceDetector.setTargetDistance(movescene.targetDistance);
+            mEventDetector = &mTargetDistanceDetector;
+        }
+    }
+    case ActionType::Turn:
+    {
+        const TrunScene& trunscene = trunScenes[mSceneId];
+        
+        //目標角
+        mGyroTraceRunner.setTargetAngle(trunscene.targetAngle);
+
+        //PID
+        mPIDCalculator.setGain(
+            trunscene.pid.kp,
+            trunscene.pid.ki,
+            trunscene.pid.kd);
+        break;
+    }
+    case ActionType::BottoleDetect:
+    {
+        const BottleDetectScene& bottledetectscene = bottleDetectScenes[mSceneId];
         /*
-        case ActionType::Move:
-            mGyroTraceRunner.move();
-            break;
-
-        case ActionType::Turn:
-            mGyroTraceRunner.turn();
-            break;*/
+        if (bottledetectscene.detectColor == Color::Yellow)
+        {
+            m.set(bottledetectscene.detectColor);
+            mEventDetector = &m;
+        }
+        */
+    }
     }
 }
