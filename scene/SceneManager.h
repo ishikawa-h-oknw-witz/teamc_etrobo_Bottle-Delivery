@@ -7,24 +7,13 @@
 #include "IEventDetector.h"
 #include "TargetDistanceDetector.h"
 #include "DistanceCalculator.h"
+#include "BottleDetector.h"
 
 enum class ActionType
 {
     LineTrace,
     Move,
     Turn
-};
-
-enum class Color
-{
-    None,
-    Red,
-    Blue,
-    Yellow,
-    Green,
-    Gray,
-    Black,
-    White
 };
 
 struct LineTraceScene

@@ -2,7 +2,7 @@
 #define BOTTLE_DETECTOR_H
 
 #include "ColorSensor.h"
-#include "SceneManager.h"
+#include "ColorDetector.h"
 
 using namespace spikeapi;
 

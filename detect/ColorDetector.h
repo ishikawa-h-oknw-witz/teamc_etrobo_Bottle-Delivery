@@ -5,6 +5,18 @@
 
 using namespace spikeapi;
 
+enum class Color
+{
+    None,
+    Red,
+    Blue,
+    Yellow,
+    Green,
+    Gray,
+    Black,
+    White
+};
+
 class BasePointDetector
 {
 public:
