@@ -86,6 +86,11 @@ bool SceneManager::SceneExecute()
     setParameter(mSceneId);
 
     mDistanceCalculator.reset();
+
+    if (mActionType == ActionType::BottoleDetect)
+    {
+        return mEventDetector->judge();
+    }
     
     while(!mEventDetector->judge())
     {
@@ -120,6 +125,7 @@ void SceneManager::setParameter(int sceneId)
     switch(mActionType)
     {
     case ActionType::LineTrace:
+    {
         const LineTraceScene& linetracescene = lineTraceScenes[mSceneId];
 
         // ライントレース
@@ -141,8 +147,9 @@ void SceneManager::setParameter(int sceneId)
             mEventDetector = &mTargetDistanceDetector;
         }
         break;
-
+    }
     case ActionType::Move:
+    {
         const MoveScene& movescene = moveScenes[mSceneId];
 
         //向き
@@ -157,12 +164,31 @@ void SceneManager::setParameter(int sceneId)
             movescene.pid.ki,
             movescene.pid.kd);
         break;
-
+    }
     case ActionType::Turn:
+    {
         const TrunScene& trunscene = trunScenes[mSceneId];
         
         //目標角
         mGyroTraceRunner.setTargetAngle(trunscene.targetAngle);
+
+        //PID
+        mPIDCalculator.setGain(
+            trunscene.pid.kp,
+            trunscene.pid.ki,
+            trunscene.pid.kd);
         break;
+    }
+    case ActionType::BottoleDetect:
+    {
+        const BottleDetectScene& bottledetectscene = bottleDetectScenes[mSceneId];
+        /*
+        if (bottledetectscene.detectColor == Color::Yellow)
+        {
+            m.set(bottledetectscene.detectColor);
+            mEventDetector = &m;
+        }
+        */
+    }
     }
 }

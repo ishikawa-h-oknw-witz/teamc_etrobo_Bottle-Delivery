@@ -12,7 +12,8 @@ enum class ActionType
 {
     LineTrace,
     Move,
-    Turn
+    Turn,
+    BottoleDetect
 };
 
 enum class Color
