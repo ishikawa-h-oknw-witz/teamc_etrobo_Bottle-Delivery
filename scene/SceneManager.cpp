@@ -30,9 +30,9 @@ LineTraceScene lineTraceScenes[] =
 
 MoveScene moveScenes[] =
 {
-    {0, Direction::front, {30.0f, 70.0f,  30.0f, 100.0f}, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlv青スルー
-    {1, Direction::front, {50.0f, 100.0f, 50.0f, 300.0f}, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
-    {1, Direction::back,  {50.0f, 100.0f, 50.0f, 300.0f}, Color::None, {1.0f, 0.0f, 0.0f}}  // Dlv線まで帰還
+    {0, Direction::front, {30.0f, 70.0f,  30.0f, 100.0f}, 100, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlv青スルー
+    {1, Direction::front, {50.0f, 100.0f, 50.0f, 300.0f}, 300, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
+    {1, Direction::back,  {50.0f, 100.0f, 50.0f, 300.0f}, 300, Color::None, {1.0f, 0.0f, 0.0f}}  // Dlv線まで帰還
 };
 
 TrunScene trunScenes[] =
@@ -165,9 +165,9 @@ void SceneManager::setParameter(int sceneId)
             movescene.pid.kd);
         break;
 
-        if (movescene.trapezoidParameter.totalDistance == 0.0f)
+        if (movescene.targetDistance != 0)
         {
-            mTargetDistanceDetector.setTargetDistance(movescene.trapezoidParameter.totalDistance);
+            mTargetDistanceDetector.setTargetDistance(movescene.targetDistance);
             mEventDetector = &mTargetDistanceDetector;
         }
     }
