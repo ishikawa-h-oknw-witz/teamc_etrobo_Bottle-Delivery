@@ -1,23 +1,31 @@
-#ifndef COLOR_DETECTOR_H
-#define COLOR_DETECTOR_H
-
 #pragma once
 
-#include <initializer_list>
 #include "ColorSensor.h"
-
-using namespace spikeapi;
 
 enum class Color
 {
     None,
+    Black,
+    White,
+    Gray,
     Red,
-    Blue,
     Yellow,
     Green,
-    Gray,
-    Black,
-    White
+    Blue
+};
+
+struct ColorHSVRange
+{
+    Color color;
+
+    int hMin;
+    int hMax;
+
+    int sMin;
+    int sMax;
+
+    int vMin;
+    int vMax;
 };
 
 class ColorDetector
@@ -25,10 +33,8 @@ class ColorDetector
 public:
     ColorDetector(ColorSensor& sensor);
 
-    bool judgeColor(std::initializer_list<Color> targetColors);
+    Color detect();
+
 private:
     ColorSensor& mColorSensor;
-    Color detectColor();
 };
-
-#endif

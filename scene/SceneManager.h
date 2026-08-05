@@ -6,7 +6,7 @@
 #include "TrapezoidCalculator.h"
 #include "IEventDetector.h"
 #include "TargetDistanceDetector.h"
-#include "ColorDetector.h"
+#include "TargetColorDetector.h"
 #include "DistanceCalculator.h"
 #include "ColorDetector.h"
 
