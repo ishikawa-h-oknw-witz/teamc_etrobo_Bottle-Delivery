@@ -41,9 +41,8 @@ struct LineTraceScene
 struct MoveScene
 {
     int sceneId;
-    int targetDistance;
     Direction direction;
-    int speed;
+    TrapezoidParameter trapezoidParameter;
     Color finishColor;
     PID pid;
 };
