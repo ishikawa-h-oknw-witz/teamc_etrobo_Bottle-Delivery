@@ -112,7 +112,6 @@ bool SceneManager::SceneExecute()
         default:
             break;
         }
-        tslp_tsk(10 * 1000);
     }
 
     // シーン終了
