@@ -1,19 +1,34 @@
-#ifndef BASE_POINT_DETECTOR_H
-#define BASE_POINT_DETECTOR_H
+#ifndef COLOR_DETECTOR_H
+#define COLOR_DETECTOR_H
 
+#pragma once
+
+#include <initializer_list>
 #include "ColorSensor.h"
 
 using namespace spikeapi;
 
-class BasePointDetector
+enum class Color
+{
+    None,
+    Red,
+    Blue,
+    Yellow,
+    Green,
+    Gray,
+    Black,
+    White
+};
+
+class ColorDetector
 {
 public:
-    BasePointDetector(ColorSensor& sensor);
+    ColorDetector(ColorSensor& sensor);
 
-    bool detect(BasePointColor targetColor);
+    bool judgeColor(std::initializer_list<Color> targetColors);
 private:
     ColorSensor& mColorSensor;
-    BasePointColor judgeColor(hsv);
+    Color detectColor();
 };
 
 #endif
