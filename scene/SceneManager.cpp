@@ -164,6 +164,12 @@ void SceneManager::setParameter(int sceneId)
             movescene.pid.ki,
             movescene.pid.kd);
         break;
+
+        if (movescene.trapezoidParameter.totalDistance == 0.0f)
+        {
+            mTargetDistanceDetector.setTargetDistance(movescene.trapezoidParameter.totalDistance);
+            mEventDetector = &mTargetDistanceDetector;
+        }
     }
     case ActionType::Turn:
     {
