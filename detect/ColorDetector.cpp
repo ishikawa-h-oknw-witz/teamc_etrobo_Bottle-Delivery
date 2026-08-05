@@ -1,45 +1,66 @@
-#include "BasePointDetector.h"
+#include "ColorDetector.h"
 
 //コンストラクタ　ポート情報を持ったカラーセンサクラスのインスタンス化を受け取るために参照渡し
-BasePointDetector::BasePointDetector(
+ColorDetector::ColorDetector(
     ColorSensor& sensor)
     : mColorSensor(sensor)
 {
 }
 
-//基準点検知
-bool BasePointDetector::detect(BasePointColor targetColor)
+//目標色判定
+bool ColorDetector::judgeColor(const std::vector<Color>& targetColors)
 {
-    // カラーセンサ取得
+    Color detected = detectColor();
 
-    // 色判定
-
-    //targetcolorと一致するか
-
-    return ;
+    for (Color color : targetColors)
+    {
+        if (detected == color)
+        {
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 //色判定
-BasePointColor BasePointDetector::judgeColor(
-    HSV hsv)
+Color ColorDetector::detectColor()
 {
-    if(/* 赤のHSV範囲 */)
+    ColorSensor::HSV hsv;
+    mColorSensor.getColor(hsv);
+
+    if (hsv.v <= 20)
     {
-        return BasePointColor::RED;
+        return Color::Black;
     }
 
-    if(/* 青のHSV範囲 */)
+    if (hsv.s <= 20)
     {
-        return BasePointColor::BLUE;
+        if (hsv.v >= 90)
+        {
+            return Color::White;
+        }
+
+        return Color::Gray;
     }
 
-    if(/* 黄のHSV範囲 */)
+    if (hsv.h >= 30 &&
+        hsv.h < 70)
     {
-        return BasePointColor::YELLOW;
+        return Color::Yellow;
     }
 
-    if(/* 緑のHSV範囲 */)
+    if (hsv.h >= 70 &&
+        hsv.h < 160)
     {
-        return BasePointColor::GREEN;
+        return Color::Green;
     }
+
+    if (hsv.h >= 160 && 
+        hsv.h > 280)
+    {
+        return Color::Blue;
+    }
+
+    return Color::Red;
 }

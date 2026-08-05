@@ -8,6 +8,7 @@
 #include "TargetDistanceDetector.h"
 #include "ColorDetector.h"
 #include "DistanceCalculator.h"
+#include "ColorDetector.h"
 
 enum class ActionType
 {
