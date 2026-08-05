@@ -6,25 +6,15 @@
 #include "TrapezoidCalculator.h"
 #include "IEventDetector.h"
 #include "TargetDistanceDetector.h"
+#include "ColorDetector.h"
 #include "DistanceCalculator.h"
 
 enum class ActionType
 {
     LineTrace,
     Move,
-    Turn
-};
-
-enum class Color
-{
-    None,
-    Red,
-    Blue,
-    Yellow,
-    Green,
-    Gray,
-    Black,
-    White
+    Turn,
+    BottoleDetect
 };
 
 struct LineTraceScene
@@ -41,9 +31,9 @@ struct LineTraceScene
 struct MoveScene
 {
     int sceneId;
-    int targetDistance;
     Direction direction;
-    int speed;
+    TrapezoidParameter trapezoidParameter;
+    int targetDistance;
     Color finishColor;
     PID pid;
 };
