@@ -46,7 +46,7 @@ struct MoveScene
     PID pid;
 };
 
-struct TrunScene
+struct TurnScene
 {
     int sceneId;
     float targetAngle;
