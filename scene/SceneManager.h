@@ -18,6 +18,12 @@ enum class ActionType
     BottoleDetect
 };
 
+enum class CalibrationData
+{
+    BlackWhiteCenter,
+    LineCenter
+};
+
 struct LineTraceScene
 {
     int sceneId;
@@ -25,7 +31,7 @@ struct LineTraceScene
     int speed;
     RunnerEdge edge;
     Color finishColor;
-    int targetReflection;
+    CalibrationData targetSensorValue;
     PID pid;
 };
 

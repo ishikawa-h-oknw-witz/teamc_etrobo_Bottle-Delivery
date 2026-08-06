@@ -129,8 +129,24 @@ void main_task(intptr_t exinf)
     logger.init();
     sta_cyc(LOGGER_TASK_CYC);
 
-    //フォースセンサボタン押下待ち
+    // 1回目の押下
     while (!forceSensor.isTouched());
+    tslp_tsk(20 * 1000);
+    while (forceSensor.isTouched());
+
+    lineTraceRunner.calibrateTargetReflection(0);
+
+    // 2回目の押下
+    while (!forceSensor.isTouched());
+    tslp_tsk(20 * 1000);
+    while (forceSensor.isTouched());
+
+    lineTraceRunner.calibrateTargetReflection(1);
+
+    // 3回目の押下（スタート）
+    while (!forceSensor.isTouched());
+    tslp_tsk(20 * 1000);
+    while (forceSensor.isTouched());
 
     int SceneNum = 0;
     int skipCount = 0;
