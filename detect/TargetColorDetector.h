@@ -11,7 +11,7 @@ public:
 
     bool judge() override;
 
-    void setTargetColors(const Color targetColors[], int num);
+    void setTargetColors(const Color targetColors[]);
 
 private:
     ColorDetector& mColorDetector;

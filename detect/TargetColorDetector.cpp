@@ -9,11 +9,11 @@ TargetColorDetector::TargetColorDetector(
 }
 
 void TargetColorDetector::setTargetColors(
-    const Color targetColors[], int num)
+    const Color targetColors[])
 {
-    mTargetColorNum = num;
+    mTargetColorNum = 7;
 
-    for (int i = 0; i < num; i++)
+    for (int i = 0; i < 7; i++)
     {
         mTargetColors[i] = targetColors[i];
     }
