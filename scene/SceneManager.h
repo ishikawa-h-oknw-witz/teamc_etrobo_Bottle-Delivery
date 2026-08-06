@@ -16,7 +16,8 @@ enum class ActionType
     LineTrace,
     Move,
     Turn,
-    BottoleDetect
+    BottoleDetect,
+    Stop
 };
 
 enum class CalibrationData
@@ -88,7 +89,7 @@ private:
     TargetDistanceDetector& mTargetDistanceDetector;
     TargetAngleDetector& mTargetAngleDetector;
     TargetColorDetector& mTargetColorDetector;
-
+    IMU mImu;
     int mSceneId;
     ActionType mActionType;
     IEventDetector* mEventDetector;

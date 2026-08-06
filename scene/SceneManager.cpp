@@ -90,6 +90,7 @@ void SceneManager::setActionType(ActionType actiontype)
 
 bool SceneManager::SceneExecute()
 {
+    mImu.resetHeading();
     setParameter(mSceneId);
 
     mDistanceCalculator.reset();
@@ -97,6 +98,12 @@ bool SceneManager::SceneExecute()
     if (mActionType == ActionType::BottoleDetect)
     {
         return mEventDetector->judge();
+    }
+
+    if (mActionType == ActionType::Stop)
+    {
+        mGyroTraceRunner.stop();
+        return true;
     }
     
     while(!mEventDetector->judge())
@@ -225,5 +232,7 @@ void SceneManager::setParameter(int sceneId)
 
         break;
     }
+    default:
+        break;
     }
 }
