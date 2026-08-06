@@ -23,7 +23,7 @@ LineTraceScene lineTraceScenes[] =
     {15,  100, 100, RunnerEdge::LeftEdge,  Color::None, 50, {0.3f, 0.0f, 0.4f} }, // Dlv行き青スルー
     {16, 1000, 100, RunnerEdge::LeftEdge,  Color::None, 50, {0.3f, 0.0f, 0.4f} }, // Dlv直線1
     {17,  200,  30, RunnerEdge::LeftEdge,  Color::None, 50, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ3
-    {18,    0, 100, RunnerEdge::LeftEdge,  Color::Blue, 50, {0.3f, 0.0f, 0.4f} }, // Dlv青まで
+    {18,    0, 100, RunnerEdge::LeftEdge,  Color::Blue, 50, {0.3f, 0.0f, 0.4f} }, // Dlv行き青まで
     {20,  100, 100, RunnerEdge::RightEdge, Color::None, 50, {0.3f, 0.0f, 0.4f} }, // Dlv帰り青スルー
     {21,  400, 100, RunnerEdge::RightEdge, Color::None, 50, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線1
     {22,  300,  30, RunnerEdge::RightEdge, Color::None, 50, {0.6f, 0.0f, 0.4f} }, // Dlv帰還カーブ1
@@ -32,8 +32,8 @@ LineTraceScene lineTraceScenes[] =
 
 MoveScene moveScenes[] =
 {
-    {0, Direction::front, {30.0f, 70.0f,  30.0f, 100.0f}, 100, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlv青スルー
-    {1, Direction::front, {50.0f, 100.0f, 50.0f, 300.0f}, 300, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
+    //{0, Direction::front, {30.0f, 70.0f,  30.0f, 100.0f}, 100, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlv青スルー
+    {0, Direction::front, {50.0f, 100.0f, 50.0f, 300.0f}, 300, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
     {1, Direction::back,  {50.0f, 100.0f, 50.0f, 300.0f}, 300, Color::None, {1.0f, 0.0f, 0.0f}}  // Dlv線まで帰還
 };
 

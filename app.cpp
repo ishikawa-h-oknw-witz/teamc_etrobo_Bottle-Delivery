@@ -54,65 +54,65 @@ struct SceneOrder
 
 SceneOrder LAP[] =
 {
-    { 0,  0,  ActionType::LineTrace},
-    { 1,  1,  ActionType::LineTrace},
-    { 2,  2,  ActionType::LineTrace},
-    { 3,  3,  ActionType::LineTrace},
-    { 4,  4,  ActionType::LineTrace},
-    { 5,  5,  ActionType::LineTrace},
-    { 6,  6,  ActionType::LineTrace},
-    { 7,  7,  ActionType::LineTrace},
-    { 8,  8,  ActionType::LineTrace},
-    { 9,  9,  ActionType::LineTrace},
-    {10, 10,  ActionType::LineTrace},
-    {11, 11,  ActionType::LineTrace},
-    {12, 12,  ActionType::LineTrace}
+    { 0,  0,  ActionType::LineTrace}, // Lap直線1
+    { 1,  1,  ActionType::LineTrace}, // Lapカーブ1-1
+    { 2,  2,  ActionType::LineTrace}, // Lapカーブ1-2
+    { 3,  3,  ActionType::LineTrace}, // Lapカーブ1-3
+    { 4,  4,  ActionType::LineTrace}, // Lap直線2
+    { 5,  5,  ActionType::LineTrace}, // Lapカーブ2-1
+    { 6,  6,  ActionType::LineTrace}, // Lapカーブ2-2
+    { 7,  7,  ActionType::LineTrace}, // Lapカーブ2-3
+    { 8,  8,  ActionType::LineTrace}, // Lap直線3
+    { 9,  9,  ActionType::LineTrace}, // Lapカーブ3
+    {10, 10,  ActionType::LineTrace}, // Lap蛇行1
+    {11, 11,  ActionType::LineTrace}, // Lap蛇行2
+    {12, 12,  ActionType::LineTrace}  // Lap直線4
 };
 
 SceneOrder DetectBottleColor[] =
 {
-    {0, 0, ActionType::BottoleDetect},
-    {1, 1, ActionType::BottoleDetect},
-    {2, 2, ActionType::BottoleDetect}
+    {0, 0, ActionType::BottoleDetect}, //黄ボトル検知
+    {1, 1, ActionType::BottoleDetect}, //青ボトル検知
+    {2, 2, ActionType::BottoleDetect}  //赤ボトル検知
 
 };
 
 SceneOrder EnterZone[] =
 {
-    {0, 13, ActionType::LineTrace},
-    {1, 14, ActionType::LineTrace},
-    {2, 15, ActionType::LineTrace},
-    {3, 16, ActionType::LineTrace},
-    {4, 17, ActionType::LineTrace},
-    {5, 18, ActionType::LineTrace}
+    {0, 13, ActionType::LineTrace}, // Dlvカーブ1
+    {1, 14, ActionType::LineTrace}, // Dlvカーブ2
+    {2, 15, ActionType::LineTrace}, // Dlv行き青スルー
+    {3, 16, ActionType::LineTrace}, // Dlv直線1
+    {4, 17, ActionType::LineTrace}, // Dlvカーブ3
+    {5, 18, ActionType::LineTrace}  // Dlv青まで
 };
 
 SceneOrder MoveZone[] =
 {
-    {0, 15, ActionType::LineTrace},
-    {1, 18, ActionType::LineTrace}
+    {0, 15, ActionType::LineTrace}, // Dlv行き青スルー
+    {1, 18, ActionType::LineTrace}  // Dlv行き青まで
 };
 
 SceneOrder CarryZone[] =
 {
-    {0,  0, ActionType::Turn},
-    {1,  0, ActionType::Move},
-    {2,  1, ActionType::Move},
-    {3,  0, ActionType::Turn},
-    {4, 20, ActionType::LineTrace}
+    {0,  0, ActionType::Turn},     //右に90°回転
+    {1,  0, ActionType::Move},     // Dlvエリアまで
+    {2,  1, ActionType::Move},     // Dlv線まで帰還
+    {3,  0, ActionType::Turn},     //右に90°回転
+    {4, 20, ActionType::LineTrace} // Dlv帰り青スルー
 };
 
 SceneOrder ReturnZone[] =
 {
-    {0, 20, ActionType::LineTrace},
-    {1, 23, ActionType::LineTrace}
+    {0, 20, ActionType::LineTrace}, // Dlv帰り青スルー
+    {1, 23, ActionType::LineTrace}  // Dlv帰還青まで
 };
 
 SceneOrder EnterRally[] =
 {
-    {0, 21, ActionType::LineTrace},
-    {1, 22, ActionType::LineTrace},
-    {2, 23, ActionType::LineTrace}
+    {0, 21, ActionType::LineTrace}, // Dlv帰還直線1
+    {1, 22, ActionType::LineTrace}, // Dlv帰還カーブ1
+    {2, 23, ActionType::LineTrace}  // Dlv帰還青まで
 };
 
 /* ログタスク */
@@ -137,6 +137,8 @@ void main_task(intptr_t exinf)
     armController.moveArmDown();
 
     //メインループ10msec周期
+
+    //LAP
     while(true)
     {
         const SceneOrder& lap = LAP[SceneNum];
@@ -157,6 +159,8 @@ void main_task(intptr_t exinf)
 
     leftWheel.stop();
     rightWheel.stop();
+
+    //ボトル色検知
     armController.moveArmUp();
 
     const char* colorName[] = {"黄", "青", "赤"};
@@ -178,6 +182,7 @@ void main_task(intptr_t exinf)
 
     armController.moveArmDown();
 
+    //ゾーン手前青まで
     SceneNum = 0;
 
     while (true)
@@ -198,6 +203,7 @@ void main_task(intptr_t exinf)
         }
     }
 
+    //青スキップ
     SceneNum = 0;
 
     for (int skip = 0; skip < skipCount; skip++)
@@ -221,6 +227,7 @@ void main_task(intptr_t exinf)
         }
     }
 
+    //ボトル設置
     SceneNum = 0;
 
     while (true)
@@ -241,6 +248,7 @@ void main_task(intptr_t exinf)
         }
     }
 
+    //帰還時青スキップ
     SceneNum = 0;
 
     for (int skip = 0; skip < skipCount; skip++)
@@ -264,6 +272,7 @@ void main_task(intptr_t exinf)
         }
     }
 
+    //ラリーへ
     SceneNum = 0;
 
     while (true)
