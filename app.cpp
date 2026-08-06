@@ -159,6 +159,8 @@ void main_task(intptr_t exinf)
 
     leftWheel.stop();
     rightWheel.stop();
+    tslp_tsk(100*1000);
+    armController.moveArmUp();
 
     //ボトル色検知
     armController.moveArmUp();
