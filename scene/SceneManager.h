@@ -57,7 +57,7 @@ struct TurnScene
 struct BottleDetectScene
 {
     int sceneId;
-    Color detectColor;
+    Color detectColor[7];
 };
 
 

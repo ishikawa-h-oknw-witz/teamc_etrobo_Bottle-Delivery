@@ -45,9 +45,9 @@ TurnScene turnScenes[] =
 
 BottleDetectScene bottleDetectScenes[] =
 {
-    {0, Color::Yellow}, //黄ボトル検知
-    {1, Color::Blue  }, //青ボトル検知
-    {2, Color::Red   }  //赤ボトル検知
+    {0, {Color::Yellow}}, //黄ボトル検知
+    {1, {Color::Blue}  }, //青ボトル検知
+    {2, {Color::Red}   }  //赤ボトル検知
 };
 
 //コンストラクタ
@@ -236,8 +236,8 @@ void SceneManager::setParameter(int sceneId)
     case ActionType::BottoleDetect:
     {
         const BottleDetectScene& bottledetectscene = bottleDetectScenes[mSceneId];
-        Color targetColors[] = { bottledetectscene.detectColor };
-        mTargetColorDetector.setTargetColors(targetColors, 1);
+    
+        mTargetColorDetector.setTargetColors(bottledetectscene.detectColor);
         mEventDetector = &mTargetColorDetector;
 
         break;
