@@ -18,16 +18,16 @@ LineTraceScene lineTraceScenes[] =
     {11,  900,  80, RunnerEdge::RightEdge, Color::None, CalibrationData::BlackWhiteCenter, {0.5f, 0.0f, 0.4f} }, // Lap蛇行2
     {12, 1100, 100, RunnerEdge::RightEdge, Color::None, CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.4f} }, // Lap直線4
     //{13,    0,  70, RunnerEdge::RightEdge, Color::None, 20, {0.4f, 0.0f, 0.4f} }, // Dlvボトルまで
-    {13,  800,  70, RunnerEdge::LeftEdge,  Color::None, CalibrationData::BlackWhiteCenter, 50, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ1
-    {14,  200,  30, RunnerEdge::LeftEdge,  Color::None, CalibrationData::BlackWhiteCenter, 50, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ2
-    {15,  100, 100, RunnerEdge::LeftEdge,  Color::None, CalibrationData::BlackWhiteCenter, 50, {0.3f, 0.0f, 0.4f} }, // Dlv行き青スルー
-    {16, 1000, 100, RunnerEdge::LeftEdge,  Color::None, CalibrationData::BlackWhiteCenter, 50, {0.3f, 0.0f, 0.4f} }, // Dlv直線1
-    {17,  200,  30, RunnerEdge::LeftEdge,  Color::None, CalibrationData::BlackWhiteCenter, 50, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ3
-    {18,    0, 100, RunnerEdge::LeftEdge,  Color::Blue, CalibrationData::BlackWhiteCenter, 50, {0.3f, 0.0f, 0.4f} }, // Dlv行き青まで
-    {20,  100, 100, RunnerEdge::RightEdge, Color::None, CalibrationData::BlackWhiteCenter, 50, {0.3f, 0.0f, 0.4f} }, // Dlv帰り青スルー
-    {21,  400, 100, RunnerEdge::RightEdge, Color::None, CalibrationData::BlackWhiteCenter, 50, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線1
-    {22,  300,  30, RunnerEdge::RightEdge, Color::None, CalibrationData::BlackWhiteCenter, 50, {0.6f, 0.0f, 0.4f} }, // Dlv帰還カーブ1
-    {23,    0, 100, RunnerEdge::RightEdge, Color::Blue, CalibrationData::BlackWhiteCenter, 50, {0.3f, 0.0f, 0.4f} }  // Dlv帰還青まで
+    {13,  800,  70, RunnerEdge::LeftEdge,  Color::None, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ1
+    {14,  200,  30, RunnerEdge::LeftEdge,  Color::None, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ2
+    {15,  100, 100, RunnerEdge::LeftEdge,  Color::None, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv行き青スルー
+    {16, 1000, 100, RunnerEdge::LeftEdge,  Color::None, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv直線1
+    {17,  200,  30, RunnerEdge::LeftEdge,  Color::None, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ3
+    {18,    0, 100, RunnerEdge::LeftEdge,  Color::Blue, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv行き青まで
+    {20,  100, 100, RunnerEdge::RightEdge, Color::None, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰り青スルー
+    {21,  400, 100, RunnerEdge::RightEdge, Color::None, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線1
+    {22,  300,  30, RunnerEdge::RightEdge, Color::None, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlv帰還カーブ1
+    {23,    0, 100, RunnerEdge::RightEdge, Color::Blue, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }  // Dlv帰還青まで
 };
 
 MoveScene moveScenes[] =
