@@ -23,15 +23,17 @@ public:
         ColorSensor& colorSensor,
         PIDCalculator& pidController);
 
-    void calibrateTargetReflection();
+    void calibrateTargetReflection(int index);
 
-    void calibrateTargetValue();
+    void calibrateTargetValue(int index);
 
-    int getTargetSensorValue() const;
+    int getTargetSensorValue(int index) const;
 
     void setBaseSpeed(int speed);
 
     void setEdge(RunnerEdge edge);
+
+    void setTargetSensorValue(int targetSensorValue);
 
     void run();
 
@@ -53,6 +55,9 @@ private:
     int mBaseSpeed;
 
     RunnerEdge mEdge = RunnerEdge::RightEdge;
+
+    static const int CALIBRATION_NUM = 2;
+    int mTargetSensorValues[CALIBRATION_NUM];
 };
 
 #endif

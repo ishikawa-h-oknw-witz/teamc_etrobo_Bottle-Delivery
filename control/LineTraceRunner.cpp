@@ -17,22 +17,20 @@ LineTraceRunner::LineTraceRunner(
 {
 }
 
-void LineTraceRunner::calibrateTargetReflection()
+void LineTraceRunner::calibrateTargetReflection(int index)
 {
     int sum = 0;
-    int reflection = 0;
 
     for (int i = 0; i < 10; i++)
     {
-        reflection = mColorSensor.getReflection();
-        sum += reflection;
-        tslp_tsk(10*1000);   // 10ms待機
+        sum += mColorSensor.getReflection();
+        tslp_tsk(10 * 1000);
     }
 
-    mTargetSensorValue = sum / 10;
+    mTargetSensorValues[index] = sum / 10;
 }
 
-void LineTraceRunner::calibrateTargetValue()
+void LineTraceRunner::calibrateTargetValue(int index)
 {
     int sum = 0;
     ColorSensor::HSV hsv;
@@ -44,12 +42,12 @@ void LineTraceRunner::calibrateTargetValue()
         tslp_tsk(10*1000);   // 10ms待機
     }
 
-    mTargetSensorValue = sum / 10;
+    mTargetSensorValues[index] = sum / 10;
 }
 
-int LineTraceRunner::getTargetSensorValue() const
+int LineTraceRunner::getTargetSensorValue(int index) const
 {
-    return mTargetSensorValue;
+    return mTargetSensorValues[index];
 }
 
 void LineTraceRunner::setBaseSpeed(int speed)
@@ -60,6 +58,11 @@ void LineTraceRunner::setBaseSpeed(int speed)
 void LineTraceRunner::setEdge(RunnerEdge edge)
 {
     mEdge = edge;
+}
+
+void LineTraceRunner::setTargetSensorValue(int targetSensorValue)
+{
+    mTargetSensorValue = targetSensorValue;
 }
 
 void LineTraceRunner::run()
