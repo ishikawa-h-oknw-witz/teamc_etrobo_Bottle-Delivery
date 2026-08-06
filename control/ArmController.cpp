@@ -26,35 +26,24 @@ void ArmController::resetAngle()
 
 void ArmController::moveArm(int angle)
 {
-    // 上限チェック
-    if(angle > mMaxAngle)
-    {
-        angle = mMaxAngle;
-    }
-
-    int currentAngle = mArmMotor.getCount();
-
-    while(currentAngle < angle)
-    {
-        mArmMotor.setPower(30);
-        currentAngle = mArmMotor.getCount();
-    }
-
-    while(currentAngle > angle)
-    {
-        mArmMotor.setPower(-30);
-        currentAngle = mArmMotor.getCount();
-    }
+    mArmMotor.setPower(100);
+    tslp_tsk(2000*1000);
 
     mArmMotor.stop();
 }
 
 void ArmController::moveArmDown()
 {
-    moveArm(0);
+     mArmMotor.setPower(-50);
+    tslp_tsk(600*1000);
+
+    mArmMotor.stop();
 }
 
 void ArmController::moveArmUp()
 {
-    moveArm(mMaxAngle);
+     mArmMotor.setPower(50);
+    tslp_tsk(500*1000);
+
+    mArmMotor.stop();
 }

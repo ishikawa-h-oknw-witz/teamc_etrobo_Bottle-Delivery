@@ -6,7 +6,7 @@
 #include "TrapezoidCalculator.h"
 #include "IEventDetector.h"
 #include "TargetDistanceDetector.h"
-#include "ColorDetector.h"
+#include "TargetColorDetector.h"
 #include "DistanceCalculator.h"
 #include "ColorDetector.h"
 
@@ -61,8 +61,9 @@ public:
         GyroTraceRunner& gyroTraceRunner,
         PIDCalculator& pidCalculator,
         TrapezoidCalculator& trapezoidCalculator,
+        DistanceCalculator& distanceCalculator,
         TargetDistanceDetector& targetDistanceDetector,
-        DistanceCalculator& distanceCalculator);
+        TargetColorDetector& targetColorDetector);
 
     int getSceneID();
     void setSceneID(int sceneid);
@@ -75,8 +76,9 @@ private:
     GyroTraceRunner& mGyroTraceRunner;
     PIDCalculator& mPIDCalculator;
     TrapezoidCalculator& mTrapezoidCalculator;
-    TargetDistanceDetector& mTargetDistanceDetector;
     DistanceCalculator& mDistanceCalculator;
+    TargetDistanceDetector& mTargetDistanceDetector;
+    TargetColorDetector& mTargetColorDetector;
 
     int mSceneId;
     ActionType mActionType;

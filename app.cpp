@@ -37,8 +37,10 @@ LineTraceRunner lineTraceRunner(leftWheel, rightWheel, colorSensor, pidCalculato
 GyroTraceRunner gyroTraceRunner(leftWheel, rightWheel, distanceCalculator, pidCalculator, trapezoidCalculator);
 ArmController armController(ArmMotor);
 
+ColorDetector colorDetector(colorSensor);
 TargetDistanceDetector targetDistanceDetector(distanceCalculator);
-SceneManager sceneManager(lineTraceRunner, gyroTraceRunner, pidCalculator, trapezoidCalculator, targetDistanceDetector, distanceCalculator);
+TargetColorDetector targetColorDetector(colorDetector);
+SceneManager sceneManager(lineTraceRunner, gyroTraceRunner, pidCalculator, trapezoidCalculator, distanceCalculator, targetDistanceDetector, targetColorDetector);
 
 Logger logger(colorSensor, leftWheel, rightWheel);
 /* インスタンス生成ここまで */
@@ -64,6 +66,7 @@ void main_task(intptr_t exinf)
     ColorSensor::HSV hsv;
 
     int SeanID = 0;
+    armController.moveArmDown();
 
     //メインループ10msec周期
     while(true)
@@ -71,30 +74,13 @@ void main_task(intptr_t exinf)
         //HSV取得
         colorSensor.getHSV(hsv);
 
-        armController.setMaxAngle(90);
-        armController.moveArmUp();
-        tslp_tsk(3000*1000);
-        //armController.moveArmDown();
-
-        /*sceneManager.setSceneID(SeanID);
+        sceneManager.setActionType(ActionType::LineTrace);
+        sceneManager.setSceneID(SeanID);
         Logger::printf("SeanID=%d", SeanID);
         if(sceneManager.SceneExecute())
         {
             SeanID++;
-        }*/
-
-        // 青検知
-        if (hsv.h >= 200 && hsv.h <= 260 &&
-            hsv.s >= 50 &&
-            hsv.v >= 20)
-        {
-            Logger::printf("青検知");
-            leftWheel.stop();
-            rightWheel.stop();
-            break;
         }
-        Logger::printf("ループ");
-        //tslp_tsk(10 * 1000);
 
         if (SeanID > 12){
             break;
@@ -103,6 +89,42 @@ void main_task(intptr_t exinf)
 
     leftWheel.stop();
     rightWheel.stop();
+    armController.moveArmUp();
+
+    sceneManager.setActionType(ActionType::BottoleDetect);
+
+    const char* colorName[] = {"黄", "青", "赤"};
+
+    for (int sceneid = 0; sceneid < 3; sceneid++)
+    {
+        sceneManager.setSceneID(sceneid);
+
+        if (sceneManager.SceneExecute())
+        {
+            Logger::printf("%s", colorName[sceneid]);
+            break;
+        }
+    }
+
+    armController.moveArmDown();
+
+    while (true)
+    {
+        sceneManager.setActionType(ActionType::LineTrace);
+        sceneManager.setSceneID(SeanID);
+        Logger::printf("SeanID=%d", SeanID);
+        if(sceneManager.SceneExecute())
+        {
+            SeanID++;
+        }
+
+        if (SeanID > 17){
+            break;
+        }
+    }
+
+    Logger::printf("終了");
+
     ext_tsk(); 
 }
 

@@ -1,66 +1,37 @@
 #include "ColorDetector.h"
+#include "Logger.h"
 
-//コンストラクタ　ポート情報を持ったカラーセンサクラスのインスタンス化を受け取るために参照渡し
-ColorDetector::ColorDetector(
-    ColorSensor& sensor)
+static constexpr ColorHSVRange mColorHSVRanges[] =
+{
+    { Color::Red,      0,29, 21,100,21,100 },
+    { Color::Red,    280,360,21,100,21,100 },
+    { Color::Blue,   160,279,21,100,21,100 },
+    { Color::Yellow,  30, 69,21,100,21,100 },
+    { Color::Green,   70,159,21,100,21,100 },
+    { Color::Gray,     0,360, 0, 20,21, 89 },
+    { Color::Black,    0,360, 0,100, 0, 20 },
+    { Color::White,    0,360, 0, 20,90,100 }
+};
+
+ColorDetector::ColorDetector(ColorSensor& sensor)
     : mColorSensor(sensor)
 {
 }
 
-//目標色判定
-bool ColorDetector::judgeColor(const std::vector<Color>& targetColors)
-{
-    Color detected = detectColor();
-
-    for (Color color : targetColors)
-    {
-        if (detected == color)
-        {
-            return true;
-        }
-    }
-    
-    return false;
-}
-
-//色判定
-Color ColorDetector::detectColor()
+Color ColorDetector::detect()
 {
     ColorSensor::HSV hsv;
-    mColorSensor.getColor(hsv);
+    mColorSensor.getHSV(hsv);
 
-    if (hsv.v <= 20)
+    for (const auto& range : mColorHSVRanges)
     {
-        return Color::Black;
-    }
-
-    if (hsv.s <= 20)
-    {
-        if (hsv.v >= 90)
+        if (hsv.h >= range.hMin && hsv.h <= range.hMax &&
+            hsv.s >= range.sMin && hsv.s <= range.sMax &&
+            hsv.v >= range.vMin && hsv.v <= range.vMax)
         {
-            return Color::White;
+            return range.color;
         }
-
-        return Color::Gray;
     }
 
-    if (hsv.h >= 30 &&
-        hsv.h < 70)
-    {
-        return Color::Yellow;
-    }
-
-    if (hsv.h >= 70 &&
-        hsv.h < 160)
-    {
-        return Color::Green;
-    }
-
-    if (hsv.h >= 160 && 
-        hsv.h > 280)
-    {
-        return Color::Blue;
-    }
-
-    return Color::Red;
+    return Color::Unknown;   // または適切なデフォルト
 }
