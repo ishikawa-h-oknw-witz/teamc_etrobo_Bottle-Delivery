@@ -9,6 +9,8 @@ APPL_CXXOBJS += \
     control/ArmController.o \
     scene/SceneManager.o \
     detect/TargetDistanceDetector.o \
+    detect/ColorDetector.o \
+    detect/TargetColorDetector.o \
     Logger.o \
 
 SRCLANG := c++

@@ -1,4 +1,5 @@
 #include "TargetColorDetector.h"
+#include "Logger.h"
 
 TargetColorDetector::TargetColorDetector(
     ColorDetector& colorDetector)

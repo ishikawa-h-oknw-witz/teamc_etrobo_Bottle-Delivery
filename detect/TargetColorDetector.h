@@ -19,4 +19,6 @@ private:
     static const int MAX_TARGET_COLORS = 3;
 
     Color mTargetColors[MAX_TARGET_COLORS];
+
+    int mTargetColorNum;
 };

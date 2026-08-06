@@ -2,6 +2,8 @@
 
 #include "ColorSensor.h"
 
+using namespace spikeapi;
+
 enum class Color
 {
     None,
@@ -11,7 +13,8 @@ enum class Color
     Red,
     Yellow,
     Green,
-    Blue
+    Blue,
+    Unknown
 };
 
 struct ColorHSVRange

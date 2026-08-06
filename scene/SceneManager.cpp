@@ -16,14 +16,14 @@ LineTraceScene lineTraceScenes[] =
     { 9,  400,  60, RunnerEdge::RightEdge, Color::None, 50, {0.5f, 0.0f, 0.4f} }, // Lapカーブ3
     {10,  900, 100, RunnerEdge::RightEdge, Color::None, 50, {0.6f, 0.0f, 0.4f} }, // Lap蛇行1
     {11,  900,  80, RunnerEdge::RightEdge, Color::None, 50, {0.5f, 0.0f, 0.4f} }, // Lap蛇行2
-    {12, 1500, 100, RunnerEdge::RightEdge, Color::None, 50, {0.4f, 0.0f, 0.4f} }, // Lap直線4
-    {13,    0,  70, RunnerEdge::RightEdge, Color::None, 20, {0.4f, 0.0f, 0.4f} }, // Dlvボトルまで
-    {14,  600,  70, RunnerEdge::LeftEdge,  Color::None, 50, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ1
-    {15,    0,  60, RunnerEdge::LeftEdge,  Color::Blue, 50, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ2
-    {16, 1200, 100, RunnerEdge::LeftEdge,  Color::None, 50, {0.3f, 0.0f, 0.4f} }, // Dlv直線1
-    {17,  300,  60, RunnerEdge::LeftEdge,  Color::None, 50, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ3
-    {18,    0, 100, RunnerEdge::LeftEdge,  Color::Blue, 50, {0.3f, 0.0f, 0.4f} }, // Dlv青まで
-    {19,  400, 100, RunnerEdge::RightEdge, Color::None, 50, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線1
+    {12, 1100, 100, RunnerEdge::RightEdge, Color::None, 50, {0.4f, 0.0f, 0.4f} }, // Lap直線4
+    //{13,    0,  70, RunnerEdge::RightEdge, Color::None, 20, {0.4f, 0.0f, 0.4f} }, // Dlvボトルまで
+    {13,  800,  70, RunnerEdge::LeftEdge,  Color::None, 50, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ1
+    {14,  200,  30, RunnerEdge::LeftEdge,  Color::None, 50, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ2
+    {15, 1100, 100, RunnerEdge::LeftEdge,  Color::None, 50, {0.3f, 0.0f, 0.4f} }, // Dlv直線1
+    {16,  200,  30, RunnerEdge::LeftEdge,  Color::None, 50, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ3
+    {17,    0, 100, RunnerEdge::LeftEdge,  Color::Blue, 50, {0.3f, 0.0f, 0.4f} }, // Dlv青まで
+    {18,  400, 100, RunnerEdge::RightEdge, Color::None, 50, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線1
     {20,  300,  60, RunnerEdge::RightEdge, Color::None, 50, {0.6f, 0.0f, 0.4f} }, // Dlv帰還カーブ1
     {21,    0, 100, RunnerEdge::RightEdge, Color::Blue, 50, {0.3f, 0.0f, 0.4f} }  // Dlv帰還青まで
 };
@@ -53,14 +53,16 @@ SceneManager::SceneManager(
     GyroTraceRunner& gyroTraceRunner,
     PIDCalculator& pidCalculator,
     TrapezoidCalculator& trapezoidCalculator,
+    DistanceCalculator& distanceCalculator,
     TargetDistanceDetector& targetDistanceDetector,
-    DistanceCalculator& distanceCalculator)
+    TargetColorDetector& targetColorDetector)
     : mLineTraceRunner(lineTraceRunner),
       mGyroTraceRunner(gyroTraceRunner),
       mPIDCalculator(pidCalculator),
       mTrapezoidCalculator(trapezoidCalculator),
-      mTargetDistanceDetector(targetDistanceDetector),
       mDistanceCalculator(distanceCalculator),
+      mTargetDistanceDetector(targetDistanceDetector),
+      mTargetColorDetector(targetColorDetector),
       mSceneId(0),
       mEventDetector(nullptr)
 {
@@ -112,6 +114,7 @@ bool SceneManager::SceneExecute()
         default:
             break;
         }
+        tslp_tsk(10*1000);
     }
 
     // シーン終了
@@ -169,6 +172,12 @@ void SceneManager::setParameter(int sceneId)
             mTargetDistanceDetector.setTargetDistance(movescene.targetDistance);
             mEventDetector = &mTargetDistanceDetector;
         }
+        if (movescene.finishColor != Color::None)
+        {
+            Color targetColors[] = { movescene.finishColor };
+            mTargetColorDetector.setTargetColors(targetColors, 1);
+            mEventDetector = &mTargetColorDetector;
+        }
     }
     case ActionType::Turn:
     {
@@ -187,13 +196,9 @@ void SceneManager::setParameter(int sceneId)
     case ActionType::BottoleDetect:
     {
         const BottleDetectScene& bottledetectscene = bottleDetectScenes[mSceneId];
-        /*
-        if (bottledetectscene.detectColor == Color::Yellow)
-        {
-            m.set(bottledetectscene.detectColor);
-            mEventDetector = &m;
-        }
-        */
+        Color targetColors[] = { bottledetectscene.detectColor };
+        mTargetColorDetector.setTargetColors(targetColors, 1);
+        mEventDetector = &mTargetColorDetector;
     }
     }
 }

@@ -1,4 +1,5 @@
 #include "ColorDetector.h"
+#include "Logger.h"
 
 static constexpr ColorHSVRange mColorHSVRanges[] =
 {
@@ -20,7 +21,7 @@ ColorDetector::ColorDetector(ColorSensor& sensor)
 Color ColorDetector::detect()
 {
     ColorSensor::HSV hsv;
-    mColorSensor.getColor(hsv);
+    mColorSensor.getHSV(hsv);
 
     for (const auto& range : mColorHSVRanges)
     {
