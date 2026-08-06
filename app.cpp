@@ -155,6 +155,8 @@ void main_task(intptr_t exinf)
     logger.init();
     sta_cyc(LOGGER_TASK_CYC);
 
+    armController.moveArmDown();
+
     // 1回目の押下
     while (!forceSensor.isTouched());
     tslp_tsk(20 * 1000);
@@ -175,7 +177,6 @@ void main_task(intptr_t exinf)
     while (forceSensor.isTouched());
 
     int skipCount = 0;
-    armController.moveArmDown();
 
     //メインループ10msec周期
 
