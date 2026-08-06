@@ -32,7 +32,7 @@ struct LineTraceScene
     int targetDistance;
     int speed;
     RunnerEdge edge;
-    Color finishColor;
+    Color finishColor[7];
     CalibrationData targetSensorValue;
     PID pid;
 };
@@ -43,7 +43,7 @@ struct MoveScene
     Direction direction;
     TrapezoidParameter trapezoidParameter;
     int targetDistance;
-    Color finishColor;
+    Color finishColor[7];
     PID pid;
 };
 
