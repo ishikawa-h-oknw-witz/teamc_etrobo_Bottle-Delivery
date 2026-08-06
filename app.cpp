@@ -68,7 +68,8 @@ SceneOrder LAP[] =
     { 9,  9,  ActionType::LineTrace}, // Lapカーブ3
     {10, 10,  ActionType::LineTrace}, // Lap蛇行1
     {11, 11,  ActionType::LineTrace}, // Lap蛇行2
-    {12, 12,  ActionType::LineTrace}  // Lap直線4
+    {12, 12,  ActionType::LineTrace}, // Lap直線4
+    {13,  0,  ActionType::Stop},      // 停止
 };
 
 SceneOrder DetectBottleColor[] =
@@ -181,11 +182,10 @@ void main_task(intptr_t exinf)
     //メインループ10msec周期
 
     //LAP
-    change_scene(LAP, 12);
+    change_scene(LAP, 13);
 
-    leftWheel.stop();
-    rightWheel.stop();
     tslp_tsk(100*1000);
+    
     armController.moveArmUp();
 
     //ボトル色検知
