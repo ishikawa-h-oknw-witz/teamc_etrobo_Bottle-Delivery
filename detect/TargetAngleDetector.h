@@ -2,12 +2,14 @@
 #define TARGET_ANGLE_DETECTOR_H
 
 #include "IMU.h"
-#include "EventDetector.h"
+#include "IEventDetector.h"
+
+using namespace spikeapi;
 
 class TargetAngleDetector : public IEventDetector
 {
 public:
-    TargetAngleDetector(IMU& imu);
+    TargetAngleDetector();
 
     void setTargetAngle(int angle);
     void setAngleTolerance(int tolerance);
@@ -15,7 +17,7 @@ public:
     bool judge() override;
 
 private:
-    IMU& mIMU;
+    IMU mIMU;
     int mTargetAngle;
     int mAngleTolerance;
 };

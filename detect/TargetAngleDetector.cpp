@@ -1,9 +1,8 @@
 #include "TargetAngleDetector.h"
+#include <stdlib.h>
 
-TargetAngleDetector::TargetAngleDetector(
-    IMU& imu)
-    : mIMU(imu),
-      mTargetAngle(0),
+TargetAngleDetector::TargetAngleDetector()
+    : mTargetAngle(0),
       mAngleTolerance(0.5)
 {
 }
@@ -20,7 +19,7 @@ void TargetAngleDetector::setAngleTolerance(int tolerance)
 
 bool TargetAngleDetector::judge()
 {
-    int currentAngle = mIMU.getAngle();
+    int currentAngle = mIMU.getHeading();
 
     return abs(currentAngle - mTargetAngle) <= mAngleTolerance;
 }

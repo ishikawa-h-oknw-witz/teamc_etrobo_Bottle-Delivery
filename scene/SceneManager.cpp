@@ -37,7 +37,7 @@ MoveScene moveScenes[] =
     {1, Direction::back,  {50.0f, 100.0f, 50.0f, 300.0f}, 300, Color::None, {1.0f, 0.0f, 0.0f}}  // Dlv線まで帰還
 };
 
-TrunScene trunScenes[] =
+TurnScene turnScenes[] =
 {
     {0, 90, {1.0f, 0.0f, 0.0f}} //右に90°回転
 };
@@ -57,13 +57,16 @@ SceneManager::SceneManager(
     TrapezoidCalculator& trapezoidCalculator,
     DistanceCalculator& distanceCalculator,
     TargetDistanceDetector& targetDistanceDetector,
-    TargetColorDetector& targetColorDetector)
+    TargetAngleDetector& targetAngleDetector,
+    TargetColorDetector& targetColorDetector
+    )
     : mLineTraceRunner(lineTraceRunner),
       mGyroTraceRunner(gyroTraceRunner),
       mPIDCalculator(pidCalculator),
       mTrapezoidCalculator(trapezoidCalculator),
       mDistanceCalculator(distanceCalculator),
       mTargetDistanceDetector(targetDistanceDetector),
+      mTargetAngleDetector(targetAngleDetector),
       mTargetColorDetector(targetColorDetector),
       mSceneId(0),
       mEventDetector(nullptr)
@@ -162,6 +165,7 @@ void SceneManager::setParameter(int sceneId)
             mTargetDistanceDetector.setTargetDistance(linetracescene.targetDistance);
             mEventDetector = &mTargetDistanceDetector;
         }
+
         break;
     }
     case ActionType::Move:
@@ -179,7 +183,6 @@ void SceneManager::setParameter(int sceneId)
             movescene.pid.kp,
             movescene.pid.ki,
             movescene.pid.kd);
-        break;
 
         if (movescene.targetDistance != 0)
         {
@@ -192,19 +195,25 @@ void SceneManager::setParameter(int sceneId)
             mTargetColorDetector.setTargetColors(targetColors, 1);
             mEventDetector = &mTargetColorDetector;
         }
+
+        break;
     }
     case ActionType::Turn:
     {
-        const TrunScene& trunscene = trunScenes[mSceneId];
-        
-        //目標角
-        mGyroTraceRunner.setTargetAngle(trunscene.targetAngle);
+        const TurnScene& turnscene = turnScenes[mSceneId];
 
         //PID
         mPIDCalculator.setGain(
-            trunscene.pid.kp,
-            trunscene.pid.ki,
-            trunscene.pid.kd);
+            turnscene.pid.kp,
+            turnscene.pid.ki,
+            turnscene.pid.kd);
+        
+        if (turnscene.targetAngle != 0)
+        {
+            mGyroTraceRunner.setTargetAngle(turnscene.targetAngle);
+            mEventDetector = &mTargetAngleDetector;
+        }
+
         break;
     }
     case ActionType::BottoleDetect:
@@ -213,6 +222,8 @@ void SceneManager::setParameter(int sceneId)
         Color targetColors[] = { bottledetectscene.detectColor };
         mTargetColorDetector.setTargetColors(targetColors, 1);
         mEventDetector = &mTargetColorDetector;
+
+        break;
     }
     }
 }

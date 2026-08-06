@@ -39,8 +39,9 @@ ArmController armController(ArmMotor);
 
 ColorDetector colorDetector(colorSensor);
 TargetDistanceDetector targetDistanceDetector(distanceCalculator);
+TargetAngleDetector targetAngleDetector;
 TargetColorDetector targetColorDetector(colorDetector);
-SceneManager sceneManager(lineTraceRunner, gyroTraceRunner, pidCalculator, trapezoidCalculator, distanceCalculator, targetDistanceDetector, targetColorDetector);
+SceneManager sceneManager(lineTraceRunner, gyroTraceRunner, pidCalculator, trapezoidCalculator, distanceCalculator, targetDistanceDetector, targetAngleDetector, targetColorDetector);
 
 Logger logger(colorSensor, leftWheel, rightWheel);
 /* インスタンス生成ここまで */
