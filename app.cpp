@@ -154,8 +154,8 @@ void main_task(intptr_t exinf)
     /* Bluetooth初期化＆接続待ち＆ログタスク起動100msec周期 */
     logger.init();
     sta_cyc(LOGGER_TASK_CYC);
-    
-    armController.moveArmUp();
+
+    armController.moveArmDown();
 
     // 1回目の押下
     while (!forceSensor.isTouched());
@@ -186,6 +186,7 @@ void main_task(intptr_t exinf)
     leftWheel.stop();
     rightWheel.stop();
     tslp_tsk(100*1000);
+    armController.moveArmUp();
 
     //ボトル色検知
 
