@@ -5,9 +5,10 @@
 #include "PIDCalculator.h"
 #include "TrapezoidCalculator.h"
 #include "IEventDetector.h"
-#include "TargetDistanceDetector.h"
-#include "TargetColorDetector.h"
 #include "DistanceCalculator.h"
+#include "TargetDistanceDetector.h"
+#include "TargetAngleDetector.h"
+#include "TargetColorDetector.h"
 #include "ColorDetector.h"
 
 enum class ActionType
@@ -69,6 +70,7 @@ public:
         TrapezoidCalculator& trapezoidCalculator,
         DistanceCalculator& distanceCalculator,
         TargetDistanceDetector& targetDistanceDetector,
+        TargetAngleDetector& targetAngleDetector,
         TargetColorDetector& targetColorDetector);
 
     int getSceneID();
@@ -84,6 +86,7 @@ private:
     TrapezoidCalculator& mTrapezoidCalculator;
     DistanceCalculator& mDistanceCalculator;
     TargetDistanceDetector& mTargetDistanceDetector;
+    TargetAngleDetector& mTargetAngleDetector;
     TargetColorDetector& mTargetColorDetector;
 
     int mSceneId;

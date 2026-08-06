@@ -57,13 +57,16 @@ SceneManager::SceneManager(
     TrapezoidCalculator& trapezoidCalculator,
     DistanceCalculator& distanceCalculator,
     TargetDistanceDetector& targetDistanceDetector,
-    TargetColorDetector& targetColorDetector)
+    TargetAngleDetector& targetAngleDetector,
+    TargetColorDetector& targetColorDetector
+    )
     : mLineTraceRunner(lineTraceRunner),
       mGyroTraceRunner(gyroTraceRunner),
       mPIDCalculator(pidCalculator),
       mTrapezoidCalculator(trapezoidCalculator),
       mDistanceCalculator(distanceCalculator),
       mTargetDistanceDetector(targetDistanceDetector),
+      mTargetAngleDetector(targetAngleDetector),
       mTargetColorDetector(targetColorDetector),
       mSceneId(0),
       mEventDetector(nullptr)
