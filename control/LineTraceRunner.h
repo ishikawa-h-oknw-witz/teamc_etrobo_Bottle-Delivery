@@ -23,11 +23,19 @@ public:
         ColorSensor& colorSensor,
         PIDCalculator& pidController);
 
+    void calibrateTargetReflection();
+
+    void calibrateTargetValue();
+
+    int getTargetSensorValue() const;
+
     void setBaseSpeed(int speed);
 
     void setEdge(RunnerEdge edge);
 
     void run();
+
+    void vrun();
 
     void stop();
 
@@ -40,7 +48,7 @@ private:
 
     PIDCalculator& mPIDCalculator;
 
-    int mTargetReflection;
+    int mTargetSensorValue;
 
     int mBaseSpeed;
 
