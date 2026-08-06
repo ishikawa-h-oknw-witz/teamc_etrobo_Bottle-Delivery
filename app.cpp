@@ -102,21 +102,21 @@ SceneOrder CarryZone[] =
     {1,  0, ActionType::Move},     // Dlvエリアまで
     {2,  1, ActionType::Move},     // Dlv線まで帰還
     {3,  0, ActionType::Turn},     // 右に90°回転
-    {4, 20, ActionType::LineTrace} // Dlv帰り青スルー
+    {4, 19, ActionType::LineTrace} // Dlv帰り青スルー
 };
 
 SceneOrder ReturnZone[] =
 {
-    {0, 20, ActionType::LineTrace}, // Dlv帰り青スルー
-    {1, 23, ActionType::LineTrace}  // Dlv帰還青まで
+    {0, 21, ActionType::LineTrace}, // Dlv帰り青スルー
+    {1, 22, ActionType::LineTrace}  // Dlv帰還青まで
 };
 
 SceneOrder EnterRally[] =
 {
-    {0, 21, ActionType::LineTrace}, // Dlv帰還直線1
-    {1, 22, ActionType::LineTrace}, // Dlv帰還カーブ1
-    {2, 23, ActionType::LineTrace}, // Dlv帰還青まで
-    {3, 24, ActionType::LineTrace}, // Dlv青半分まで
+    {0, 20, ActionType::LineTrace}, // Dlv帰還直線1
+    {1, 21, ActionType::LineTrace}, // Dlv帰還カーブ1
+    {2, 22, ActionType::LineTrace}, // Dlv帰還青まで
+    {3, 23, ActionType::LineTrace}, // Dlv青半分まで
     {4,  0, ActionType::Turn},      // Dlv右に90°回転
     {5,  0, ActionType::Move}       // Dlv基準線まで
 };
