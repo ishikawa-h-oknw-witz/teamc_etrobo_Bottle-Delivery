@@ -40,7 +40,8 @@ const MoveScene moveScenes[] =
 
 const TurnScene turnScenes[] =
 {
-    {0, 90, {1.0f, 0.0f, 0.0f}} //右に90°回転
+    {0,  90, {1.0f, 0.0f, 0.0f}}, //右に90°回転
+    {1, -30, {1.0f, 0.0f, 0.0f}}  //左に30°回転
 };
 
 const BottleDetectScene bottleDetectScenes[] =
