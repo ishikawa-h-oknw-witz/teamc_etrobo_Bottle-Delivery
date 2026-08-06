@@ -204,10 +204,10 @@ void main_task(intptr_t exinf)
     }
 
     //青スキップ
-    SceneNum = 0;
-
     for (int skip = 0; skip < skipCount; skip++)
     {
+        SceneNum = 0;
+
         while (true)
         {
             const SceneOrder& movezone = MoveZone[SceneNum];
@@ -249,10 +249,10 @@ void main_task(intptr_t exinf)
     }
 
     //帰還時青スキップ
-    SceneNum = 0;
-
     for (int skip = 0; skip < skipCount; skip++)
     {
+        SceneNum = 0;
+        
         while (true)
         {
             const SceneOrder& returnzone = ReturnZone[SceneNum];
