@@ -56,20 +56,21 @@ struct SceneOrder
 
 const SceneOrder LAP[] =
 {
-    { 0,  0,  ActionType::LineTrace}, // Lap直線1
-    { 1,  1,  ActionType::LineTrace}, // Lapカーブ1-1
-    { 2,  2,  ActionType::LineTrace}, // Lapカーブ1-2
-    { 3,  3,  ActionType::LineTrace}, // Lapカーブ1-3
-    { 4,  4,  ActionType::LineTrace}, // Lap直線2
-    { 5,  5,  ActionType::LineTrace}, // Lapカーブ2-1
-    { 6,  6,  ActionType::LineTrace}, // Lapカーブ2-2
-    { 7,  7,  ActionType::LineTrace}, // Lapカーブ2-3
-    { 8,  8,  ActionType::LineTrace}, // Lap直線3
-    { 9,  9,  ActionType::LineTrace}, // Lapカーブ3
-    {10, 10,  ActionType::LineTrace}, // Lap蛇行1
-    {11, 11,  ActionType::LineTrace}, // Lap蛇行2
-    {12, 12,  ActionType::LineTrace}, // Lap直線4
-    {13,  0,  ActionType::Stop},      // 停止
+    { 0,  0, ActionType::LineTrace}, // Lap直線1
+    { 1,  1, ActionType::LineTrace}, // Lapカーブ1-1
+    { 2,  2, ActionType::LineTrace}, // Lapカーブ1-2
+    { 3,  3, ActionType::LineTrace}, // Lapカーブ1-3
+    { 4,  4, ActionType::LineTrace}, // Lap直線2
+    { 5,  5, ActionType::LineTrace}, // Lapカーブ2-1
+    { 6,  6, ActionType::LineTrace}, // Lapカーブ2-2
+    { 7,  7, ActionType::LineTrace}, // Lapカーブ2-3
+    { 8,  8, ActionType::LineTrace}, // Lap直線3
+    { 9,  9, ActionType::LineTrace}, // Lapカーブ3
+    {10, 10, ActionType::LineTrace}, // Lap蛇行1
+    {11, 11, ActionType::LineTrace}, // Lap蛇行2
+    {12, 12, ActionType::LineTrace}, // Lap直線4
+    {13,  1, ActionType::Turn},      // エッジの向きに回転
+    {14,  0, ActionType::Stop},      // 停止
 };
 
 const SceneOrder DetectBottleColor[] =
@@ -185,7 +186,7 @@ void main_task(intptr_t exinf)
     //メインループ10msec周期
 
     //LAP
-    change_scene(LAP, 13);
+    change_scene(LAP, 14);
 
     tslp_tsk(100*1000);
     
