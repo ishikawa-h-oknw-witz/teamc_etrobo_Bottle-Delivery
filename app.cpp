@@ -52,6 +52,7 @@ struct SceneOrder
     ActionType actionType;
 };
 
+
 SceneOrder LAP[] =
 {
     { 0,  0,  ActionType::LineTrace}, // Lap直線1
@@ -122,6 +123,30 @@ void logger_task(intptr_t exinf)
     ext_tsk();
 }
 
+//シーン実行&遷移
+void change_scene(SceneOrder sceneOrder[], int MaxSceneNum)
+{
+    int SceneNum = 0;
+
+    while (true)
+    {
+        const SceneOrder& sceneorder = sceneOrder[SceneNum];
+
+        sceneManager.setActionType(sceneorder.actionType);
+        sceneManager.setSceneID(sceneorder.sceneId);
+        Logger::printf("SceneID=%d", sceneorder.sceneId);
+        if(sceneManager.SceneExecute())
+        {
+            SceneNum++;
+        }
+
+        if (SceneNum > MaxSceneNum)
+        {
+            break;
+        }
+    }
+}
+
 /* メインタスク */
 void main_task(intptr_t exinf)
 {
@@ -148,30 +173,13 @@ void main_task(intptr_t exinf)
     tslp_tsk(20 * 1000);
     while (forceSensor.isTouched());
 
-    int SceneNum = 0;
     int skipCount = 0;
     armController.moveArmDown();
 
     //メインループ10msec周期
 
     //LAP
-    while(true)
-    {
-        const SceneOrder& lap = LAP[SceneNum];
-
-        sceneManager.setActionType(lap.actionType);
-        sceneManager.setSceneID(lap.sceneId);
-        Logger::printf("SceneID=%d", lap.sceneId);
-        if(sceneManager.SceneExecute())
-        {
-            SceneNum++;
-        }
-
-        if (SceneNum > 12)
-        {
-            break;
-        }
-    }
+    change_scene(LAP, 12);
 
     leftWheel.stop();
     rightWheel.stop();
@@ -179,11 +187,10 @@ void main_task(intptr_t exinf)
     armController.moveArmUp();
 
     //ボトル色検知
-    armController.moveArmUp();
 
     const char* colorName[] = {"黄", "青", "赤"};
 
-    for (SceneNum = 0; SceneNum < 3; SceneNum++)
+    for (int SceneNum = 0; SceneNum < 3; SceneNum++)
     {
         const SceneOrder& detectbottlecolor = DetectBottleColor[SceneNum];
 
@@ -201,118 +208,27 @@ void main_task(intptr_t exinf)
     armController.moveArmDown();
 
     //ゾーン手前青まで
-    SceneNum = 0;
-
-    while (true)
-    {
-        const SceneOrder& enterzone = EnterZone[SceneNum];
-
-        sceneManager.setActionType(enterzone.actionType);
-        sceneManager.setSceneID(enterzone.sceneId);
-        Logger::printf("SceneID=%d", enterzone.sceneId);
-        if(sceneManager.SceneExecute())
-        {
-            SceneNum++;
-        }
-
-        if (SceneNum > 5)
-        {
-            break;
-        }
-    }
+    change_scene(EnterZone, 5);
 
     //青スキップ
     for (int skip = 0; skip < skipCount; skip++)
     {
-        SceneNum = 0;
-
-        while (true)
-        {
-            const SceneOrder& movezone = MoveZone[SceneNum];
-
-            sceneManager.setActionType(movezone.actionType);
-            sceneManager.setSceneID(movezone.sceneId);
-            Logger::printf("SceneID=%d", movezone.sceneId);
-            if(sceneManager.SceneExecute())
-            {
-                SceneNum++;
-            }
-
-            if (SceneNum > 1)
-            {
-                break;
-            }
-        }
+        change_scene(MoveZone, 1);
     }
 
     //ボトル設置
-    SceneNum = 0;
-
-    while (true)
-    {
-        const SceneOrder& carryzone = CarryZone[SceneNum];
-
-        sceneManager.setActionType(carryzone.actionType);
-        sceneManager.setSceneID(carryzone.sceneId);
-        Logger::printf("SceneID=%d", carryzone.sceneId);
-        if(sceneManager.SceneExecute())
-        {
-            SceneNum++;
-        }
-
-        if (SceneNum > 4)
-        {
-            break;
-        }
-    }
+    change_scene(CarryZone, 4);
 
     //帰還時青スキップ
     for (int skip = 0; skip < skipCount; skip++)
     {
-        SceneNum = 0;
-        
-        while (true)
-        {
-            const SceneOrder& returnzone = ReturnZone[SceneNum];
-
-            sceneManager.setActionType(returnzone.actionType);
-            sceneManager.setSceneID(returnzone.sceneId);
-            Logger::printf("SceneID=%d", returnzone.sceneId);
-            if(sceneManager.SceneExecute())
-            {
-                SceneNum++;
-            }
-
-            if (SceneNum > 1)
-            {
-                break;
-            }
-        }
+        change_scene(ReturnZone, 1);
     }
 
     //ラリーへ
-    SceneNum = 0;
+    change_scene(EnterRally, 2);
 
-    while (true)
-    {
-        const SceneOrder& enterrally = CarryZone[SceneNum];
-
-        sceneManager.setActionType(enterrally.actionType);
-        sceneManager.setSceneID(enterrally.sceneId);
-        Logger::printf("SceneID=%d", enterrally.sceneId);
-        if(sceneManager.SceneExecute())
-        {
-            SceneNum++;
-        }
-
-        if (SceneNum > 2)
-        {
-            break;
-        }
-    }
     Logger::printf("終了");
 
     ext_tsk(); 
 }
-
-
