@@ -98,10 +98,10 @@ SceneOrder MoveZone[] =
 
 SceneOrder CarryZone[] =
 {
-    {0,  0, ActionType::Turn},     //右に90°回転
+    {0,  0, ActionType::Turn},     // 右に90°回転
     {1,  0, ActionType::Move},     // Dlvエリアまで
     {2,  1, ActionType::Move},     // Dlv線まで帰還
-    {3,  0, ActionType::Turn},     //右に90°回転
+    {3,  0, ActionType::Turn},     // 右に90°回転
     {4, 20, ActionType::LineTrace} // Dlv帰り青スルー
 };
 
@@ -115,7 +115,10 @@ SceneOrder EnterRally[] =
 {
     {0, 21, ActionType::LineTrace}, // Dlv帰還直線1
     {1, 22, ActionType::LineTrace}, // Dlv帰還カーブ1
-    {2, 23, ActionType::LineTrace}  // Dlv帰還青まで
+    {2, 23, ActionType::LineTrace}, // Dlv帰還青まで
+    {3, 24, ActionType::LineTrace}, // Dlv青半分まで
+    {4,  0, ActionType::Turn},      // Dlv右に90°回転
+    {5,  0, ActionType::Move}       // Dlv基準線まで
 };
 
 /* ログタスク */
@@ -228,7 +231,7 @@ void main_task(intptr_t exinf)
     }
 
     //ラリーへ
-    change_scene(EnterRally, 2);
+    change_scene(EnterRally, 5);
 
     Logger::printf("終了");
 

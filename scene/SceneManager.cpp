@@ -28,13 +28,14 @@ LineTraceScene lineTraceScenes[] =
     {21,  400, 100, RunnerEdge::RightEdge, Color::None, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線1
     {22,  300,  30, RunnerEdge::RightEdge, Color::None, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlv帰還カーブ1
     {23,    0, 100, RunnerEdge::RightEdge, Color::Blue, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }  // Dlv帰還青まで
+    {21,   50, 100, RunnerEdge::RightEdge, Color::None, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv青半分まで
 };
 
 MoveScene moveScenes[] =
 {
     //{0, Direction::front, {30.0f, 70.0f,  30.0f, 100.0f}, 100, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlv青スルー
-    {0, Direction::front, {50.0f, 100.0f, 50.0f, 300.0f}, 300, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
-    {1, Direction::back,  {50.0f, 100.0f, 50.0f, 300.0f}, 300, Color::None, {1.0f, 0.0f, 0.0f}}  // Dlv線まで帰還
+    {0, Direction::front, {50.0f, 100.0f,  50.0f, 300.0f}, 300, Color::None,  {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
+    {1, Direction::back,  {50.0f, 100.0f, 100.0f,   0.0f},   0, Color::Black, {1.0f, 0.0f, 0.0f}}  // Dlv線まで帰還
 };
 
 TurnScene turnScenes[] =
