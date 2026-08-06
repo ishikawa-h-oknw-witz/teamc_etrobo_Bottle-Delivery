@@ -2,7 +2,7 @@
 #include "Logger.h"
 
 // {シーンID, 目標距離, 速度, 走行エッジ, 終了色, 目標輝度, {Kp, Ki, Kd}}
-LineTraceScene lineTraceScenes[] =
+const LineTraceScene lineTraceScenes[] =
 {
     { 0,  500, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.2f, 0.0f, 0.2f} }, // Lap直線1
     { 1,  150,  80, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Lapカーブ1-1
@@ -31,19 +31,19 @@ LineTraceScene lineTraceScenes[] =
     {23,   50, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }  // Dlv青半分まで
 };
 
-MoveScene moveScenes[] =
+const MoveScene moveScenes[] =
 {
     //{0, Direction::front, {30.0f, 70.0f,  30.0f, 100.0f}, 100, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlv青スルー
     {0, Direction::front, {50.0f, 100.0f,  50.0f, 300.0f}, 300, {Color::None},  {1.0f, 0.0f, 0.0f}},              // Dlvエリアまで
     {1, Direction::back,  {50.0f, 100.0f, 100.0f,   0.0f},   0, {Color::Black, Color::Blue}, {1.0f, 0.0f, 0.0f}}  // Dlv線まで帰還
 };
 
-TurnScene turnScenes[] =
+const TurnScene turnScenes[] =
 {
     {0, 90, {1.0f, 0.0f, 0.0f}} //右に90°回転
 };
 
-BottleDetectScene bottleDetectScenes[] =
+const BottleDetectScene bottleDetectScenes[] =
 {
     {0, {Color::Yellow}}, //黄ボトル検知
     {1, {Color::Blue}  }, //青ボトル検知

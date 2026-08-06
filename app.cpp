@@ -54,7 +54,7 @@ struct SceneOrder
 };
 
 
-SceneOrder LAP[] =
+const SceneOrder LAP[] =
 {
     { 0,  0,  ActionType::LineTrace}, // Lap直線1
     { 1,  1,  ActionType::LineTrace}, // Lapカーブ1-1
@@ -72,7 +72,7 @@ SceneOrder LAP[] =
     {13,  0,  ActionType::Stop},      // 停止
 };
 
-SceneOrder DetectBottleColor[] =
+const SceneOrder DetectBottleColor[] =
 {
     {0, 0, ActionType::BottoleDetect}, //黄ボトル検知
     {1, 1, ActionType::BottoleDetect}, //青ボトル検知
@@ -80,7 +80,7 @@ SceneOrder DetectBottleColor[] =
 
 };
 
-SceneOrder EnterZone[] =
+const SceneOrder EnterZone[] =
 {
     {0, 13, ActionType::LineTrace}, // Dlvカーブ1
     {1, 14, ActionType::LineTrace}, // Dlvカーブ2
@@ -90,13 +90,13 @@ SceneOrder EnterZone[] =
     {5, 18, ActionType::LineTrace}  // Dlv青まで
 };
 
-SceneOrder MoveZone[] =
+const SceneOrder MoveZone[] =
 {
     {0, 15, ActionType::LineTrace}, // Dlv行き青スルー
     {1, 18, ActionType::LineTrace}  // Dlv行き青まで
 };
 
-SceneOrder CarryZone[] =
+const SceneOrder CarryZone[] =
 {
     {0,  0, ActionType::Turn},     // 右に90°回転
     {1,  0, ActionType::Move},     // Dlvエリアまで
@@ -105,13 +105,13 @@ SceneOrder CarryZone[] =
     {4, 19, ActionType::LineTrace} // Dlv帰り青スルー
 };
 
-SceneOrder ReturnZone[] =
+const SceneOrder ReturnZone[] =
 {
     {0, 21, ActionType::LineTrace}, // Dlv帰り青スルー
     {1, 22, ActionType::LineTrace}  // Dlv帰還青まで
 };
 
-SceneOrder EnterRally[] =
+const SceneOrder EnterRally[] =
 {
     {0, 20, ActionType::LineTrace}, // Dlv帰還直線1
     {1, 21, ActionType::LineTrace}, // Dlv帰還カーブ1
