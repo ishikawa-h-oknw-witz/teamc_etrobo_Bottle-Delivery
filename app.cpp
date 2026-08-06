@@ -129,7 +129,7 @@ void logger_task(intptr_t exinf)
 }
 
 //シーン実行&遷移
-void change_scene(SceneOrder sceneOrder[], int MaxSceneNum)
+void change_scene(const SceneOrder sceneOrder[], int MaxSceneNum)
 {
     int SceneNum = 0;
 
