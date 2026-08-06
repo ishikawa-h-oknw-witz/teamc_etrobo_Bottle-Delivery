@@ -62,46 +62,43 @@ void main_task(intptr_t exinf)
     //フォースセンサボタン押下待ち
     while (!forceSensor.isTouched());
 
-    //HSV構造体定義
-    ColorSensor::HSV hsv;
-
-    int SeanID = 0;
+    int LineTrace_SceneID = 0;
+    int BottoleDetect_SceneID = 0;
     armController.moveArmDown();
 
     //メインループ10msec周期
     while(true)
     {
-        //HSV取得
-        colorSensor.getHSV(hsv);
-
         sceneManager.setActionType(ActionType::LineTrace);
-        sceneManager.setSceneID(SeanID);
-        Logger::printf("SeanID=%d", SeanID);
+        sceneManager.setSceneID(LineTrace_SceneID);
+        Logger::printf("LineTrace_SceneID=%d", LineTrace_SceneID);
         if(sceneManager.SceneExecute())
         {
-            SeanID++;
+            LineTrace_SceneID++;
         }
 
-        if (SeanID > 12){
+        //ラップまでのライントレースシーンID
+        if (LineTrace_SceneID > 12){
             break;
         }
     }
 
     leftWheel.stop();
     rightWheel.stop();
+    tslp_tsk(100*1000);
     armController.moveArmUp();
 
     sceneManager.setActionType(ActionType::BottoleDetect);
 
     const char* colorName[] = {"黄", "青", "赤"};
 
-    for (int sceneid = 0; sceneid < 3; sceneid++)
+    for (BottoleDetect_SceneID = 0; BottoleDetect_SceneID < 3; BottoleDetect_SceneID++)
     {
-        sceneManager.setSceneID(sceneid);
+        sceneManager.setSceneID(BottoleDetect_SceneID);
 
         if (sceneManager.SceneExecute())
         {
-            Logger::printf("%s", colorName[sceneid]);
+            Logger::printf("%s\n", colorName[BottoleDetect_SceneID]);
             break;
         }
     }
@@ -111,19 +108,19 @@ void main_task(intptr_t exinf)
     while (true)
     {
         sceneManager.setActionType(ActionType::LineTrace);
-        sceneManager.setSceneID(SeanID);
-        Logger::printf("SeanID=%d", SeanID);
+        sceneManager.setSceneID(LineTrace_SceneID);
+        Logger::printf("LineTrace_SceneID=%d\n", LineTrace_SceneID);
         if(sceneManager.SceneExecute())
         {
-            SeanID++;
+            LineTrace_SceneID++;
         }
 
-        if (SeanID > 17){
+        if (LineTrace_SceneID > 17){
             break;
         }
     }
 
-    Logger::printf("終了");
+    Logger::printf("終了\n");
 
     ext_tsk(); 
 }
