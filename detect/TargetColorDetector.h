@@ -16,7 +16,7 @@ public:
 private:
     ColorDetector& mColorDetector;
     
-    static const int MAX_TARGET_COLORS = 3;
+    static const int MAX_TARGET_COLORS = 7;
 
     Color mTargetColors[MAX_TARGET_COLORS];
 

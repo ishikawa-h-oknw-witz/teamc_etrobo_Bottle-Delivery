@@ -69,7 +69,7 @@ const SceneOrder LAP[] =
     {10, 10, ActionType::LineTrace}, // Lap蛇行1
     {11, 11, ActionType::LineTrace}, // Lap蛇行2
     {12, 12, ActionType::LineTrace}, // Lap直線4
-    {13,  1, ActionType::Turn},      // エッジの向きに回転
+    {13, 24, ActionType::LineTrace}, // Lap直線5
     {14,  0, ActionType::Stop},      // 停止
 };
 
@@ -83,18 +83,19 @@ const SceneOrder DetectBottleColor[] =
 
 const SceneOrder EnterZone[] =
 {
-    {0, 13, ActionType::LineTrace}, // Dlvカーブ1
-    {1, 14, ActionType::LineTrace}, // Dlvカーブ2
-    {2, 15, ActionType::LineTrace}, // Dlv行き青スルー
-    {3, 16, ActionType::LineTrace}, // Dlv直線1
-    {4, 17, ActionType::LineTrace}, // Dlvカーブ3
-    {5, 18, ActionType::LineTrace}  // Dlv青まで
+    {0,  1, ActionType::Turn}, // 角度調整
+    {1, 13, ActionType::LineTrace}, // Dlvカーブ1
+    {2, 14, ActionType::LineTrace}, // Dlvカーブ2
+    {3, 15, ActionType::LineTrace}, // Dlv行き青スルー
+    {4, 16, ActionType::LineTrace}, // Dlv直線1
+    {5, 17, ActionType::LineTrace}, // Dlvカーブ3
+    {6, 18, ActionType::LineTrace}  // Dlv青まで
 };
 
 const SceneOrder MoveZone[] =
 {
-    {0, 15, ActionType::LineTrace}, // Dlv行き青スルー
-    {1, 18, ActionType::LineTrace}  // Dlv行き青まで
+    {0, 18, ActionType::LineTrace},  // Dlv行き青まで
+    {1,  0, ActionType::Stop}
 };
 
 const SceneOrder CarryZone[] =
@@ -120,6 +121,11 @@ const SceneOrder EnterRally[] =
     {3, 23, ActionType::LineTrace}, // Dlv青半分まで
     {4,  0, ActionType::Turn},      // Dlv右に90°回転
     {5,  0, ActionType::Move}       // Dlv基準線まで
+};
+
+const SceneOrder turntest[] =
+{
+    {0, 3, ActionType::Turn}
 };
 
 /* ログタスク */
@@ -202,11 +208,11 @@ void main_task(intptr_t exinf)
 
         sceneManager.setActionType(detectbottlecolor.actionType);
         sceneManager.setSceneID(detectbottlecolor.sceneId);
-        Logger::printf("SceneID=%d", detectbottlecolor.sceneId);
+        Logger::printf("SceneID=%d\n", detectbottlecolor.sceneId);
         if(sceneManager.SceneExecute())
         {
             skipCount = SceneNum;
-            Logger::printf("%s", colorName[SceneNum]);
+            Logger::printf("%s!!!!!!!!!!!!!!!!!!!!!!!!!!\n", colorName[SceneNum]);
             break;
         }
     }
@@ -214,12 +220,13 @@ void main_task(intptr_t exinf)
     armController.moveArmDown();
 
     //ゾーン手前青まで
-    change_scene(EnterZone, 5);
+    change_scene(EnterZone, 6);
 
     //青スキップ
-    for (int skip = 0; skip < skipCount; skip++)
+    for (int skip = 0; skip < skipCount + 1; skip++)
     {
         change_scene(MoveZone, 1);
+        tslp_tsk(1000*1000);
     }
 
     //ボトル設置
