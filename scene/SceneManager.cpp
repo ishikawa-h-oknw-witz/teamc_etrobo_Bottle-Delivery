@@ -16,32 +16,35 @@ const LineTraceScene lineTraceScenes[] =
     { 9,  400,  60, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.5f, 0.0f, 0.4f} }, // Lapカーブ3
     {10,  900, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Lap蛇行1
     {11,  900,  80, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.5f, 0.0f, 0.4f} }, // Lap蛇行2
-    {12, 1100, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.4f} }, // Lap直線4
+    {12,  920, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.4f} }, // Lap直線4
     //{13,    0,  70, RunnerEdge::RightEdge, Color::None, 20, {0.4f, 0.0f, 0.4f} }, // Dlvボトルまで
-    {13,  800,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ1
-    {14,  200,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ2
-    {15,  100, 100, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv行き青スルー
-    {16, 1000, 100, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv直線1
+    {13,  800,  60, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ1
+    {14,  130,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ2
+    {15,  100,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv行き青スルー
+    {16, 1100,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv直線1
     {17,  200,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ3
-    {18,    0, 100, RunnerEdge::LeftEdge,  {Color::Blue}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv行き青まで
+    {18,  100,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv行き青まで
     {19,  100, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰り青スルー
     {20,  400, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線1
     {21,  300,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlv帰還カーブ1
-    {22,    0, 100, RunnerEdge::RightEdge, {Color::Blue}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還青まで
-    {23,   50, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }  // Dlv青半分まで
+    {22,    0, 100, RunnerEdge::RightEdge, {Color::Blue}, CalibrationData::LineCenter      , {0.3f, 0.0f, 0.4f} }, // Dlv帰還青まで
+    {23,   50, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} },  // Dlv青半分まで
+    {24,  200, 70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.4f} } // Lap直線5
 };
 
 const MoveScene moveScenes[] =
 {
-    //{0, Direction::front, {30.0f, 70.0f,  30.0f, 100.0f}, 100, Color::None, {1.0f, 0.0f, 0.0f}}, // Dlv青スルー
-    {0, Direction::front, {50.0f, 100.0f,  50.0f, 300.0f}, 300, {Color::None},  {1.0f, 0.0f, 0.0f}},              // Dlvエリアまで
-    {1, Direction::back,  {50.0f, 100.0f, 100.0f,   0.0f},   0, {Color::Black, Color::Blue}, {1.0f, 0.0f, 0.0f}}  // Dlv線まで帰還
+    {0, Direction::front, {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None},  {1.0f, 0.0f, 0.0f}},              // Dlvエリアまで
+    {1, Direction::back,  {50.0f, 100.0f, 100.0f,   0.0f},   0, {Color::Black, Color::Blue}, {1.0f, 0.0f, 0.0f}},  // Dlv線まで帰還
+    {2, Direction::front, {30.0f, 70.0f,  30.0f,  50.0f}, 50, {Color::None}, {1.0f, 0.0f, 0.0f}} // Dlv青スルー
 };
 
 const TurnScene turnScenes[] =
 {
     {0,  90, {1.0f, 0.0f, 0.0f}}, //右に90°回転
-    {1, -30, {1.0f, 0.0f, 0.0f}}  //左に30°回転
+    {1, -30, {1.0f, 0.0f, 0.0f}},  //左に30°回転
+    {2, -90, {1.0f, 0.0f, 0.0f}}, //右に90°回転
+    {3, 180, {1.0f, 0.0f, 0.0f}} //右に90°回転
 };
 
 const BottleDetectScene bottleDetectScenes[] =
@@ -229,6 +232,7 @@ void SceneManager::setParameter(int sceneId)
         if (turnscene.targetAngle != 0)
         {
             mGyroTraceRunner.setTargetAngle(turnscene.targetAngle);
+            mTargetAngleDetector.setTargetAngle(turnscene.targetAngle);
             mEventDetector = &mTargetAngleDetector;
         }
 
