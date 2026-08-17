@@ -69,7 +69,7 @@ const SceneOrder LAP[] =
     {10, 10, ActionType::LineTrace}, // Lap蛇行1
     {11, 11, ActionType::LineTrace}, // Lap蛇行2
     {12, 12, ActionType::LineTrace}, // Lap直線4
-    {13, 24, ActionType::LineTrace}, // Lap直線5
+    {13, 13, ActionType::LineTrace}, // Lap減速
     {14,  0, ActionType::Stop},      // 停止
 };
 
@@ -84,18 +84,18 @@ const SceneOrder DetectBottleColor[] =
 const SceneOrder EnterZone[] =
 {
     {0,  1, ActionType::Turn}, // 角度調整
-    {1, 13, ActionType::LineTrace}, // Dlvカーブ1
-    {2, 14, ActionType::LineTrace}, // Dlvカーブ2
-    {3, 15, ActionType::LineTrace}, // Dlv行き青スルー
-    {4, 16, ActionType::LineTrace}, // Dlv直線1
-    {5, 17, ActionType::LineTrace}, // Dlvカーブ3
-    {6, 18, ActionType::LineTrace}  // Dlv青まで
+    {1, 14, ActionType::LineTrace}, // Dlvカーブ1
+    {2, 15, ActionType::LineTrace}, // Dlvカーブ2
+    {3, 16, ActionType::LineTrace}, // Dlv行き青スルー
+    {4, 17, ActionType::LineTrace}, // Dlv直線1
+    {5, 18, ActionType::LineTrace}, // Dlvカーブ3
+    {6, 19, ActionType::LineTrace}  // Dlv直線2
 };
 
 const SceneOrder MoveZone[] =
 {
-    {0, 18, ActionType::LineTrace},  // Dlv行き青まで
-    {1,  0, ActionType::Stop}
+    {0, 19, ActionType::LineTrace},  // Dlv行きゲート前まで
+    {1,  0, ActionType::Stop} //回数確認用
 };
 
 const SceneOrder CarryZone[] =
@@ -104,21 +104,20 @@ const SceneOrder CarryZone[] =
     {1,  0, ActionType::Move},     // Dlvエリアまで
     {2,  1, ActionType::Move},     // Dlv線まで帰還
     {3,  0, ActionType::Turn},     // 右に90°回転
-    {4, 19, ActionType::LineTrace} // Dlv帰り青スルー
+    {4, 20, ActionType::LineTrace} // Dlv帰り青スルー
 };
 
 const SceneOrder ReturnZone[] =
 {
-    {0, 21, ActionType::LineTrace}, // Dlv帰り青スルー
-    {1, 22, ActionType::LineTrace}  // Dlv帰還青まで
+    {0, 19, ActionType::LineTrace},  // Dlv行きゲート前まで
 };
 
 const SceneOrder EnterRally[] =
 {
-    {0, 20, ActionType::LineTrace}, // Dlv帰還直線1
-    {1, 21, ActionType::LineTrace}, // Dlv帰還カーブ1
-    {2, 22, ActionType::LineTrace}, // Dlv帰還青まで
-    {3, 23, ActionType::LineTrace}, // Dlv青半分まで
+    {0, 21, ActionType::LineTrace}, // Dlv帰還直線1
+    {1, 22, ActionType::LineTrace}, // Dlv帰還カーブ1
+    {2, 23, ActionType::LineTrace}, // Dlv帰還青まで
+    {3, 24, ActionType::LineTrace}, // Dlv青半分まで
     {4,  0, ActionType::Turn},      // Dlv右に90°回転
     {5,  0, ActionType::Move}       // Dlv基準線まで
 };
@@ -223,7 +222,7 @@ void main_task(intptr_t exinf)
     change_scene(EnterZone, 6);
 
     //青スキップ
-    for (int skip = 0; skip < skipCount + 1; skip++)
+    for (int skip = 0; skip < skipCount; skip++)
     {
         change_scene(MoveZone, 1);
         tslp_tsk(1000*1000);
@@ -235,7 +234,7 @@ void main_task(intptr_t exinf)
     //帰還時青スキップ
     for (int skip = 0; skip < skipCount; skip++)
     {
-        change_scene(ReturnZone, 1);
+        change_scene(ReturnZone, 0);
     }
 
     //ラリーへ
