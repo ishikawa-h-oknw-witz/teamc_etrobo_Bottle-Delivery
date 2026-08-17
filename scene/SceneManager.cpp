@@ -30,12 +30,13 @@ const LineTraceScene lineTraceScenes[] =
     {16,  100,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv最初の青スルー
     {17, 1100,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv直線1
     {18,  200,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ3
-    {19,  200,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlvゲート前まで
-    {20,  100,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還青通過まで
-    {21,  400, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線1
-    {22,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlv帰還カーブ1
+    {19,  250,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlvゲート前まで
+    {20,   70,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還青通過まで
+    {21,  300,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線1
+    {22,  250,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlv帰還カーブ1
     {23, 1000, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還青まで
-    {24,   50,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }  // Dlv青半分まで
+    {24,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv青半分まで
+    {25,  100,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }
 };
 
 const MoveScene moveScenes[] =
@@ -49,7 +50,7 @@ const MoveScene moveScenes[] =
 const TurnScene turnScenes[] =
 {
     {0,  90, {1.0f, 0.0f, 0.0f}}, //右に90°回転
-    {1, -30, {1.0f, 0.0f, 0.0f}},  //左に30°回転
+    {1, -15, {1.0f, 0.0f, 0.0f}},  //左に30°回転
     {2, -90, {1.0f, 0.0f, 0.0f}}, //左に90°回転
     {3,  30, {1.0f, 0.0f, 0.0f}},  //左に30°回転
 };
