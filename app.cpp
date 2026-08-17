@@ -73,6 +73,12 @@ const SceneOrder LAP[] =
     {14,  0, ActionType::Stop},      // 停止
 };
 
+const SceneOrder EnterBottle[] =
+{
+    {0, 2, ActionType::Move}, //ボトル前まで移動
+    {1, 0, ActionType::Stop}  //回数確認用
+};
+
 const SceneOrder DetectBottleColor[] =
 {
     {0, 0, ActionType::BottoleDetect}, //黄ボトル検知
@@ -94,17 +100,20 @@ const SceneOrder EnterZone[] =
 
 const SceneOrder MoveZone[] =
 {
-    {0, 19, ActionType::LineTrace},  // Dlv行きゲート前まで
-    {1,  0, ActionType::Stop} //回数確認用
+    {0, 19, ActionType::LineTrace},  // Dlv行きゲート前ま
 };
 
 const SceneOrder CarryZone[] =
 {
-    {0,  0, ActionType::Turn},     // 右に90°回転
-    {1,  0, ActionType::Move},     // Dlvエリアまで
-    {2,  1, ActionType::Move},     // Dlv線まで帰還
-    {3,  0, ActionType::Turn},     // 右に90°回転
-    {4, 20, ActionType::LineTrace} // Dlv帰り青スルー
+    {0,  3, ActionType::Turn},     // 右に90°回転
+    {1,  3, ActionType::Move},
+    {2,  3, ActionType::Turn},     // 右に90°回転
+    {3,  3, ActionType::Move},
+    {4,  3, ActionType::Turn},     // 右に90°回転
+    {6,  0, ActionType::Move},     // Dlvエリアまで
+    {7,  1, ActionType::Move},     // Dlv線まで帰還
+    {8,  0, ActionType::Turn},     // 右に90°回転
+    {9, 20, ActionType::LineTrace} // Dlv帰り青スルー
 };
 
 const SceneOrder ReturnZone[] =
@@ -186,7 +195,7 @@ void main_task(intptr_t exinf)
     tslp_tsk(20 * 1000);
     while (forceSensor.isTouched());
 
-    int skipCount = 0;
+    int skipCount = -1;
 
     //メインループ10msec周期
 
@@ -196,6 +205,13 @@ void main_task(intptr_t exinf)
     tslp_tsk(100*1000);
     
     armController.moveArmUp();
+
+    // アーム上昇直後の振動が収まるまで待つ
+    tslp_tsk(200*1000);
+
+    //ボトルまで動く
+
+    change_scene(EnterBottle, 1);
 
     //ボトル色検知
 
@@ -216,20 +232,27 @@ void main_task(intptr_t exinf)
         }
     }
 
+    if (skipCount < 0)
+    {
+        Logger::printf("Bottle color detection failed.\r\n");
+        gyroTraceRunner.stop();
+        ext_tsk();
+        return;
+    }
+
     armController.moveArmDown();
 
     //ゾーン手前青まで
     change_scene(EnterZone, 6);
 
     //青スキップ
-    for (int skip = 0; skip < skipCount; skip++)
+    for (int skip = 0; skip < skipCount + 1; skip++)
     {
-        change_scene(MoveZone, 1);
-        tslp_tsk(1000*1000);
+        change_scene(MoveZone, 0);
     }
 
     //ボトル設置
-    change_scene(CarryZone, 4);
+    change_scene(CarryZone, 9);
 
     //帰還時青スキップ
     for (int skip = 0; skip < skipCount; skip++)

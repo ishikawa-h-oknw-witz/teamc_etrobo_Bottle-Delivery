@@ -28,6 +28,7 @@ void LineTraceRunner::calibrateTargetReflection(int index)
     }
 
     mTargetSensorValues[index] = sum / 10;
+    Logger::printf("キャリブレーションReflection:%d",mTargetSensorValues[index]);
 }
 
 void LineTraceRunner::calibrateTargetValue(int index)
