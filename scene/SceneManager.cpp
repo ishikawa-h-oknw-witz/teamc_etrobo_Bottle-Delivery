@@ -1,6 +1,13 @@
 #include "SceneManager.h"
 #include "Logger.h"
 
+namespace
+{
+constexpr int BOTTLE_COLOR_SAMPLE_COUNT = 10;
+constexpr int BOTTLE_COLOR_REQUIRED_MATCH_COUNT = 6;
+constexpr int BOTTLE_COLOR_SAMPLE_INTERVAL_MS = 10;
+}
+
 // {シーンID, 目標距離, 速度, 走行エッジ, 終了色, 目標輝度, {Kp, Ki, Kd}}
 const LineTraceScene lineTraceScenes[] =
 {
@@ -16,14 +23,14 @@ const LineTraceScene lineTraceScenes[] =
     { 9,  400,  60, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.5f, 0.0f, 0.4f} }, // Lapカーブ3
     {10,  900, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Lap蛇行1
     {11,  900,  80, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.5f, 0.0f, 0.4f} }, // Lap蛇行2
-    {12,  920, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.4f} }, // Lap直線4
-    {13,  200,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.4f} }, // Lap減速
+    {12,  900, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.4f} }, // Lap直線4
+    {13,  180,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.4f} }, // Lap減速
     {14,  800,  60, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ1
-    {15,  130,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ2
+    {15,  200,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ2
     {16,  100,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv最初の青スルー
     {17, 1100,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv直線1
     {18,  200,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ3
-    {19,  100,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlvゲート前まで
+    {19,  200,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlvゲート前まで
     {20,  100,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還青通過まで
     {21,  400, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線1
     {22,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlv帰還カーブ1
@@ -33,8 +40,10 @@ const LineTraceScene lineTraceScenes[] =
 
 const MoveScene moveScenes[] =
 {
-    {0, Direction::front, {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
-    {1, Direction::back,  {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}  // Dlv線まで帰還
+    {0, Direction::front, {50.0f, 100.0f,  50.0f, 100.0f}, 100, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
+    {1, Direction::back,  {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlv線まで帰還
+    {2, Direction::front, {50.0f,  70.0f,  50.0f,  10.0f},  10, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
+    {3, Direction::front, {50.0f,  70.0f,  50.0f,  10.0f},  50, {Color::None}, {1.0f, 0.0f, 0.0f}}
 };
 
 const TurnScene turnScenes[] =
@@ -42,6 +51,7 @@ const TurnScene turnScenes[] =
     {0,  90, {1.0f, 0.0f, 0.0f}}, //右に90°回転
     {1, -30, {1.0f, 0.0f, 0.0f}},  //左に30°回転
     {2, -90, {1.0f, 0.0f, 0.0f}}, //左に90°回転
+    {3,  30, {1.0f, 0.0f, 0.0f}},  //左に30°回転
 };
 
 const BottleDetectScene bottleDetectScenes[] =
@@ -99,7 +109,10 @@ bool SceneManager::SceneExecute()
 
     if (mActionType == ActionType::BottoleDetect)
     {
-        return mEventDetector->judge();
+        return mTargetColorDetector.judgeMultiple(
+            BOTTLE_COLOR_SAMPLE_COUNT,
+            BOTTLE_COLOR_REQUIRED_MATCH_COUNT,
+            BOTTLE_COLOR_SAMPLE_INTERVAL_MS);
     }
 
     if (mActionType == ActionType::Stop)

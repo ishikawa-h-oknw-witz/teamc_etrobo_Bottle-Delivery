@@ -1,5 +1,6 @@
 #include "TargetColorDetector.h"
 #include "Logger.h"
+#include "kernel.h"
 
 TargetColorDetector::TargetColorDetector(
     ColorDetector& colorDetector)
@@ -32,4 +33,41 @@ bool TargetColorDetector::judge()
     }
 
     return false;
+}
+
+bool TargetColorDetector::judgeMultiple(
+    int sampleCount,
+    int requiredMatchCount,
+    int sampleIntervalMs)
+{
+    if (sampleCount <= 0 ||
+        requiredMatchCount <= 0 ||
+        requiredMatchCount > sampleCount ||
+        sampleIntervalMs < 0)
+    {
+        return false;
+    }
+
+    int matchCount = 0;
+
+    for (int sample = 0; sample < sampleCount; sample++)
+    {
+        if (judge())
+        {
+            matchCount++;
+        }
+
+        if (sample + 1 < sampleCount && sampleIntervalMs > 0)
+        {
+            tslp_tsk(sampleIntervalMs * 1000);
+        }
+    }
+
+    Logger::printf(
+        "ColorMatch=%d/%d Required=%d\r\n",
+        matchCount,
+        sampleCount,
+        requiredMatchCount);
+
+    return matchCount >= requiredMatchCount;
 }
