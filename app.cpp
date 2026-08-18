@@ -95,7 +95,7 @@ const SceneOrder EnterZone[] =
     {3, 16, ActionType::LineTrace}, // Dlv行き青スルー
     {4, 17, ActionType::LineTrace}, // Dlv直線1
     {5, 18, ActionType::LineTrace}, // Dlvカーブ3
-    {6, 19, ActionType::LineTrace}  // Dlv直線2
+    {6, 25, ActionType::LineTrace}  // Dlv直線2
 };
 
 const SceneOrder MoveZone[] =
@@ -110,25 +110,25 @@ const SceneOrder CarryZone[] =
     {2,  3, ActionType::Turn},     // 右に90°回転
     {3,  3, ActionType::Move},
     {4,  3, ActionType::Turn},     // 右に90°回転
-    {6,  0, ActionType::Move},     // Dlvエリアまで
-    {7,  1, ActionType::Move},     // Dlv線まで帰還
-    {8,  0, ActionType::Turn},     // 右に90°回転
-    {9, 20, ActionType::LineTrace} // Dlv帰り青スルー
+    {5,  0, ActionType::Move},     // Dlvエリアまで
+    {6,  1, ActionType::Move},     // Dlv線まで帰還
+    {7,  0, ActionType::Turn},     // 右に90°回転
+    {8, 20, ActionType::LineTrace} // Dlv帰り青スルー
 };
 
 const SceneOrder ReturnZone[] =
 {
-    {0, 19, ActionType::LineTrace},  // Dlv行きゲート前まで
+    {0, 21, ActionType::LineTrace},  // Dlv行きゲート前まで
 };
 
 const SceneOrder EnterRally[] =
 {
-    {0, 21, ActionType::LineTrace}, // Dlv帰還直線1
-    {1, 22, ActionType::LineTrace}, // Dlv帰還カーブ1
-    {2, 23, ActionType::LineTrace}, // Dlv帰還青まで
-    {3, 24, ActionType::LineTrace}, // Dlv青半分まで
-    {4,  0, ActionType::Turn},      // Dlv右に90°回転
-    {5,  0, ActionType::Move}       // Dlv基準線まで
+    {0, 22, ActionType::LineTrace}, // Dlv帰還カーブ1
+    {1, 23, ActionType::LineTrace}, // Dlv帰還青まで
+    {2, 24, ActionType::LineTrace}, // Dlv青半分まで
+    {3,  0, ActionType::Turn},      // Dlv右に90°回転
+    {4,  0, ActionType::Move},      // Dlv基準線まで
+    {5,  0, ActionType::Stop}
 };
 
 const SceneOrder turntest[] =
@@ -252,10 +252,10 @@ void main_task(intptr_t exinf)
     }
 
     //ボトル設置
-    change_scene(CarryZone, 9);
+    change_scene(CarryZone, 8);
 
     //帰還時青スキップ
-    for (int skip = 0; skip < skipCount; skip++)
+    for (int skip = 0; skip < skipCount + 1; skip++)
     {
         change_scene(ReturnZone, 0);
     }
