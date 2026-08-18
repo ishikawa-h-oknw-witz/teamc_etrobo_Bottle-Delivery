@@ -94,12 +94,13 @@ const SceneOrder EnterZone[] =
     {3, 16, ActionType::LineTrace}, // Dlv行き青スルー
     {4, 17, ActionType::LineTrace}, // Dlv直線1
     {5, 18, ActionType::LineTrace}, // Dlvカーブ3
-    {6, 25, ActionType::LineTrace}  // Dlv直線2
 };
 
 const SceneOrder MoveZone[] =
 {
-    {0, 19, ActionType::LineTrace},  // Dlv行きゲート前ま
+    {0, 19, ActionType::LineTrace},  // 黄エリア前まで
+    {0, 20, ActionType::LineTrace},  // 青エリア前まで
+    {0, 21, ActionType::LineTrace},  // 赤エリア前まで
 };
 
 const SceneOrder CarryZone[] =
@@ -112,19 +113,20 @@ const SceneOrder CarryZone[] =
     {5,  0, ActionType::Move},     // Dlvエリアまで
     {6,  1, ActionType::Move},     // Dlv線まで帰還
     {7,  0, ActionType::Turn},     // 右に90°回転
-    {8, 20, ActionType::LineTrace} // Dlv帰り青スルー
 };
 
 const SceneOrder ReturnZone[] =
 {
-    {0, 21, ActionType::LineTrace},  // Dlv行きゲート前まで
+    {0, 22, ActionType::LineTrace},  // Dlv黄から行きゲート前まで
+    {0, 23, ActionType::LineTrace},  // Dlv青から行きゲート前まで
+    {0, 24, ActionType::LineTrace},  // Dlv黄から行きゲート前まで
 };
 
 const SceneOrder EnterRally[] =
 {
-    {0, 22, ActionType::LineTrace}, // Dlv帰還カーブ1
-    {1, 23, ActionType::LineTrace}, // Dlv帰還青まで
-    {2, 24, ActionType::LineTrace}, // Dlv青半分まで
+    {0, 25, ActionType::LineTrace}, // Dlv帰還カーブ1
+    {1, 26, ActionType::LineTrace}, // Dlv帰還青まで
+    {2, 27, ActionType::LineTrace}, // Dlv青半分まで
     {3,  0, ActionType::Turn},      // Dlv右に90°回転
     {4,  0, ActionType::Move},      // Dlv基準線まで
     {5,  0, ActionType::Stop}
@@ -209,11 +211,9 @@ void main_task(intptr_t exinf)
     tslp_tsk(200*1000);
 
     //ボトルまで動く
-
     change_scene(EnterBottle, 1);
 
     //ボトル色検知
-
     const char* colorName[] = {"黄", "青", "赤"};
 
     for (int SceneNum = 0; SceneNum < 3; SceneNum++)
@@ -233,33 +233,26 @@ void main_task(intptr_t exinf)
 
     if (skipCount < 0)
     {
+        tslp_tsk(200*1000);
         Logger::printf("Bottle color detection failed.\r\n");
-        gyroTraceRunner.stop();
-        ext_tsk();
-        return;
+        change_scene(EnterBottle, 1);
     }
 
     armController.moveArmDown();
 
-    //ゾーン手前青まで
-    change_scene(EnterZone, 6);
+    //Dlvカープ3まで
+    change_scene(EnterZone, 5);
 
-    //青スキップ
-    for (int skip = 0; skip < skipCount + 1; skip++)
-    {
-        change_scene(MoveZone, 0);
-    }
+    //任意のエリア前まで移動
+    change_scene(&MoveZone[skipCount], 0);
 
     //ボトル設置
-    change_scene(CarryZone, 8);
+    change_scene(CarryZone, 7);
 
-    //帰還時青スキップ
-    for (int skip = 0; skip < skipCount + 1; skip++)
-    {
-        change_scene(ReturnZone, 0);
-    }
+    //カーブに向かう
+    change_scene(&ReturnZone[skipCount], 0);
 
-    //ラリーへ
+    //ラリーへ向かう
     change_scene(EnterRally, 5);
 
     Logger::printf("終了");

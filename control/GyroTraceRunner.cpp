@@ -36,7 +36,9 @@ void GyroTraceRunner::setTargetAngle(float targetAngle)
 
 void GyroTraceRunner::move()
 {
-    mTrapezoidCalculator.getSpeed();
+    // 毎周期、台形加減速で算出した正の速度から設定し直す
+    // （前回の後退時に負へ変換した値を次周期へ持ち越さない）
+    mBaseSpeed = mTrapezoidCalculator.getSpeed();
 
     // 後退の場合は速度を負にする
     if(mDirection==Direction::back)
