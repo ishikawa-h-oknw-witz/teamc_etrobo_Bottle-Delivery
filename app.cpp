@@ -19,6 +19,8 @@
 //タスク系
 #include "kernel.h"   
 #include "kernel_cfg.h"
+//バッテリー
+#include "Battery.h"
 
 using namespace spikeapi;
 
@@ -44,6 +46,8 @@ TargetColorDetector targetColorDetector(colorDetector);
 SceneManager sceneManager(lineTraceRunner, gyroTraceRunner, pidCalculator, trapezoidCalculator, distanceCalculator, targetDistanceDetector, targetAngleDetector, targetColorDetector);
 
 Logger logger(colorSensor, leftWheel, rightWheel);
+
+Battery battery;
 /* インスタンス生成ここまで */
 
 struct SceneOrder
@@ -157,7 +161,7 @@ void change_scene(const SceneOrder sceneOrder[], int MaxSceneNum)
 
         sceneManager.setActionType(sceneorder.actionType);
         sceneManager.setSceneID(sceneorder.sceneId);
-        Logger::printf("SceneID=%d", sceneorder.sceneId);
+        Logger::printf("[app]SceneID=%d\n", sceneorder.sceneId);
         if(sceneManager.SceneExecute())
         {
             SceneNum++;
@@ -175,12 +179,15 @@ void main_task(intptr_t exinf)
 {
     /* Bluetooth初期化＆接続待ち＆ログタスク起動100msec周期 */
     logger.init();
-    Logger::printf("接続完了\n");
+    Logger::printf("[app]接続完了\n");
+    Logger::printf("[app]出力電圧:%d\n",battery.getVoltage());
+    Logger::printf("[app]出力電流:%d\n",battery.getCurrent());
     //sta_cyc(LOGGER_TASK_CYC);
 
     armController.moveArmDown();
 
     // 1回目の押下
+    /*
     while (!forceSensor.isTouched());
     tslp_tsk(20 * 1000);
     while (forceSensor.isTouched());
@@ -195,18 +202,19 @@ void main_task(intptr_t exinf)
 
     lineTraceRunner.calibrateTargetReflection(1);
     Logger::printf("キャリブレーション２完了\n");
+    */
 
     // 3回目の押下（スタート）
     while (!forceSensor.isTouched());
     tslp_tsk(20 * 1000);
     while (forceSensor.isTouched());
-    Logger::printf("スタート\n");
+    Logger::printf("[app]スタート\n");
 
     int skipCount = -1;
 
     //メインループ10msec周期
 
-    Logger::printf("ラップ開始\n");
+    Logger::printf("[app]ラップ開始\n");
     //LAP
     change_scene(LAP, 14);
 
@@ -229,11 +237,11 @@ void main_task(intptr_t exinf)
 
         sceneManager.setActionType(detectbottlecolor.actionType);
         sceneManager.setSceneID(detectbottlecolor.sceneId);
-        Logger::printf("SceneID=%d\n", detectbottlecolor.sceneId);
+        Logger::printf("[app]SceneID=%d\n", detectbottlecolor.sceneId);
         if(sceneManager.SceneExecute())
         {
             skipCount = SceneNum;
-            Logger::printf("%s!!!!!!!!!!!!!!!!!!!!!!!!!!\n", colorName[SceneNum]);
+            Logger::printf("[app]色検知:%s\n", colorName[SceneNum]);
             break;
         }
     }
@@ -241,7 +249,7 @@ void main_task(intptr_t exinf)
     if (skipCount < 0)
     {
         tslp_tsk(200*1000);
-        Logger::printf("Bottle color detection failed.\r\n");
+        Logger::printf("[app]ボトル検知失敗\n");
         change_scene(EnterBottle, 1);
     }
 
@@ -262,7 +270,7 @@ void main_task(intptr_t exinf)
     //ラリーへ向かう
     change_scene(EnterRally, 5);
 
-    Logger::printf("終了");
+    Logger::printf("[app]終了\n");
 
     ext_tsk(); 
 }

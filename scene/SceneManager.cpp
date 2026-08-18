@@ -173,6 +173,7 @@ void SceneManager::setParameter()
         mLineTraceRunner.setEdge(linetracescene.edge);
 
         // 目標輝度
+        /*
         if (linetracescene.targetSensorValue == CalibrationData::BlackWhiteCenter)
         {
             mLineTraceRunner.setTargetSensorValue(
@@ -183,6 +184,7 @@ void SceneManager::setParameter()
             mLineTraceRunner.setTargetSensorValue(
                 mLineTraceRunner.getTargetSensorValue(1));
         }
+        */
 
         // 走行距離
         if (linetracescene.targetDistance != 0)
