@@ -1,5 +1,4 @@
-#ifndef TARGET_ANGLE_DETECTOR_H
-#define TARGET_ANGLE_DETECTOR_H
+#pragma once
 
 #include "IMU.h"
 #include "IEventDetector.h"
@@ -21,5 +20,3 @@ private:
     int mTargetAngle;
     int mAngleTolerance;
 };
-
-#endif

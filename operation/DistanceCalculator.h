@@ -1,5 +1,4 @@
-#ifndef DISTANCE_CALCULATOR_H
-#define DISTANCE_CALCULATOR_H
+#pragma once
 
 #include "Motor.h"
 
@@ -31,5 +30,3 @@ private:
 
     static constexpr float TIRE_DIAMETER = 56.0f;
 };
-
-#endif

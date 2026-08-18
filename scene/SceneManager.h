@@ -78,7 +78,7 @@ public:
     void setSceneID(int sceneid);
     void setActionType(ActionType actiontype);
     bool SceneExecute();
-    void setParameter(int sceneId);
+    void setParameter();
 
 private:
     LineTraceRunner& mLineTraceRunner;

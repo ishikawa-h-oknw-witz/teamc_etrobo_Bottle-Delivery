@@ -1,5 +1,4 @@
-#ifndef PID_CALCULATOR_H
-#define PID_CALCULATOR_H
+#pragma once
 
 struct PID
 {
@@ -26,5 +25,3 @@ private:
 
     PID mPID;
 };
- 
-#endif
