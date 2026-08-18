@@ -12,7 +12,7 @@ LineTraceRunner::LineTraceRunner(
       mRightMotor(rightMotor),
       mColorSensor(colorSensor),
       mPIDCalculator(pidCalculate),
-      mTargetSensorValue(50),
+      mTargetSensorValue(55),
       mBaseSpeed(60)
 {
 }
@@ -28,7 +28,7 @@ void LineTraceRunner::calibrateTargetReflection(int index)
     }
 
     mTargetSensorValues[index] = sum / 10;
-    Logger::printf("キャリブレーションReflection:%d",mTargetSensorValues[index]);
+    Logger::printf("[LineTraceRunner]目標輝度:%d",mTargetSensorValues[index]);
 }
 
 void LineTraceRunner::calibrateTargetValue(int index)
