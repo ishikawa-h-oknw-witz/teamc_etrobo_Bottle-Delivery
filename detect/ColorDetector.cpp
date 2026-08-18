@@ -9,7 +9,7 @@ static constexpr ColorHSVRange mColorHSVRanges[] =
     { Color::Yellow,  30, 69,21,100,11,100 },
     { Color::Green,   70,159,21,100,11,100 },
     { Color::Gray,     0,360, 0, 20,11, 89 },
-    { Color::Black,    0,360, 0,100, 0, 20 },
+    { Color::Black,    0,360, 0,100, 0, 10 },
     { Color::White,    0,360, 0, 20,90,100 }
 };
 
