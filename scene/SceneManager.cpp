@@ -41,9 +41,9 @@ const LineTraceScene lineTraceScenes[] =
     {26, 1000, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還青まで
     {27,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv青半分まで
     {28,    0,  30, RunnerEdge::RightEdge, {Color::Green, Color::Yellow, Color::Red, Color::Blue},
-                                                          CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.2f} }, // Rly右エッジで次の色地点まで
+                                                          CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.2f} }, // Rly右エッジで次の色地点まで
     {29,    0,  30, RunnerEdge::LeftEdge,  {Color::Green, Color::Yellow, Color::Red, Color::Blue},
-                                                          CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.2f} }, // Rly左エッジで次の色地点まで
+                                                          CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.2f} }, // Rly左エッジで次の色地点まで
 };
 
 const MoveScene moveScenes[] =
@@ -62,6 +62,7 @@ const MoveScene moveScenes[] =
                                                                                 {1.0f, 0.0f, 0.0f}}, //基準点帰還
     {11, Direction::front, {30.0f,  50.0f,  30.0f, 100.0f}, 100, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rly目標外の基準点を通過
     {12, Direction::back,  {30.0f,  50.0f,  30.0f, 300.0f}, 300, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲートから後退して帰還
+    {13, Direction::front, {30.0f,  50.0f,  30.0f,  50.0f},  50, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rly帰還旋回後にラインまで直進
 };
 
 const TurnScene turnScenes[] =
@@ -71,8 +72,8 @@ const TurnScene turnScenes[] =
     {2, -90, {1.0f, 0.0f, 0.0f}}, //左に90°回転
     {3,  30, {1.0f, 0.0f, 0.0f}},  //右に30°回転
     {4, 180, {1.0f, 0.0f, 0.0f}},  //180°回転
-    {5,  90, {1.0f, 0.0f, 0.0f}},  //右に45°回転
-    {6, -90, {1.0f, 0.0f, 0.0f}},  //左に45°回転
+    {5,  70, {1.0f, 0.0f, 0.0f}},  //右に90°回転
+    {6, -70, {1.0f, 0.0f, 0.0f}},  //左に90°回転
 };
 
 const ColorDetectScene colorDetectScenes[] =

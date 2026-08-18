@@ -213,8 +213,13 @@ const SceneOrder GateTurn[] =
 
 const SceneOrder RejoinTurn[] =
 {
-    {0, 5, ActionType::Turn}, // 次の基準点方向へ右45°
-    {1, 6, ActionType::Turn}, // 次の基準点方向へ左45°
+    {0, 5, ActionType::Turn}, // 次の基準点方向へ右90°
+    {1, 6, ActionType::Turn}, // 次の基準点方向へ左90°
+};
+
+const SceneOrder RejoinMove[] =
+{
+    {0, 13, ActionType::Move}, // 旋回後、ラインへ戻るため100mm直進
 };
 
 const SceneOrder EnterGate[] =
@@ -505,9 +510,10 @@ void main_task(intptr_t exinf)
                 static_cast<int>(nextPointColor),
                 nowEdgeIndex);
 
-            // 次の基準点へ向き直す。ゲートへ向かう90°旋回は、
-            // 次の目標色へ到着した後のGateTurnで行う。
-            if (!change_scene(&RejoinTurn[nowEdgeIndex], 0))
+            // 次の基準点方向へ90°旋回し、100mm直進してラインへ戻る。
+            // ゲートへ向かう90°旋回は、次の目標色へ到着した後のGateTurnで行う。
+            if (!change_scene(&RejoinTurn[nowEdgeIndex], 0) ||
+                !change_scene(RejoinMove, 0))
             {
                 ext_tsk();
                 return;
