@@ -46,6 +46,15 @@ SceneManager sceneManager(lineTraceRunner, gyroTraceRunner, pidCalculator, trape
 Logger logger(colorSensor, leftWheel, rightWheel);
 /* インスタンス生成ここまで */
 
+const int RightEdge = 0;
+const int LeftEdge = 1;
+
+struct GatePosition
+{
+    Color PointColor;
+    int GatePositionNum;
+};
+
 struct SceneOrder
 {
     int sceneNum;
@@ -53,6 +62,12 @@ struct SceneOrder
     ActionType actionType;
 };
 
+const GatePosition Gateposition[] =
+{
+    {Color::Yellow, 3}, //赤ゲート
+    {Color::Red,    4}, //青ゲート
+    {Color::Green, 13}, //黄ゲート
+};
 
 const SceneOrder LAP[] =
 {
@@ -81,9 +96,9 @@ const SceneOrder EnterBottle[] =
 
 const SceneOrder DetectBottleColor[] =
 {
-    {0, 0, ActionType::BottoleDetect}, //黄ボトル検知
-    {1, 1, ActionType::BottoleDetect}, //青ボトル検知
-    {2, 2, ActionType::BottoleDetect}  //赤ボトル検知
+    {0, 0, ActionType::ColorDetect}, //黄ボトル検知
+    {1, 1, ActionType::ColorDetect}, //青ボトル検知
+    {2, 2, ActionType::ColorDetect}  //赤ボトル検知
 };
 
 const SceneOrder EnterZone[] =
@@ -132,10 +147,50 @@ const SceneOrder EnterRally[] =
     {5,  0, ActionType::Stop}
 };
 
-const SceneOrder turntest[] =
+const SceneOrder EnterPoint[] =
 {
-    {0, 3, ActionType::Turn}
+    {0, 28, ActionType::LineTrace}, // 右エッジ基準点まで
+    {1, 29, ActionType::LineTrace}, // 左エッジ基準点まで
 };
+
+const SceneOrder DetectPointColor[] =
+{
+    {0, 3, ActionType::ColorDetect}, // 緑検知
+    {1, 0, ActionType::ColorDetect}, // 黄検知
+    {2, 2, ActionType::ColorDetect}, // 赤検知
+    {3, 1, ActionType::ColorDetect}, // 青検知
+};
+
+const SceneOrder MovePointCenter[] =
+{
+    {0, 3, ActionType::Move}, //基準点中央まで
+};
+
+const SceneOrder GateTurn[] =
+{
+    {0, 0, ActionType::Turn}, //右90
+    {1, 2, ActionType::Turn}, //左90
+};
+
+const SceneOrder EnterGate[] =
+{
+    {0, 4, ActionType::Move}, //ゲート前1
+    {1, 5, ActionType::Move}, //ゲート前2
+    {2, 6, ActionType::Move}, //ゲート前3
+    {3, 7, ActionType::Move}, //ゲート前4
+    {4, 8, ActionType::Move}, //ゲート前5
+};
+
+const SceneOrder GateCrossing[] =
+{
+    {0, 9, ActionType::Move}, //ゲート通過
+    {1, 1, ActionType::Move}, //ゲート帰還
+};
+
+const SceneOrder ReturnPoint[] =
+{
+    {0, 10, ActionType::Move}, //基準点帰還
+}
 
 /* ログタスク */
 void logger_task(intptr_t exinf)
@@ -199,7 +254,7 @@ void main_task(intptr_t exinf)
     int skipCount = -1;
 
     //メインループ10msec周期
-
+/*
     //LAP
     change_scene(LAP, 14);
 
@@ -254,6 +309,72 @@ void main_task(intptr_t exinf)
 
     //ラリーへ向かう
     change_scene(EnterRally, 5);
+*/
+    int NowEdge = RightEdge;
+
+    for (int i = 0, i < 3, i++)
+    {
+        for (int j = 0, j < 3, j++)
+        {
+            Color NowPointColor = Color::None;
+            while (NowPonitColor != Gateposition[j].PointColor)
+            {
+                change_scene(&EnterPoint[NowEdge], 0);
+
+                const Color* PointColors[] = {Color::Green, Color::Yellow, Collor::Red, Color::Blue};
+
+                for (int SceneNum = 0; SceneNum < 4; SceneNum++)
+                {
+                    const SceneOrder& detectpointcolor = DetectPointColor[SceneNum];
+
+                    sceneManager.setActionType(detectpointcolor.actionType);
+                    sceneManager.setSceneID(detectpointcolor.sceneId);
+                    Logger::printf("SceneID=%d\n", detectpointcolor.sceneId);
+                    if (sceneManager.SceneExecute())
+                    {
+                        NowPointColor = PointColor[SceneNum];
+                        Logger::printf("%s!!!!!!!!!!!!!!!!!!!!!!!!!!\n", PointColors[SceneNum]);
+                        break;
+                    }
+                }
+            }
+
+            change_scene(MovePointCenter, 0);
+
+            change_scene(&GateTurn[NowEdge], 0);
+
+            int GateNum = Gateposition[j].GatePositionNum;
+
+            if (GateNum <= 4 || GateNum >= 10)
+            {
+                int lookside = 0;
+                if (GateNum <= 4)
+                {
+                    change_scene(EnterGate[Gateposition[j].GatePositionNum - 1], 0);
+                    lookside = 1;
+                }
+                else 
+                {
+                    change_scene(EnterGate[Gateposition[j].GatePositionNum - 10], 0);
+                    lookside = 0;
+                }
+
+                change_scene(&GateTurn[lookside], 0);
+                change_scene(GateCrossing, 1);
+                change_scene(&GateTurn[lookside], 0);
+            }
+            else
+            {
+                change_scene(EnterGate[Gateposition[j].GatePositionNum - 5], 0);
+                change_scene(&GateTurn[3], 0);
+            }
+            change_scene(ReturnPoint, 0);
+
+            j = 3;
+        }
+
+        i = 3;
+    }
 
     Logger::printf("終了");
 

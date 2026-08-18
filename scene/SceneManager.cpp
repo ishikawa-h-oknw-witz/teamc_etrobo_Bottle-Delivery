@@ -38,15 +38,27 @@ const LineTraceScene lineTraceScenes[] =
     {24,  800,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線 赤
     {25,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlv帰還カーブ1
     {26, 1000, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還青まで
-    {27,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }  // Dlv青半分まで
-};
+    {27,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv青半分まで
+    {28,    0,  70, RunnerEdge::RightEdge, {Color::Green, Color::Yellow, Color::Red, Color::Blue}, 
+                                                          CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Rly右エッジ基準点まで
+    {28,    0,  70, RunnerEdge::LeftEdge,  {Color::Green, Color::Yellow, Color::Red, Color::Blue}, 
+                                                          CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Rly左エッジ基準点まで
+    };
 
 const MoveScene moveScenes[] =
 {
-    {0, Direction::front, {50.0f, 100.0f,  50.0f, 100.0f}, 100, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
-    {1, Direction::back,  {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlv線まで帰還
-    {2, Direction::front, {50.0f,  70.0f,  50.0f,  10.0f},  10, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
-    {3, Direction::front, {50.0f,  70.0f,  50.0f,  50.0f},  50, {Color::None}, {1.0f, 0.0f, 0.0f}}
+    { 0, Direction::front, {50.0f, 100.0f,  50.0f, 100.0f}, 100, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
+    { 1, Direction::back,  {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlv線まで帰還
+    { 2, Direction::front, {50.0f,  70.0f,  50.0f,  10.0f},  10, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
+    { 3, Direction::front, {50.0f,  70.0f,  50.0f,  50.0f},  50, {Color::None}, {1.0f, 0.0f, 0.0f}},
+    { 4, Direction::front, {50.0f, 100.0f,  50.0f, 250.0f}, 250, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前1
+    { 5, Direction::front, {50.0f, 100.0f,  50.0f, 450.0f}, 450, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前2
+    { 6, Direction::front, {50.0f, 100.0f,  50.0f, 650.0f}, 650, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前3
+    { 7, Direction::front, {50.0f, 100.0f,  50.0f, 650.0f}, 850, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前4
+    { 8, Direction::front, {50.0f, 100.0f,  50.0f, 650.0f},1050, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前5
+    { 9, Direction::front, {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート通過
+    {10, Direction::front, {50.0f, 100.0f,  50.0f,   0.0f},   0, {Color::Green, Color::Yellow, Color::Red, Color::Blue},
+                                                                                {1.0f, 0.0f, 0.0f}}, //基準点帰還
 };
 
 const TurnScene turnScenes[] =
@@ -57,11 +69,12 @@ const TurnScene turnScenes[] =
     {3,  30, {1.0f, 0.0f, 0.0f}},  //左に30°回転
 };
 
-const BottleDetectScene bottleDetectScenes[] =
+const BottleDetectScene ColorDetectScenes[] =
 {
-    {0, {Color::Yellow}}, //黄ボトル検知
-    {1, {Color::Blue}  }, //青ボトル検知
-    {2, {Color::Red}   }  //赤ボトル検知
+    {0, {Color::Yellow}}, //黄検知
+    {1, {Color::Blue}  }, //青検知
+    {2, {Color::Red}   }, //赤検知
+    {3, {Color::Green} }, //緑検知
 };
 
 //コンストラクタ
@@ -110,7 +123,7 @@ bool SceneManager::SceneExecute()
 
     mDistanceCalculator.reset();
 
-    if (mActionType == ActionType::BottoleDetect)
+    if (mActionType == ActionType::ColorDetect)
     {
         return mTargetColorDetector.judgeMultiple(
             BOTTLE_COLOR_SAMPLE_COUNT,
@@ -251,11 +264,11 @@ void SceneManager::setParameter()
 
         break;
     }
-    case ActionType::BottoleDetect:
+    case ActionType::ColorDetect:
     {
-        const BottleDetectScene& bottledetectscene = bottleDetectScenes[mSceneId];
+        const BottleDetectScene& colordetectscene = ColorDetectScenes[mSceneId];
     
-        mTargetColorDetector.setTargetColors(bottledetectscene.detectColor);
+        mTargetColorDetector.setTargetColors(colordetectscene.detectColor);
         mEventDetector = &mTargetColorDetector;
 
         break;

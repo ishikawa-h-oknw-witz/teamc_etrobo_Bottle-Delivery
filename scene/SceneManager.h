@@ -16,7 +16,7 @@ enum class ActionType
     LineTrace,
     Move,
     Turn,
-    BottoleDetect,
+    ColorDetect,
     Stop
 };
 
