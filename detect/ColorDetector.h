@@ -37,7 +37,9 @@ public:
     ColorDetector(ColorSensor& sensor);
 
     Color detect();
+    Color getLastDetectedColor() const;
 
 private:
     ColorSensor& mColorSensor;
+    Color mLastDetectedColor;
 };

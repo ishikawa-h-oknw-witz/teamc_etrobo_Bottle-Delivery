@@ -5,6 +5,7 @@
 
 #include <syssvc/serial.h>
 #include <spike/hub/bluetooth.h>
+#include "kernel.h"
 
 Logger::Logger(
     ColorSensor& colorSensor,

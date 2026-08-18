@@ -2,6 +2,13 @@
 #include "Logger.h"
 #include "kernel.h"
 
+namespace
+{
+// 同じ色区間を連続して別の基準点として検知しないためのロック。
+// 一度色を検知した後、色以外の場所へ抜けると次の検知を許可する。
+bool waitingForColorRelease = false;
+}
+
 TargetColorDetector::TargetColorDetector(
     ColorDetector& colorDetector)
     : mColorDetector(colorDetector),
@@ -23,13 +30,31 @@ void TargetColorDetector::setTargetColors(
 bool TargetColorDetector::judge()
 {
     Color detected = mColorDetector.detect();
+    bool isTargetColor = false;
 
     for (int i = 0; i < mTargetColorNum; i++)
     {
         if (detected == mTargetColors[i])
         {
-            return true;
+            isTargetColor = true;
+            break;
         }
+    }
+
+    if (waitingForColorRelease)
+    {
+        if (!isTargetColor)
+        {
+            waitingForColorRelease = false;
+        }
+
+        return false;
+    }
+
+    if (isTargetColor)
+    {
+        waitingForColorRelease = true;
+        return true;
     }
 
     return false;
@@ -52,9 +77,15 @@ bool TargetColorDetector::judgeMultiple(
 
     for (int sample = 0; sample < sampleCount; sample++)
     {
-        if (judge())
+        const Color detected = mColorDetector.detect();
+
+        for (int targetIndex = 0; targetIndex < mTargetColorNum; targetIndex++)
         {
-            matchCount++;
+            if (detected == mTargetColors[targetIndex])
+            {
+                matchCount++;
+                break;
+            }
         }
 
         if (sample + 1 < sampleCount && sampleIntervalMs > 0)

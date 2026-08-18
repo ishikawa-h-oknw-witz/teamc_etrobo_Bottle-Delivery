@@ -10,13 +10,13 @@ class TargetAngleDetector : public IEventDetector
 public:
     TargetAngleDetector();
 
-    void setTargetAngle(int angle);
-    void setAngleTolerance(int tolerance);
+    void setTargetAngle(float angle);
+    void setAngleTolerance(float tolerance);
 
     bool judge() override;
 
 private:
     IMU mIMU;
-    int mTargetAngle;
-    int mAngleTolerance;
+    float mTargetAngle;
+    float mAngleTolerance;
 };
