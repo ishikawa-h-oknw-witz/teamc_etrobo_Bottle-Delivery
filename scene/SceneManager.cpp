@@ -41,9 +41,9 @@ const LineTraceScene lineTraceScenes[] =
     {26, 1000, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還青まで
     {27,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv青半分まで
     {28,    0,  70, RunnerEdge::RightEdge, {Color::Green, Color::Yellow, Color::Red, Color::Blue},
-                                                          CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Rly右エッジ基準点まで
+                                                          CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Rly右エッジで次の色地点まで
     {29,    0,  70, RunnerEdge::LeftEdge,  {Color::Green, Color::Yellow, Color::Red, Color::Blue},
-                                                          CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Rly左エッジ基準点まで
+                                                          CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Rly左エッジで次の色地点まで
 };
 
 const MoveScene moveScenes[] =
@@ -51,7 +51,7 @@ const MoveScene moveScenes[] =
     { 0, Direction::front, {50.0f, 100.0f,  50.0f, 100.0f}, 100, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
     { 1, Direction::back,  {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlv線まで帰還
     { 2, Direction::front, {50.0f,  70.0f,  50.0f,  10.0f},  10, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
-    { 3, Direction::front, {50.0f,  70.0f,  50.0f,  50.0f},  50, {Color::None}, {1.0f, 0.0f, 0.0f}},
+    { 3, Direction::front, {70.0f,  70.0f,  50.0f,  50.0f},  50, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rly基準点中央まで
     { 4, Direction::front, {50.0f, 100.0f,  50.0f, 250.0f}, 250, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前1
     { 5, Direction::front, {50.0f, 100.0f,  50.0f, 450.0f}, 450, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前2
     { 6, Direction::front, {50.0f, 100.0f,  50.0f, 650.0f}, 650, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前3

@@ -14,7 +14,8 @@ static constexpr ColorHSVRange mColorHSVRanges[] =
 };
 
 ColorDetector::ColorDetector(ColorSensor& sensor)
-    : mColorSensor(sensor)
+    : mColorSensor(sensor),
+      mLastDetectedColor(Color::Unknown)
 {
 }
 
@@ -29,9 +30,16 @@ Color ColorDetector::detect()
             hsv.s >= range.sMin && hsv.s <= range.sMax &&
             hsv.v >= range.vMin && hsv.v <= range.vMax)
         {
-            return range.color;
+            mLastDetectedColor = range.color;
+            return mLastDetectedColor;
         }
     }
 
-    return Color::Unknown;   // または適切なデフォルト
+    mLastDetectedColor = Color::Unknown;
+    return mLastDetectedColor;
+}
+
+Color ColorDetector::getLastDetectedColor() const
+{
+    return mLastDetectedColor;
 }
