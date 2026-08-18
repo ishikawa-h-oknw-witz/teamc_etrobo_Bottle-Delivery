@@ -1,5 +1,4 @@
-#ifndef LOGGER_H
-#define LOGGER_H
+#pragma once
 
 #include "Motor.h"
 #include "IMU.h"
@@ -25,5 +24,3 @@ private:
     Motor& mRightMotor;
     IMU mImu;
 };
-
-#endif

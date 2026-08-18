@@ -1,5 +1,4 @@
-#ifndef TRAPEZOID_CALCULATOR_H
-#define TRAPEZOID_CALCULATOR_H
+#pragma once
 
 #include "DistanceCalculator.h"
 
@@ -33,5 +32,3 @@ private:
     float mDecelDistance;
     float mTotalDistance;
 };
-
-#endif

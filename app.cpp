@@ -84,7 +84,6 @@ const SceneOrder DetectBottleColor[] =
     {0, 0, ActionType::BottoleDetect}, //黄ボトル検知
     {1, 1, ActionType::BottoleDetect}, //青ボトル検知
     {2, 2, ActionType::BottoleDetect}  //赤ボトル検知
-
 };
 
 const SceneOrder EnterZone[] =

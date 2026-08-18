@@ -3,9 +3,9 @@
 
 namespace
 {
-constexpr int BOTTLE_COLOR_SAMPLE_COUNT = 10;
-constexpr int BOTTLE_COLOR_REQUIRED_MATCH_COUNT = 6;
-constexpr int BOTTLE_COLOR_SAMPLE_INTERVAL_MS = 10;
+    constexpr int BOTTLE_COLOR_SAMPLE_COUNT = 10;
+    constexpr int BOTTLE_COLOR_REQUIRED_MATCH_COUNT = 6;
+    constexpr int BOTTLE_COLOR_SAMPLE_INTERVAL_MS = 10;
 }
 
 // {シーンID, 目標距離, 速度, 走行エッジ, 終了色, 目標輝度, {Kp, Ki, Kd}}
@@ -104,7 +104,7 @@ void SceneManager::setActionType(ActionType actiontype)
 bool SceneManager::SceneExecute()
 {
     mImu.resetHeading();
-    setParameter(mSceneId);
+    setParameter();
 
     mDistanceCalculator.reset();
 
@@ -149,7 +149,7 @@ bool SceneManager::SceneExecute()
     return true;
 }
 
-void SceneManager::setParameter(int sceneId)
+void SceneManager::setParameter()
 {
 
     switch(mActionType)
