@@ -137,11 +137,13 @@ const SceneOrder turntest[] =
 };
 
 /* ログタスク */
+/*
 void logger_task(intptr_t exinf)
 {
     logger.output();
     ext_tsk();
 }
+*/
 
 //シーン実行&遷移
 void change_scene(const SceneOrder sceneOrder[], int MaxSceneNum)
@@ -172,7 +174,8 @@ void main_task(intptr_t exinf)
 {
     /* Bluetooth初期化＆接続待ち＆ログタスク起動100msec周期 */
     logger.init();
-    sta_cyc(LOGGER_TASK_CYC);
+    Logger::printf("接続完了");
+    //sta_cyc(LOGGER_TASK_CYC);
 
     armController.moveArmDown();
 
@@ -182,6 +185,7 @@ void main_task(intptr_t exinf)
     while (forceSensor.isTouched());
 
     lineTraceRunner.calibrateTargetReflection(0);
+    Logger::printf("キャリブレーション１完了");
 
     // 2回目の押下
     while (!forceSensor.isTouched());
@@ -189,11 +193,13 @@ void main_task(intptr_t exinf)
     while (forceSensor.isTouched());
 
     lineTraceRunner.calibrateTargetReflection(1);
+    Logger::printf("キャリブレーション２完了");
 
     // 3回目の押下（スタート）
     while (!forceSensor.isTouched());
     tslp_tsk(20 * 1000);
     while (forceSensor.isTouched());
+    Logger::printf("スタート");
 
     int skipCount = -1;
 
