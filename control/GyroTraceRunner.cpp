@@ -1,7 +1,25 @@
 #include "GyroTraceRunner.h"
 #include "SceneManager.h"
 #include "kernel.h"
-#include <stdlib.h>
+#include <cmath>
+
+namespace
+{
+float normalizeAngle(float angle)
+{
+    while (angle > 180.0f)
+    {
+        angle -= 360.0f;
+    }
+
+    while (angle < -180.0f)
+    {
+        angle += 360.0f;
+    }
+
+    return angle;
+}
+}
 
 // コンストラクタ
 GyroTraceRunner::GyroTraceRunner(
@@ -68,7 +86,7 @@ void GyroTraceRunner::turn()
 {
     float currentHeading = mImu.getHeading();
 
-    float error = mTargetAngle - currentHeading;
+    float error = normalizeAngle(mTargetAngle - currentHeading);
 
     /*
     // パルス制御
@@ -97,7 +115,8 @@ void GyroTraceRunner::turn()
 
     // PID制御
     // 誤差が5°を超える間はPID制御により旋回出力を計算する。
-    int turnPower = abs(mPIDCalculator.calculate(error)); 
+    int turnPower = static_cast<int>(
+        std::fabs(mPIDCalculator.calculate(error)));
 
     //PID計算結果が40以上なら40に制限し、30以下なら30に引き上げる
     //上限を決めるのは安定させるため、下限を決めるのは走行体のスタックを防ぐため

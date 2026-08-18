@@ -6,6 +6,7 @@ namespace
     constexpr int BOTTLE_COLOR_SAMPLE_COUNT = 10;
     constexpr int BOTTLE_COLOR_REQUIRED_MATCH_COUNT = 6;
     constexpr int BOTTLE_COLOR_SAMPLE_INTERVAL_MS = 10;
+    constexpr int MAX_SCENE_CONTROL_CYCLES = 3000;
 }
 
 // {シーンID, 目標距離, 速度, 走行エッジ, 終了色, 目標輝度, {Kp, Ki, Kd}}
@@ -39,11 +40,11 @@ const LineTraceScene lineTraceScenes[] =
     {25,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlv帰還カーブ1
     {26, 1000, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還青まで
     {27,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv青半分まで
-    {28,    0,  70, RunnerEdge::RightEdge, {Color::Green, Color::Yellow, Color::Red, Color::Blue}, 
+    {28,    0,  70, RunnerEdge::RightEdge, {Color::Green, Color::Yellow, Color::Red, Color::Blue},
                                                           CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Rly右エッジ基準点まで
-    {28,    0,  70, RunnerEdge::LeftEdge,  {Color::Green, Color::Yellow, Color::Red, Color::Blue}, 
+    {29,    0,  70, RunnerEdge::LeftEdge,  {Color::Green, Color::Yellow, Color::Red, Color::Blue},
                                                           CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Rly左エッジ基準点まで
-    };
+};
 
 const MoveScene moveScenes[] =
 {
@@ -54,10 +55,10 @@ const MoveScene moveScenes[] =
     { 4, Direction::front, {50.0f, 100.0f,  50.0f, 250.0f}, 250, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前1
     { 5, Direction::front, {50.0f, 100.0f,  50.0f, 450.0f}, 450, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前2
     { 6, Direction::front, {50.0f, 100.0f,  50.0f, 650.0f}, 650, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前3
-    { 7, Direction::front, {50.0f, 100.0f,  50.0f, 650.0f}, 850, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前4
-    { 8, Direction::front, {50.0f, 100.0f,  50.0f, 650.0f},1050, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前5
+    { 7, Direction::front, {50.0f, 100.0f,  50.0f, 850.0f}, 850, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前4
+    { 8, Direction::front, {50.0f, 100.0f,  50.0f,1050.0f},1050, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前5
     { 9, Direction::front, {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート通過
-    {10, Direction::front, {50.0f, 100.0f,  50.0f,   0.0f},   0, {Color::Green, Color::Yellow, Color::Red, Color::Blue},
+    {10, Direction::front, {50.0f,  50.0f,  50.0f,   0.0f},   0, {Color::Green, Color::Yellow, Color::Red, Color::Blue},
                                                                                 {1.0f, 0.0f, 0.0f}}, //基準点帰還
 };
 
@@ -66,10 +67,11 @@ const TurnScene turnScenes[] =
     {0,  90, {1.0f, 0.0f, 0.0f}}, //右に90°回転
     {1, -15, {1.0f, 0.0f, 0.0f}},  //左に30°回転
     {2, -90, {1.0f, 0.0f, 0.0f}}, //左に90°回転
-    {3,  30, {1.0f, 0.0f, 0.0f}},  //左に30°回転
+    {3,  30, {1.0f, 0.0f, 0.0f}},  //右に30°回転
+    {4, 180, {1.0f, 0.0f, 0.0f}},  //180°回転
 };
 
-const BottleDetectScene ColorDetectScenes[] =
+const ColorDetectScene colorDetectScenes[] =
 {
     {0, {Color::Yellow}}, //黄検知
     {1, {Color::Blue}  }, //青検知
@@ -119,9 +121,11 @@ void SceneManager::setActionType(ActionType actiontype)
 bool SceneManager::SceneExecute()
 {
     mImu.resetHeading();
+    mEventDetector = nullptr;
     setParameter();
 
     mDistanceCalculator.reset();
+    mPIDCalculator.reset();
 
     if (mActionType == ActionType::ColorDetect)
     {
@@ -136,9 +140,24 @@ bool SceneManager::SceneExecute()
         mGyroTraceRunner.stop();
         return true;
     }
+
+    if (mEventDetector == nullptr)
+    {
+        Logger::printf("Event detector is not configured. SceneID=%d\r\n", mSceneId);
+        mGyroTraceRunner.stop();
+        return false;
+    }
     
+    int controlCycleCount = 0;
     while(!mEventDetector->judge())
     {
+        if (controlCycleCount >= MAX_SCENE_CONTROL_CYCLES)
+        {
+            Logger::printf("Scene timeout. SceneID=%d\r\n", mSceneId);
+            mGyroTraceRunner.stop();
+            return false;
+        }
+
         // 走行実行
         switch (mActionType)
         {
@@ -158,6 +177,7 @@ bool SceneManager::SceneExecute()
             break;
         }
         tslp_tsk(10*1000);
+        controlCycleCount++;
     }
 
     // シーン終了
@@ -266,9 +286,9 @@ void SceneManager::setParameter()
     }
     case ActionType::ColorDetect:
     {
-        const BottleDetectScene& colordetectscene = ColorDetectScenes[mSceneId];
+        const ColorDetectScene& colorDetectScene = colorDetectScenes[mSceneId];
     
-        mTargetColorDetector.setTargetColors(colordetectscene.detectColor);
+        mTargetColorDetector.setTargetColors(colorDetectScene.detectColor);
         mEventDetector = &mTargetColorDetector;
 
         break;

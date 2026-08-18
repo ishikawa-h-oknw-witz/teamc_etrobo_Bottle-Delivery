@@ -54,7 +54,7 @@ struct TurnScene
     PID pid;
 };
 
-struct BottleDetectScene
+struct ColorDetectScene
 {
     int sceneId;
     Color detectColor[7];
