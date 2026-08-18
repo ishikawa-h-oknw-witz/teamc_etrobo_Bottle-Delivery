@@ -176,6 +176,12 @@ const SceneOrder GateTurn[] =
     {2, 4, ActionType::Turn}, // 180°
 };
 
+const SceneOrder RejoinTurn[] =
+{
+    {0, 5, ActionType::Turn}, // 次の基準点方向へ右45°
+    {1, 6, ActionType::Turn}, // 次の基準点方向へ左45°
+};
+
 const SceneOrder EnterGate[] =
 {
     {0, 4, ActionType::Move}, //ゲート前1
@@ -187,13 +193,18 @@ const SceneOrder EnterGate[] =
 
 const SceneOrder GateCrossing[] =
 {
-    {0, 9, ActionType::Move}, //ゲート通過
-    {1, 1, ActionType::Move}, //ゲート帰還
+    {0,  9, ActionType::Move}, // ゲートを500mm通過
+    {1, 12, ActionType::Move}, // ゲートから500mm後退して帰還
 };
 
 const SceneOrder ReturnPoint[] =
 {
     {0, 10, ActionType::Move}, //基準点帰還
+};
+
+const SceneOrder RejoinLine[] =
+{
+    {0, 13, ActionType::Move}, // 次の基準点方向へ50mm進んでラインへ戻る
 };
 
 /* ログタスク */
@@ -429,18 +440,29 @@ void main_task(intptr_t exinf)
             }
         }
 
-        if (!change_scene(ReturnPoint, 0) ||
-            !change_scene(&GateTurn[nowEdgeIndex], 0))
+        if (!change_scene(ReturnPoint, 0))
         {
             ext_tsk();
             return;
         }
 
-        // 基準点へ戻った後は進行方向が反転するため、
-        // 次の基準点探索では反対側のエッジを使用する。
-        nowEdgeIndex = (nowEdgeIndex == RIGHT_EDGE_INDEX)
-            ? LEFT_EDGE_INDEX
-            : RIGHT_EDGE_INDEX;
+        const bool hasNextPoint = gateIndex + 1 < gatePositionCount;
+        if (hasNextPoint)
+        {
+            // 基準点の並びは下から緑・黄・赤・青。
+            // 黄から赤へは上方向、赤から緑へは下方向へ向き直す。
+            if (!change_scene(&RejoinTurn[nowEdgeIndex], 0) ||
+                !change_scene(RejoinLine, 0))
+            {
+                ext_tsk();
+                return;
+            }
+
+            // 進行方向が反転するため、次の探索では反対側のエッジを使用する。
+            nowEdgeIndex = (nowEdgeIndex == RIGHT_EDGE_INDEX)
+                ? LEFT_EDGE_INDEX
+                : RIGHT_EDGE_INDEX;
+        }
     }
 
     gyroTraceRunner.stop();

@@ -57,10 +57,12 @@ const MoveScene moveScenes[] =
     { 6, Direction::front, {50.0f, 100.0f,  50.0f, 650.0f}, 650, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前3
     { 7, Direction::front, {50.0f, 100.0f,  50.0f, 850.0f}, 850, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前4
     { 8, Direction::front, {50.0f, 100.0f,  50.0f,1050.0f},1050, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前5
-    { 9, Direction::front, {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート通過
+    { 9, Direction::front, {50.0f, 100.0f,  50.0f, 500.0f}, 500, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲートを通過
     {10, Direction::front, {50.0f,  50.0f,  50.0f,   0.0f},   0, {Color::Green, Color::Yellow, Color::Red, Color::Blue},
                                                                                 {1.0f, 0.0f, 0.0f}}, //基準点帰還
     {11, Direction::front, {70.0f,  70.0f,  70.0f, 100.0f}, 100, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rly目標外の基準点を通過
+    {12, Direction::back,  {50.0f, 100.0f,  50.0f, 500.0f}, 500, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲートから後退して帰還
+    {13, Direction::front, {50.0f,  50.0f,  50.0f,  50.0f},  50, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rly次の基準点方向へ進みラインへ戻る
 };
 
 const TurnScene turnScenes[] =
@@ -70,6 +72,8 @@ const TurnScene turnScenes[] =
     {2, -90, {1.0f, 0.0f, 0.0f}}, //左に90°回転
     {3,  30, {1.0f, 0.0f, 0.0f}},  //右に30°回転
     {4, 180, {1.0f, 0.0f, 0.0f}},  //180°回転
+    {5,  45, {1.0f, 0.0f, 0.0f}},  //右に45°回転
+    {6, -45, {1.0f, 0.0f, 0.0f}},  //左に45°回転
 };
 
 const ColorDetectScene colorDetectScenes[] =
