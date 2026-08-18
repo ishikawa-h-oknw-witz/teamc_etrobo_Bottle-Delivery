@@ -16,10 +16,13 @@ public:
 
     void resetAngle();
 
+    //指定角度にアームを移動
     void moveArm(int angle);
     
+    //最低角度にアームを移動
     void moveArmDown();
 
+    //最大角度にアームを移動
     void moveArmUp();
 
 private:

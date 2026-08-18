@@ -24,11 +24,6 @@ void GyroTraceRunner::setDirection(Direction direction)
     mDirection = direction;
 }
 
-void GyroTraceRunner::setBasespeed(int speed)
-{
-    mBaseSpeed = speed;
-}
-
 void GyroTraceRunner::setTargetAngle(float targetAngle)
 {
     mTargetAngle = targetAngle;
