@@ -136,11 +136,6 @@ const SceneOrder EnterRally[] =
     {5,  0, ActionType::Stop}
 };
 
-const SceneOrder turntest[] =
-{
-    {0, 3, ActionType::Turn}
-};
-
 /* ログタスク */
 /*
 void logger_task(intptr_t exinf)
@@ -187,7 +182,7 @@ void main_task(intptr_t exinf)
     armController.moveArmDown();
 
     // 1回目の押下
-    /*
+    /*キャリブレーション用
     while (!forceSensor.isTouched());
     tslp_tsk(20 * 1000);
     while (forceSensor.isTouched());
