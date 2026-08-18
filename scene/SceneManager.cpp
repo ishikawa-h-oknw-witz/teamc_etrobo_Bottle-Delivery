@@ -60,6 +60,7 @@ const MoveScene moveScenes[] =
     { 9, Direction::front, {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート通過
     {10, Direction::front, {50.0f,  50.0f,  50.0f,   0.0f},   0, {Color::Green, Color::Yellow, Color::Red, Color::Blue},
                                                                                 {1.0f, 0.0f, 0.0f}}, //基準点帰還
+    {11, Direction::front, {70.0f,  70.0f,  70.0f, 100.0f}, 100, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rly目標外の基準点を通過
 };
 
 const TurnScene turnScenes[] =

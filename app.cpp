@@ -161,7 +161,12 @@ const SceneOrder EnterPoint[] =
 
 const SceneOrder MovePointCenter[] =
 {
-    {0, 3, ActionType::Move}, //基準点中央まで
+    {0, 3, ActionType::Move}, // 目標の基準点中央まで50mm進む
+};
+
+const SceneOrder PassPoint[] =
+{
+    {0, 11, ActionType::Move}, // 目標外の基準点を100mmで通り抜ける
 };
 
 const SceneOrder GateTurn[] =
@@ -345,9 +350,14 @@ void main_task(intptr_t exinf)
                 static_cast<int>(detectedPointColor),
                 static_cast<int>(gatePositions[gateIndex].pointColor));
 
-            // 色区間ではライントレースが不安定になるため、
-            // 50mm直進して色区間を抜けてから走行を続ける。
-            if (!change_scene(MovePointCenter, 0))
+            const bool isTargetPoint =
+                detectedPointColor == gatePositions[gateIndex].pointColor;
+
+            // 目標色なら中央まで50mm、目標外なら色区間を抜けるため100mm進む。
+            const SceneOrder* pointMove =
+                isTargetPoint ? MovePointCenter : PassPoint;
+
+            if (!change_scene(pointMove, 0))
             {
                 ext_tsk();
                 return;
