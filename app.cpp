@@ -152,23 +152,21 @@ const SceneOrder EnterRally[] =
     {5,  0, ActionType::Stop}
 };
 
+// 次の色地点までライントレースする。
 const SceneOrder EnterPoint[] =
 {
-    {0, 28, ActionType::LineTrace}, // 右エッジ基準点まで
-    {1, 29, ActionType::LineTrace}, // 左エッジ基準点まで
-};
-
-const SceneOrder DetectPointColor[] =
-{
-    {0, 3, ActionType::ColorDetect}, // 緑検知
-    {1, 0, ActionType::ColorDetect}, // 黄検知
-    {2, 2, ActionType::ColorDetect}, // 赤検知
-    {3, 1, ActionType::ColorDetect}, // 青検知
+    {0, 28, ActionType::LineTrace}, // 右エッジで次の色地点まで
+    {0, 29, ActionType::LineTrace}, // 左エッジで次の色地点まで
 };
 
 const SceneOrder MovePointCenter[] =
 {
-    {0, 3, ActionType::Move}, //基準点中央まで
+    {0, 3, ActionType::Move}, // 目標の基準点中央まで50mm進む
+};
+
+const SceneOrder PassPoint[] =
+{
+    {0, 11, ActionType::Move}, // 目標外の基準点を100mmで通り抜ける
 };
 
 const SceneOrder GateTurn[] =
@@ -176,6 +174,12 @@ const SceneOrder GateTurn[] =
     {0, 0, ActionType::Turn}, // 右90°
     {1, 2, ActionType::Turn}, // 左90°
     {2, 4, ActionType::Turn}, // 180°
+};
+
+const SceneOrder RejoinTurn[] =
+{
+    {0, 5, ActionType::Turn}, // 次の基準点方向へ右45°
+    {1, 6, ActionType::Turn}, // 次の基準点方向へ左45°
 };
 
 const SceneOrder EnterGate[] =
@@ -189,8 +193,8 @@ const SceneOrder EnterGate[] =
 
 const SceneOrder GateCrossing[] =
 {
-    {0, 9, ActionType::Move}, //ゲート通過
-    {1, 1, ActionType::Move}, //ゲート帰還
+    {0,  9, ActionType::Move}, // ゲートを500mm通過
+    {1, 12, ActionType::Move}, // ゲートから500mm後退して帰還
 };
 
 const SceneOrder ReturnPoint[] =
@@ -198,20 +202,9 @@ const SceneOrder ReturnPoint[] =
     {0, 10, ActionType::Move}, //基準点帰還
 };
 
-const Color pointColors[] =
+const SceneOrder RejoinLine[] =
 {
-    Color::Green,
-    Color::Yellow,
-    Color::Red,
-    Color::Blue,
-};
-
-const char* pointColorNames[] =
-{
-    "緑",
-    "黄",
-    "赤",
-    "青",
+    {0, 13, ActionType::Move}, // 次の基準点方向へ50mm進んでラインへ戻る
 };
 
 /* ログタスク */
@@ -249,29 +242,6 @@ bool change_scene(const SceneOrder sceneOrder[], int maxSceneNum)
     }
 
     return true;
-}
-
-Color detectPointColor()
-{
-    gyroTraceRunner.stop();
-
-    for (int sceneNum = 0; sceneNum < 4; sceneNum++)
-    {
-        const SceneOrder& detectPointColorScene = DetectPointColor[sceneNum];
-
-        sceneManager.setActionType(detectPointColorScene.actionType);
-        sceneManager.setSceneID(detectPointColorScene.sceneId);
-        Logger::printf("ColorDetectSceneID=%d\r\n", detectPointColorScene.sceneId);
-
-        if (sceneManager.SceneExecute())
-        {
-            Logger::printf("PointColor=%s\r\n", pointColorNames[sceneNum]);
-            return pointColors[sceneNum];
-        }
-    }
-
-    Logger::printf("Point color detection failed.\r\n");
-    return Color::Unknown;
 }
 
 /* メインタスク */
@@ -365,10 +335,10 @@ void main_task(intptr_t exinf)
 
     for (int gateIndex = 0; gateIndex < gatePositionCount; gateIndex++)
     {
-        Color nowPointColor = Color::Unknown;
+        Color detectedPointColor = Color::Unknown;
         int pointSearchCount = 0;
 
-        while (nowPointColor != gatePositions[gateIndex].pointColor)
+        while (detectedPointColor != gatePositions[gateIndex].pointColor)
         {
             if (pointSearchCount >= MAX_POINT_SEARCH_COUNT)
             {
@@ -384,16 +354,21 @@ void main_task(intptr_t exinf)
                 return;
             }
 
-            nowPointColor = detectPointColor();
-            if (nowPointColor == Color::Unknown)
-            {
-                gyroTraceRunner.stop();
-                ext_tsk();
-                return;
-            }
+            // ライントレースの終了判定で検知済みの色を取得する。
+            detectedPointColor = colorDetector.getLastDetectedColor();
+            Logger::printf(
+                "PointColor=%d TargetColor=%d\r\n",
+                static_cast<int>(detectedPointColor),
+                static_cast<int>(gatePositions[gateIndex].pointColor));
 
-            // 検知したマーカーを抜け、基準点中央へ移動する。
-            if (!change_scene(MovePointCenter, 0))
+            const bool isTargetPoint =
+                detectedPointColor == gatePositions[gateIndex].pointColor;
+
+            // 目標色なら中央まで50mm、目標外なら色区間を抜けるため100mm進む。
+            const SceneOrder* pointMove =
+                isTargetPoint ? MovePointCenter : PassPoint;
+
+            if (!change_scene(pointMove, 0))
             {
                 ext_tsk();
                 return;
@@ -401,6 +376,8 @@ void main_task(intptr_t exinf)
 
             pointSearchCount++;
         }
+
+        Logger::printf("Target point detected. GateIndex=%d\r\n", gateIndex);
 
         if (!change_scene(&GateTurn[nowEdgeIndex], 0))
         {
@@ -463,18 +440,29 @@ void main_task(intptr_t exinf)
             }
         }
 
-        if (!change_scene(ReturnPoint, 0) ||
-            !change_scene(&GateTurn[nowEdgeIndex], 0))
+        if (!change_scene(ReturnPoint, 0))
         {
             ext_tsk();
             return;
         }
 
-        // 基準点へ戻った後は進行方向が反転するため、
-        // 次の基準点探索では反対側のエッジを使用する。
-        nowEdgeIndex = (nowEdgeIndex == RIGHT_EDGE_INDEX)
-            ? LEFT_EDGE_INDEX
-            : RIGHT_EDGE_INDEX;
+        const bool hasNextPoint = gateIndex + 1 < gatePositionCount;
+        if (hasNextPoint)
+        {
+            // 基準点の並びは下から緑・黄・赤・青。
+            // 黄から赤へは上方向、赤から緑へは下方向へ向き直す。
+            if (!change_scene(&RejoinTurn[nowEdgeIndex], 0) ||
+                !change_scene(RejoinLine, 0))
+            {
+                ext_tsk();
+                return;
+            }
+
+            // 進行方向が反転するため、次の探索では反対側のエッジを使用する。
+            nowEdgeIndex = (nowEdgeIndex == RIGHT_EDGE_INDEX)
+                ? LEFT_EDGE_INDEX
+                : RIGHT_EDGE_INDEX;
+        }
     }
 
     gyroTraceRunner.stop();
