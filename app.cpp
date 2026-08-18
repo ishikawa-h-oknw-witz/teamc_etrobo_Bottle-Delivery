@@ -70,7 +70,7 @@ struct SceneOrder
 const GatePosition gatePositions[] =
 {
     {Color::Yellow,  3}, // 黄色地点にある赤ゲート
-    {Color::Red,     4}, // 赤色地点にある青ゲート
+    {Color::Red,     7}, // 赤色地点にある青ゲート
     {Color::Green,  13}, // 緑色地点にある黄ゲート
 };
 

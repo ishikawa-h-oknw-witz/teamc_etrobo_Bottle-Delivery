@@ -51,15 +51,15 @@ const MoveScene moveScenes[] =
     { 0, Direction::front, {50.0f, 100.0f,  50.0f, 100.0f}, 100, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
     { 1, Direction::back,  {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlv線まで帰還
     { 2, Direction::front, {50.0f,  70.0f,  50.0f,  10.0f},  10, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
-    { 3, Direction::front, {50.0f,  70.0f,  50.0f,  50.0f},  50, {Color::None}, {1.0f, 0.0f, 0.0f}},
-    { 4, Direction::front, {50.0f, 100.0f,  50.0f, 250.0f}, 250, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前1
-    { 5, Direction::front, {50.0f, 100.0f,  50.0f, 450.0f}, 450, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前2
-    { 6, Direction::front, {50.0f, 100.0f,  50.0f, 650.0f}, 650, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前3
-    { 7, Direction::front, {50.0f, 100.0f,  50.0f, 850.0f}, 850, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前4
-    { 8, Direction::front, {50.0f, 100.0f,  50.0f,1050.0f},1050, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート前5
+    { 3, Direction::front, {50.0f,  70.0f,  50.0f,  30.0f},  30, {Color::None}, {1.0f, 0.0f, 0.0f}},
+    { 4, Direction::front, {50.0f, 100.0f,  50.0f, 250.0f}, 250, {Color::None}, {2.0f, 0.0f, 0.0f}}, // Rlyゲート前1
+    { 5, Direction::front, {50.0f, 100.0f,  50.0f, 500.0f}, 500, {Color::None}, {2.0f, 0.0f, 0.0f}}, // Rlyゲート前2
+    { 6, Direction::front, {50.0f, 100.0f,  50.0f, 750.0f}, 750, {Color::None}, {2.0f, 0.0f, 0.0f}}, // Rlyゲート前3
+    { 7, Direction::front, {50.0f, 100.0f,  50.0f,1000.0f},1000, {Color::None}, {2.0f, 0.0f, 0.0f}}, // Rlyゲート前4
+    { 8, Direction::front, {50.0f, 100.0f,  50.0f,1250.0f},1250, {Color::None}, {2.0f, 0.0f, 0.0f}}, // Rlyゲート前5
     { 9, Direction::front, {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲート通過
     {10, Direction::front, {50.0f,  50.0f,  50.0f,   0.0f},   0, {Color::Green, Color::Yellow, Color::Red, Color::Blue},
-                                                                                {1.0f, 0.0f, 0.0f}}, //基準点帰還
+                                                                                {2.0f, 0.0f, 0.0f}}, //基準点帰還
 };
 
 const TurnScene turnScenes[] =

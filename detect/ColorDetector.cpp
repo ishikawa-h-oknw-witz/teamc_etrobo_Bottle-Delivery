@@ -3,14 +3,14 @@
 
 static constexpr ColorHSVRange mColorHSVRanges[] =
 {
-    { Color::Red,      0,29, 21,100,11,100 },
-    { Color::Red,    280,360,21,100,11,100 },
-    { Color::Blue,   160,279,21,100,11,100 },
-    { Color::Yellow,  30, 69,21,100,11,100 },
-    { Color::Green,   70,159,21,100,11,100 },
-    { Color::Gray,     0,360, 0, 20,11, 89 },
+    { Color::Red,      0,29, 41,100,11,100 },
+    { Color::Red,    280,360,41,100,11,100 },
+    { Color::Blue,   160,279,41,100,11,100 },
+    { Color::Yellow,  30, 69,41,100,11,100 },
+    { Color::Green,   70,159,41,100,11,100 },
+    { Color::Gray,     0,360, 0, 40,11, 89 },
     { Color::Black,    0,360, 0,100, 0, 10 },
-    { Color::White,    0,360, 0, 20,90,100 }
+    { Color::White,    0,360, 0, 40,90,100 }
 };
 
 ColorDetector::ColorDetector(ColorSensor& sensor)
