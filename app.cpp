@@ -143,7 +143,7 @@ const SceneOrder DetectBottleColor[] =
 
 const SceneOrder EnterZone[] =
 {
-    {0,  1, ActionType::Turn}, // 角度調整
+    {0,  9, ActionType::Turn}, // 角度調整
     {1, 14, ActionType::LineTrace}, // Dlvカーブ1
     {2, 15, ActionType::LineTrace}, // Dlvカーブ2
     {3, 16, ActionType::LineTrace}, // Dlv行き青スルー
@@ -162,12 +162,12 @@ const SceneOrder CarryZone[] =
 {
     {0,  3, ActionType::Turn},     // 右に90°回転
     {1,  3, ActionType::Move},
-    {2,  3, ActionType::Turn},     // 右に90°回転
+    {2,  4, ActionType::Turn},     // 右に90°回転
     {3,  3, ActionType::Move},
-    {4,  3, ActionType::Turn},     // 右に90°回転
+    {4,  0, ActionType::Turn},     // 右に90°回転
     {5,  0, ActionType::Move},     // Dlvエリアまで
     {6,  1, ActionType::Move},     // Dlv線まで帰還
-    {7,  0, ActionType::Turn},     // 右に90°回転
+    {7,  1, ActionType::Turn},     // 右に90°回転
 };
 
 const SceneOrder ReturnZone[] =
@@ -182,7 +182,7 @@ const SceneOrder EnterRally[] =
     {0, 25, ActionType::LineTrace}, // Dlv帰還カーブ1
     {1, 26, ActionType::LineTrace}, // Dlv帰還青まで
     {2, 27, ActionType::LineTrace}, // Dlv青半分まで
-    {3,  0, ActionType::Turn},      // Dlv右に90°回転
+    {3,  1, ActionType::Turn},      // Dlv右に90°回転
     {4,  0, ActionType::Move},      // Dlv基準線まで
     {5,  0, ActionType::Stop}
 };
@@ -206,15 +206,17 @@ const SceneOrder PassPoint[] =
 
 const SceneOrder GateTurn[] =
 {
-    {0, 0, ActionType::Turn}, // 右90°
-    {1, 2, ActionType::Turn}, // 左90°
-    {2, 4, ActionType::Turn}, // 180°
+    {0, 8, ActionType::Turn}, // 右90°
+    {1, 0, ActionType::Turn}, // 左90°
+    {2, 1, ActionType::Turn}, // 180°
 };
 
 const SceneOrder RejoinTurn[] =
 {
-    {0, 5, ActionType::Turn}, // 次の基準点方向へ右90°
-    {1, 6, ActionType::Turn}, // 次の基準点方向へ左90°
+    {0, 4, ActionType::Turn}, // 次の基準点方向へ右90°
+    {1, 5, ActionType::Turn}, // 次の基準点方向へ左90°
+    {2, 6, ActionType::Turn}, // 次の基準点方向へ右90°
+    {3, 7, ActionType::Turn}, // 次の基準点方向へ左90°
 };
 
 const SceneOrder RejoinMove[] =
