@@ -135,46 +135,42 @@ const SceneOrder EnterRally[] =
 const SceneOrder EnterBule[] =
 {
     {0, 26, ActionType::LineTrace}, // 青まで
-    {1,  4, ActionType::Turn},
+    {1,  4, ActionType::Turn}, // 後ろを向く
 };
 
 const SceneOrder MoveLine[] =
 {
-    {0, 27, ActionType::LineTrace},
-    {1, 28, ActionType::LineTrace},
-    {2, 29, ActionType::LineTrace},
-    {3, 30, ActionType::LineTrace},
+    {0, 27, ActionType::LineTrace}, // Rly1~5
+    {1, 28, ActionType::LineTrace}, // Rly6~10
+    {2, 29, ActionType::LineTrace}, // Rly11~15
+    {3, 30, ActionType::LineTrace}, // Rly16~20
 };
 
-const SceneOrder TrunLeft[] =
+const SceneOrder Trun[] =
 {
-    {0, 2, ActionType::Turn},
-    {1, 5, ActionType::Turn},
-};
-
-const SceneOrder TrunRight[] =
-{
-    {0, 0, ActionType::Turn},
-    {1, 6, ActionType::Turn},
+    {0, 2, ActionType::Turn}, //左に90°
+    {1, 5, ActionType::Turn}, //左に100°
+    {2, 0, ActionType::Turn}, //右に90°
+    {3, 6, ActionType::Turn}, //右に100°
 };
 
 const SceneOrder EnterGate[] =
 {
-    {0,  8, ActionType::Move},
-    {1,  4, ActionType::Move},
-    {2,  5, ActionType::Move},
-    {3,  6, ActionType::Move},
-    {4,  7, ActionType::Move},
-    {5, 14, ActionType::Move},
+    {0,  8, ActionType::Move}, // Rly行き5n
+    {1,  4, ActionType::Move}, // Rly行き5n+1
+    {2,  5, ActionType::Move}, // Rly行き5n+2
+    {3,  6, ActionType::Move}, // Rly行き5n+3
+    {4,  7, ActionType::Move}, // Rly行き5n+4
+    {5, 14, ActionType::Move}, // Rly行き5n+5
 };
 
 const SceneOrder ReturnGate[] =
 {
-    {0, 13, ActionType::Move},
-    {1,  9, ActionType::Move},
-    {2, 10, ActionType::Move},
-    {3, 11, ActionType::Move},
-    {4, 12, ActionType::Move},
+    {0, 13, ActionType::Move}, // Rly帰還5n
+    {1,  9, ActionType::Move}, // Rly帰還5n+1
+    {2, 10, ActionType::Move}, // Rly帰還5n+2
+    {3, 11, ActionType::Move}, // Rly帰還5n+3
+    {4, 12, ActionType::Move}, // Rly帰還5n+4
 };
 
 /* ログタスク */
@@ -324,32 +320,32 @@ void main_task(intptr_t exinf)
             if (GatePosition[GatePass] > 20)
             {
                 //エリアに向く
-                change_scene(TrunLeft, 0);
+                change_scene(&Trun[1], 0);
                 //青ゲートのある行に移動
                 change_scene(&EnterGate[GatePosition[GatePass] % 20], 0);
                 //ゲートの方を向く
-                change_scene(TrunRight, 0);
+                change_scene(&Trun[3], 0);
                 //ゲート通過
                 change_scene(&EnterGate[5], 0);
                 //線の方へ向く
-                change_scene(TrunRight, 0);
+                change_scene(&Trun[2], 0);
                 //線の方へ進む
                 change_scene(&EnterGate[GatePosition[GatePass] % 20], 0);
                 //青線の方へ向く
-                change_scene(TrunRight, 0);
+                change_scene(&Trun[2], 0);
             }
             //赤,黄ゲート
             else {
                 //ゲートのある列まで向かう
                 change_scene(&MoveLine[(GatePosition[GatePass] - 1) / 5], 0);
                 //ゲートの方を向く
-                change_scene(TrunLeft, 0);
+                change_scene(&Trun[0], 0);
                 //ゲート通過
                 change_scene(&EnterGate[(GatePosition[GatePass] % 5)], 0);
                 //バックでゲートから帰還
                 change_scene(&ReturnGate[(GatePosition[GatePass] % 5)], 0);
                 //青線の方を向く
-                change_scene(TrunLeft, 0);
+                change_scene(&Trun[0], 0);
             }
             //青を検知して反対を向く
             change_scene(EnterBule, 1);
