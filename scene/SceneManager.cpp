@@ -51,7 +51,7 @@ const MoveScene moveScenes[] =
     { 0, Direction::front, {50.0f, 100.0f,  50.0f, 100.0f}, 100, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
     { 1, Direction::back,  {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlv線まで帰還
     { 2, Direction::front, {50.0f,  70.0f,  50.0f,  10.0f},  10, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
-    { 3, Direction::front, {30.0f,  50.0f,  30.0f,  50.0f},  50, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rly基準点中央まで
+    { 3, Direction::front, {30.0f,  50.0f,  30.0f,  50.0f},  70, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rly基準点中央まで
     { 4, Direction::front, {50.0f, 100.0f,  50.0f, 250.0f}, 250, {Color::None}, {2.0f, 0.0f, 0.0f}}, // Rlyゲート前1
     { 5, Direction::front, {50.0f, 100.0f,  50.0f, 500.0f}, 500, {Color::None}, {2.0f, 0.0f, 0.0f}}, // Rlyゲート前2
     { 6, Direction::front, {50.0f, 100.0f,  50.0f, 750.0f}, 750, {Color::None}, {2.0f, 0.0f, 0.0f}}, // Rlyゲート前3
@@ -59,7 +59,7 @@ const MoveScene moveScenes[] =
     { 8, Direction::front, {50.0f, 100.0f,  50.0f,1250.0f},1250, {Color::None}, {2.0f, 0.0f, 0.0f}}, // Rlyゲート前5
     { 9, Direction::front, {50.0f, 100.0f,  50.0f, 300.0f}, 300, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲートを通過
     {10, Direction::front, {50.0f,  80.0f,  50.0f,   0.0f},   0, {Color::Green, Color::Yellow, Color::Red, Color::Blue},
-                                                                                {1.0f, 0.0f, 0.0f}}, //基準点帰還
+                                                                                {2.0f, 0.0f, 0.0f}}, //基準点帰還
     {11, Direction::front, {30.0f,  50.0f,  30.0f, 100.0f}, 100, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rly目標外の基準点を通過
     {12, Direction::back,  {30.0f,  50.0f,  30.0f, 300.0f}, 300, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rlyゲートから後退して帰還
     {13, Direction::front, {30.0f,  50.0f,  30.0f,  50.0f},  50, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Rly帰還旋回後にラインまで直進
@@ -76,6 +76,7 @@ const TurnScene turnScenes[] =
     {6,-150, {1.0f, 0.0f, 0.0f}}, //L150°
     {7, 150, {1.0f, 0.0f, 0.0f}}, //R150°
     {8, 180, {1.0f, 0.0f, 0.0f}}, //後ろ
+    {9,  15, {1.0f, 0.0f, 0.0f}}, //左15°
 };
 
 const ColorDetectScene colorDetectScenes[] =
@@ -183,11 +184,11 @@ bool SceneManager::SceneExecute()
                 SumCount++;
             }
 
-            if (SumCount == 30)
+            if (SumCount == 50)
             {
                 mImu.resetHeading();
             }
-            else if (SumCount > 30)
+            else if (SumCount > 50)
             {
                 HeadingSum += mImu.getHeading();
             }
@@ -211,10 +212,8 @@ bool SceneManager::SceneExecute()
     if (SumCount > 30)
     {
         SumCount -= 30;
-        mHeadingAverage = HeadingSum / SumCount;
-
-        // 直線ライントレース直後のMoveは、計測した進行方向を維持する。
-        mGyroTraceRunner.setTargetAngle(mHeadingAverage);
+        mHeadingAverage = (HeadingSum / SumCount);
+        Logger::printf("HeadingAve=%f\r\n", mHeadingAverage);
     }
 
     // シーン終了
@@ -311,12 +310,12 @@ void SceneManager::setParameter()
             turnscene.pid.kp,
             turnscene.pid.ki,
             turnscene.pid.kd);
-        
-        // 絶対角度では0°も有効な旋回目標として扱う。
-        const float targetAngle = turnscene.targetAngle + mHeadingAverage;
-        mGyroTraceRunner.setTargetAngle(targetAngle);
-        mTargetAngleDetector.setTargetAngle(targetAngle);
-        mEventDetector = &mTargetAngleDetector;
+
+            float TargetAngle = turnscene.targetAngle;
+            TargetAngle -= 1.5f;
+            mGyroTraceRunner.setTargetAngle(TargetAngle + mHeadingAverage);
+            mTargetAngleDetector.setTargetAngle(TargetAngle + mHeadingAverage);
+            mEventDetector = &mTargetAngleDetector;
 
         break;
     }
