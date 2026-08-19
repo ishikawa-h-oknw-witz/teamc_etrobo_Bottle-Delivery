@@ -29,6 +29,8 @@ Color ColorDetector::detect()
             hsv.s >= range.sMin && hsv.s <= range.sMax &&
             hsv.v >= range.vMin && hsv.v <= range.vMax)
         {
+            Logger::printf("[ColorDetector]指定色を検知しました\n");
+            Logger::printf("H:%d, S:%d, V:%d\n", hsv.h, hsv.s, hsv.v);
             return range.color;
         }
     }

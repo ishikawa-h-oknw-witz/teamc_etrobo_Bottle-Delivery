@@ -306,7 +306,7 @@ void main_task(intptr_t exinf)
     Logger::printf("[app]終了\n");
     */
 
-    Logger::printf("ETrally Start!\n");
+    Logger::printf("[app]ETrally Start!\n");
 
     change_scene(EnterBule, 1);
 
