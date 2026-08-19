@@ -95,7 +95,7 @@ bool TargetColorDetector::judgeMultiple(
     }
 
     Logger::printf(
-        "ColorMatch=%d/%d Required=%d\r\n",
+        "[TargetColorDetector]色検知回数=%d/%d 成功必要検知回数=%d\r\n",
         matchCount,
         sampleCount,
         requiredMatchCount);

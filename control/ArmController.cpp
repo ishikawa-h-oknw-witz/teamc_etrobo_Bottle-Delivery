@@ -26,10 +26,7 @@ void ArmController::resetAngle()
 
 void ArmController::moveArm(int angle)
 {
-    mArmMotor.setPower(100);
-    tslp_tsk(2000*1000);
-
-    mArmMotor.stop();
+    //必要になったら実装
 }
 
 void ArmController::moveArmDown()

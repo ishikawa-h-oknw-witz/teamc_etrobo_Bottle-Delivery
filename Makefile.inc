@@ -41,3 +41,4 @@ INCLUDES += \
 	-I$(mkfile_path)device \
     -I$(mkfile_path)operation \
     -I$(mkfile_path)scene \
+    -I$(mkfile_path)parameter \

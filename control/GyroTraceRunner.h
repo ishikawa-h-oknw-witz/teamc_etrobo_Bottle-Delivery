@@ -28,8 +28,6 @@ public:
     
     void setDirection(Direction direction);
 
-    void setBasespeed(int speed);
-
     void setTargetAngle(float targetAngle);
 
     //前後退走行
@@ -38,6 +36,7 @@ public:
     //旋回
     void turn();
 
+    //停止
     void stop();
 
 private:
