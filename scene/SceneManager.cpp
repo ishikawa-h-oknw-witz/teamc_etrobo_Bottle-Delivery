@@ -153,7 +153,7 @@ bool SceneManager::SceneExecute()
         return false;
     }
     
-    if (lineTraceScenes[mSceneId].captureHeading == true)
+    if (mActionType == ActionType::LineTrace && lineTraceScenes[mSceneId].captureHeading == true)
     {
         mGyroTraceRunner.setTargetAngle(0);
         mImu.resetHeading();
@@ -161,7 +161,7 @@ bool SceneManager::SceneExecute()
 
     int controlCycleCount = 0;
     int SumCount = 0;
-    int SumHeading = 0;
+    float HeadingSum = 0;
     while(!mEventDetector->judge())
     {
         if (controlCycleCount >= MAX_SCENE_CONTROL_CYCLES)
@@ -176,10 +176,18 @@ bool SceneManager::SceneExecute()
         {
         case ActionType::LineTrace:
             mLineTraceRunner.run();
-            SumCount++;
-            if (SumCount > 30)
+            if (lineTraceScenes[mSceneId].captureHeading == true)
             {
-                SumHeading += mImu.getHeading();
+                SumCount++;
+            }
+
+            if (SumCount == 30)
+            {
+                mImu.resetHeading();
+            }
+            else if (SumCount > 30)
+            {
+                HeadingSum += mImu.getHeading();
             }
             break;
 
@@ -198,10 +206,10 @@ bool SceneManager::SceneExecute()
         controlCycleCount++;
     }
 
-    if (lineTraceScenes[mSceneId].captureHeading == true)
+    if (mActionType == ActionType::LineTrace && lineTraceScenes[mSceneId].captureHeading == true)
     {
-        SumCount - 30;
-        mHeadingAverage = (SumHeading / SumCount) + 0.5;
+        SumCount -= 30;
+        mHeadingAverage = (HeadingSum / SumCount) + 0.5;
     }
 
     // シーン終了
@@ -301,8 +309,9 @@ void SceneManager::setParameter()
         
         if (turnscene.targetAngle != 0)
         {
-            mGyroTraceRunner.setTargetAngle(mTargetAngle + turnscene.targetAngle);
+            mGyroTraceRunner.setTargetAngle(turnscene.targetAngle);
             mTargetAngleDetector.setTargetAngle(turnscene.targetAngle);
+            mGyroTraceRunner.setHeadingAverage(mHeadingAverage);
             mEventDetector = &mTargetAngleDetector;
         }
 

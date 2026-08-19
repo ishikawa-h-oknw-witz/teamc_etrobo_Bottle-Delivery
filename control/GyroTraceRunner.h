@@ -32,6 +32,8 @@ public:
 
     void setTargetAngle(float targetAngle);
 
+    void setHeadingAverage(float headingAverage);
+
     //前後退走行
     void move();
 
@@ -50,6 +52,7 @@ private:
     Clock mClock;
     int mBaseSpeed;
     float mTargetAngle;
+    float mHeadingAverage;
     Direction mDirection;
 };
 #endif

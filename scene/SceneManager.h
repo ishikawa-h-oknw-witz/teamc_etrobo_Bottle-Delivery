@@ -94,4 +94,5 @@ private:
     int mSceneId;
     ActionType mActionType;
     IEventDetector* mEventDetector;
+    float mHeadingAverage;
 };

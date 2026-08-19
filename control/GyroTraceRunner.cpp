@@ -33,7 +33,8 @@ GyroTraceRunner::GyroTraceRunner(
       mDistanceCalculator(distanceCalculator),
       mPIDCalculator(pidCalculate),
       mTrapezoidCalculator(trapezoidCalculate),
-      mBaseSpeed(60)
+      mBaseSpeed(60),
+      mHeadingAverage(0.0f)
 {
 }
 
@@ -50,6 +51,11 @@ void GyroTraceRunner::setBasespeed(int speed)
 void GyroTraceRunner::setTargetAngle(float targetAngle)
 {
     mTargetAngle = targetAngle;
+}
+
+void GyroTraceRunner::setHeadingAverage(int headingAverage)
+{
+    mHeadingAverage = headingAverage;
 }
 
 void GyroTraceRunner::move()
