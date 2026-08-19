@@ -12,38 +12,38 @@ namespace
 // {シーンID, 目標距離, 速度, 走行エッジ, 終了色, 目標輝度, {Kp, Ki, Kd}}
 const LineTraceScene lineTraceScenes[] =
 {
-    { 0,  500, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.2f, 0.0f, 0.2f} }, // Lap直線1
-    { 1,  150,  80, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Lapカーブ1-1
-    { 2,  100,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.5f, 0.0f, 0.4f} }, // Lapカーブ1-2
-    { 3,  150,  80, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Lapカーブ1-3
-    { 4,  400, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Lap直線2
-    { 5,  150,  80, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Lapカーブ2-1
-    { 6,  100,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.5f, 0.0f, 0.4f} }, // Lapカーブ2-2
-    { 7,  100,  80, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Lapカーブ2-3
-    { 8,  300, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Lap直線3
-    { 9,  400,  60, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.5f, 0.0f, 0.4f} }, // Lapカーブ3
-    {10,  900, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Lap蛇行1
-    {11,  900,  80, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.5f, 0.0f, 0.4f} }, // Lap蛇行2
-    {12,  900, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.4f} }, // Lap直線4
-    {13,  180,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.4f} }, // Lap減速
-    {14,  800,  60, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ1
-    {15,  200,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ2
-    {16,  100,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv最初の青スルー
-    {17, 1100,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv直線1
-    {18,  200,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlvカーブ3
-    {19,  250,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // 黄ボトル位置まで
-    {20,  500,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // 青ボトル位置まで
-    {21,  750,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // 赤ボトル位置まで
-    {22,  300,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線 黄
-    {23,  550,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線 青
-    {24,  800,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線 赤
-    {25,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlv帰還カーブ1
-    {26, 1000, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還青まで
-    {27,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv青半分まで
+    { 0,  500, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.2f, 0.0f, 0.2f}, false}, // Lap直線1
+    { 1,  150,  80, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f}, false}, // Lapカーブ1-1
+    { 2,  100,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.5f, 0.0f, 0.4f}, false}, // Lapカーブ1-2
+    { 3,  150,  80, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f}, false}, // Lapカーブ1-3
+    { 4,  400, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f}, false}, // Lap直線2
+    { 5,  150,  80, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f}, false}, // Lapカーブ2-1
+    { 6,  100,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.5f, 0.0f, 0.4f}, false}, // Lapカーブ2-2
+    { 7,  100,  80, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f}, false}, // Lapカーブ2-3
+    { 8,  300, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f}, false}, // Lap直線3
+    { 9,  400,  60, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.5f, 0.0f, 0.4f}, false}, // Lapカーブ3
+    {10,  900, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f}, false}, // Lap蛇行1
+    {11,  900,  80, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.5f, 0.0f, 0.4f}, false}, // Lap蛇行2
+    {12,  900, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.4f},  true}, // Lap直線4
+    {13,  180,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.4f}, false}, // Lap減速
+    {14,  800,  60, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f}, false}, // Dlvカーブ1
+    {15,  200,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f}, false}, // Dlvカーブ2
+    {16,  100,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f}, false}, // Dlv最初の青スルー
+    {17, 1100,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f},  true}, // Dlv直線1
+    {18,  200,  30, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f}, false}, // Dlvカーブ3
+    {19,  250,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f}, false}, // 黄ボトル位置まで
+    {20,  500,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f}, false}, // 青ボトル位置まで
+    {21,  750,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f}, false}, // 赤ボトル位置まで
+    {22,  300,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f}, false}, // Dlv帰還直線 黄
+    {23,  550,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f}, false}, // Dlv帰還直線 青
+    {24,  800,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f}, false}, // Dlv帰還直線 赤
+    {25,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f}, false}, // Dlv帰還カーブ1
+    {26, 1000, 100, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f}, true}, // Dlv帰還青まで
+    {27,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f}, false}, // Dlv青半分まで
     {28,    0,  30, RunnerEdge::RightEdge, {Color::Green, Color::Yellow, Color::Red, Color::Blue},
-                                                          CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.2f} }, // Rly右エッジで次の色地点まで
+                                                          CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.2f},  true}, // Rly右エッジで次の色地点まで
     {29,    0,  30, RunnerEdge::LeftEdge,  {Color::Green, Color::Yellow, Color::Red, Color::Blue},
-                                                          CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.2f} }, // Rly左エッジで次の色地点まで
+                                                          CalibrationData::BlackWhiteCenter, {0.4f, 0.0f, 0.2f},  true}, // Rly左エッジで次の色地点まで
 };
 
 const MoveScene moveScenes[] =
@@ -125,7 +125,7 @@ void SceneManager::setActionType(ActionType actiontype)
 
 bool SceneManager::SceneExecute()
 {
-    mImu.resetHeading();
+    //mImu.resetHeading();
     mEventDetector = nullptr;
     setParameter();
 
@@ -153,7 +153,15 @@ bool SceneManager::SceneExecute()
         return false;
     }
     
+    if (lineTraceScenes[mSceneId].captureHeading == true)
+    {
+        mGyroTraceRunner.setTargetAngle(0);
+        mImu.resetHeading();
+    }
+
     int controlCycleCount = 0;
+    int SumCount = 0;
+    int SumHeading = 0;
     while(!mEventDetector->judge())
     {
         if (controlCycleCount >= MAX_SCENE_CONTROL_CYCLES)
@@ -168,6 +176,11 @@ bool SceneManager::SceneExecute()
         {
         case ActionType::LineTrace:
             mLineTraceRunner.run();
+            SumCount++;
+            if (SumCount > 30)
+            {
+                SumHeading += mImu.getHeading();
+            }
             break;
 
         case ActionType::Move:
@@ -183,6 +196,12 @@ bool SceneManager::SceneExecute()
         }
         tslp_tsk(10*1000);
         controlCycleCount++;
+    }
+
+    if (lineTraceScenes[mSceneId].captureHeading == true)
+    {
+        SumCount - 30;
+        mHeadingAverage = (SumHeading / SumCount) + 0.5;
     }
 
     // シーン終了
@@ -282,7 +301,7 @@ void SceneManager::setParameter()
         
         if (turnscene.targetAngle != 0)
         {
-            mGyroTraceRunner.setTargetAngle(turnscene.targetAngle);
+            mGyroTraceRunner.setTargetAngle(mTargetAngle + turnscene.targetAngle);
             mTargetAngleDetector.setTargetAngle(turnscene.targetAngle);
             mEventDetector = &mTargetAngleDetector;
         }

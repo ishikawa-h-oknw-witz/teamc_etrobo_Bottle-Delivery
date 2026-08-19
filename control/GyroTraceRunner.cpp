@@ -67,7 +67,7 @@ void GyroTraceRunner::move()
     float heading = mImu.getHeading();
     
     // 目標角度は0°
-    float error = 0.0f - heading;
+    float error = (mTargetAngle + mHeadingAverage) - heading;
     float correction = mPIDCalculator.calculate(error);
 
     int leftPower = 0;
@@ -86,7 +86,7 @@ void GyroTraceRunner::turn()
 {
     float currentHeading = mImu.getHeading();
 
-    float error = normalizeAngle(mTargetAngle - currentHeading);
+    float error = normalizeAngle((mTargetAngle + mHeadingAverage) - currentHeading);
 
     /*
     // パルス制御

@@ -35,6 +35,7 @@ struct LineTraceScene
     Color finishColor[7];
     CalibrationData targetSensorValue;
     PID pid;
+    bool captureHeading;
 };
 
 struct MoveScene
