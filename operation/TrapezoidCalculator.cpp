@@ -20,6 +20,12 @@ void TrapezoidCalculator::setParameter(TrapezoidParameter parameter)
 
 int TrapezoidCalculator::getSpeed()
 {
+    // 距離ではなく色で終了するシーンでは、設定した最高速度を維持する。
+    if (mTotalDistance <= 0.0f)
+    {
+        return mMaxSpeed;
+    }
+
     int currentDistance = mDistanceCalculator.getDistance();
     int remainingDistance = mTotalDistance - currentDistance;
 

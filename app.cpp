@@ -50,13 +50,14 @@ Logger logger(colorSensor, leftWheel, rightWheel);
 Battery battery;
 /* インスタンス生成ここまで */
 
+const int GatePosition[3] = {7, 22, 4};
+
 struct SceneOrder
 {
     int sceneNum;
     int sceneId;
     ActionType actionType;
 };
-
 
 const SceneOrder LAP[] =
 {
@@ -122,18 +123,58 @@ const SceneOrder CarryZone[] =
 const SceneOrder ReturnZone[] =
 {
     {0, 22, ActionType::LineTrace},  // Dlv黄から行きゲート前まで
-    {0, 23, ActionType::LineTrace},  // Dlv青から行きゲート前まで
-    {0, 24, ActionType::LineTrace},  // Dlv黄から行きゲート前まで
+    {1, 23, ActionType::LineTrace},  // Dlv青から行きゲート前まで
+    {2, 24, ActionType::LineTrace},  // Dlv黄から行きゲート前まで
 };
 
 const SceneOrder EnterRally[] =
 {
     {0, 25, ActionType::LineTrace}, // Dlv帰還カーブ1
-    {1, 26, ActionType::LineTrace}, // Dlv帰還青まで
-    {2, 27, ActionType::LineTrace}, // Dlv青半分まで
-    {3,  0, ActionType::Turn},      // Dlv右に90°回転
-    {4,  0, ActionType::Move},      // Dlv基準線まで
-    {5,  0, ActionType::Stop}
+};
+
+const SceneOrder EnterBule[] =
+{
+    {0, 26, ActionType::LineTrace}, // 青まで
+    {1,  4, ActionType::Turn},
+};
+
+const SceneOrder MoveLine[] =
+{
+    {0, 27, ActionType::LineTrace},
+    {1, 28, ActionType::LineTrace},
+    {2, 29, ActionType::LineTrace},
+    {3, 30, ActionType::LineTrace},
+};
+
+const SceneOrder TrunLeft[] =
+{
+    {0, 2, ActionType::Turn},
+    {1, 5, ActionType::Turn},
+};
+
+const SceneOrder TrunRight[] =
+{
+    {0, 0, ActionType::Turn},
+    {1, 6, ActionType::Turn},
+};
+
+const SceneOrder EnterGate[] =
+{
+    {0,  8, ActionType::Move},
+    {1,  4, ActionType::Move},
+    {2,  5, ActionType::Move},
+    {3,  6, ActionType::Move},
+    {4,  7, ActionType::Move},
+    {5, 14, ActionType::Move},
+};
+
+const SceneOrder ReturnGate[] =
+{
+    {0, 13, ActionType::Move},
+    {1,  9, ActionType::Move},
+    {2, 10, ActionType::Move},
+    {3, 11, ActionType::Move},
+    {4, 12, ActionType::Move},
 };
 
 /* ログタスク */
@@ -205,6 +246,7 @@ void main_task(intptr_t exinf)
     while (forceSensor.isTouched());
     Logger::printf("[app]スタート\n");
 
+    /*
     int skipCount = -1;
 
     //メインループ10msec周期
@@ -263,9 +305,44 @@ void main_task(intptr_t exinf)
     change_scene(&ReturnZone[skipCount], 0);
 
     //ラリーへ向かう
-    change_scene(EnterRally, 5);
+    change_scene(EnterRally, 0);
 
     Logger::printf("[app]終了\n");
+    */
+
+    Logger::printf("ETrally Start!\n");
+
+    change_scene(EnterBule, 1);
+
+    for (int LoopCount = 0; LoopCount < 3; LoopCount++)
+    {
+        for (int GatePass = 0; GatePass < 3; GatePass++)
+        {
+            if (GatePosition[GatePass] > 20)
+            {
+                change_scene(TrunLeft, 0);
+                change_scene(&EnterGate[GatePosition[GatePass] % 20], 0);
+                change_scene(TrunRight, 0);
+                change_scene(&EnterGate[5], 0);
+                change_scene(TrunRight, 0);
+                change_scene(&EnterGate[GatePosition[GatePass] % 20], 0);
+                change_scene(TrunRight, 0);
+            }
+            else {
+                change_scene(&MoveLine[(GatePosition[GatePass] - 1) / 5], 0);
+            
+                change_scene(TrunLeft, 0);
+
+                change_scene(&EnterGate[(GatePosition[GatePass] % 5)], 0);
+                
+                change_scene(&ReturnGate[(GatePosition[GatePass] % 5)], 0);
+
+                change_scene(TrunLeft, 0);
+            }
+
+            change_scene(EnterBule, 1);
+        }
+    }
 
     ext_tsk(); 
 }
