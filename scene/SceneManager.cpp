@@ -211,7 +211,10 @@ bool SceneManager::SceneExecute()
     if (SumCount > 30)
     {
         SumCount -= 30;
-        mHeadingAverage = (HeadingSum / SumCount) + 0.5;
+        mHeadingAverage = HeadingSum / SumCount;
+
+        // 直線ライントレース直後のMoveは、計測した進行方向を維持する。
+        mGyroTraceRunner.setTargetAngle(mHeadingAverage);
     }
 
     // シーン終了
@@ -309,12 +312,11 @@ void SceneManager::setParameter()
             turnscene.pid.ki,
             turnscene.pid.kd);
         
-        if (turnscene.targetAngle != 0)
-        {
-            mGyroTraceRunner.setTargetAngle(turnscene.targetAngle + mHeadingAverage);
-            mTargetAngleDetector.setTargetAngle(turnscene.targetAngle + mHeadingAverage);
-            mEventDetector = &mTargetAngleDetector;
-        }
+        // 絶対角度では0°も有効な旋回目標として扱う。
+        const float targetAngle = turnscene.targetAngle + mHeadingAverage;
+        mGyroTraceRunner.setTargetAngle(targetAngle);
+        mTargetAngleDetector.setTargetAngle(targetAngle);
+        mEventDetector = &mTargetAngleDetector;
 
         break;
     }

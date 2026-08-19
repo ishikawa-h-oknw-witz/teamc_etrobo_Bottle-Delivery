@@ -68,8 +68,8 @@ void GyroTraceRunner::move()
 
     float heading = mImu.getHeading();
     
-    // 目標角度は0°
-    float error = mTargetAngle - heading;
+    // ±180°の境界をまたいでも、最短方向の角度誤差を使用する。
+    float error = normalizeAngle(mTargetAngle - heading);
     float correction = mPIDCalculator.calculate(error);
 
     int leftPower = 0;

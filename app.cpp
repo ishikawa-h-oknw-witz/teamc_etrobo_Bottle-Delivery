@@ -50,7 +50,7 @@ namespace
 {
 constexpr int RIGHT_EDGE_INDEX = 0;
 constexpr int LEFT_EDGE_INDEX = 1;
-constexpr int TURN_AROUND_INDEX = 2;
+constexpr int REJOIN_TURN_VARIATIONS_PER_EDGE = 2;
 constexpr int MAX_POINT_SEARCH_COUNT = 20;
 
 int getPointOrder(Color color)
@@ -204,24 +204,29 @@ const SceneOrder PassPoint[] =
     {0, 11, ActionType::Move}, // 目標外の基準点を100mmで通り抜ける
 };
 
+// 基準線の進行方向を0°とした、ゲート方向への絶対角度。
 const SceneOrder GateTurn[] =
 {
-    {0, 8, ActionType::Turn}, // 右90°
-    {1, 0, ActionType::Turn}, // 左90°
-    {2, 1, ActionType::Turn}, // 180°
+    {0, 1, ActionType::Turn}, // 右90°
+    {1, 2, ActionType::Turn}, // 左90°
+};
+
+const SceneOrder GateCrossingTurn[] =
+{
+    {0, 0, ActionType::Turn}, // 基準線と平行な0°へ旋回
 };
 
 const SceneOrder RejoinTurn[] =
 {
-    {0, 4, ActionType::Turn}, // 次の基準点方向へ右90°
-    {1, 5, ActionType::Turn}, // 次の基準点方向へ左90°
-    {2, 6, ActionType::Turn}, // 次の基準点方向へ右90°
-    {3, 7, ActionType::Turn}, // 次の基準点方向へ左90°
+    {0, 4, ActionType::Turn}, // 右エッジへ復帰（ゲートから-90°で帰還）
+    {1, 5, ActionType::Turn}, // 右エッジへ復帰（ゲートから+90°で帰還）
+    {2, 6, ActionType::Turn}, // 左エッジへ復帰（ゲートから-90°で帰還）
+    {3, 7, ActionType::Turn}, // 左エッジへ復帰（ゲートから+90°で帰還）
 };
 
 const SceneOrder RejoinMove[] =
 {
-    {0, 13, ActionType::Move}, // 旋回後、ラインへ戻るため100mm直進
+    {0, 13, ActionType::Move}, // 旋回後、ラインへ戻るため50mm直進
 };
 
 const SceneOrder EnterGate[] =
@@ -416,8 +421,11 @@ void main_task(intptr_t exinf)
 
         Logger::printf("Target point detected. GateIndex=%d\r\n", gateIndex);
 
+        // このゲートへ向かったエッジは、帰還方向と帰還後の旋回シーンの選択にも使用する。
+        const int gateApproachEdgeIndex = nowEdgeIndex;
+
         // 次の色地点まで使用したエッジと同じ方向へ90°旋回し、ゲートへ向かう。
-        if (!change_scene(&GateTurn[nowEdgeIndex], 0))
+        if (!change_scene(&GateTurn[gateApproachEdgeIndex], 0))
         {
             ext_tsk();
             return;
@@ -425,20 +433,23 @@ void main_task(intptr_t exinf)
 
         const int gateNum = gatePositions[gateIndex].gatePositionNum;
 
+        // ゲートへ向かった方向と反対の絶対角度で基準点へ戻る。
+        const int returnDirectionIndex =
+            gateApproachEdgeIndex == RIGHT_EDGE_INDEX
+                ? LEFT_EDGE_INDEX
+                : RIGHT_EDGE_INDEX;
+
         if (gateNum <= 4 || gateNum >= 10)
         {
-            int lookSideIndex = RIGHT_EDGE_INDEX;
             int enterGateIndex = 0;
 
             if (gateNum <= 4)
             {
                 enterGateIndex = gateNum - 1;
-                lookSideIndex = LEFT_EDGE_INDEX;
             }
             else
             {
                 enterGateIndex = gateNum - 10;
-                lookSideIndex = RIGHT_EDGE_INDEX;
             }
 
             if (enterGateIndex < 0 || enterGateIndex >= 5)
@@ -450,9 +461,9 @@ void main_task(intptr_t exinf)
             }
 
             if (!change_scene(&EnterGate[enterGateIndex], 0) ||
-                !change_scene(&GateTurn[lookSideIndex], 0) ||
+                !change_scene(GateCrossingTurn, 0) ||
                 !change_scene(GateCrossing, 1) ||
-                !change_scene(&GateTurn[lookSideIndex], 0))
+                !change_scene(&GateTurn[returnDirectionIndex], 0))
             {
                 ext_tsk();
                 return;
@@ -471,7 +482,7 @@ void main_task(intptr_t exinf)
             }
 
             if (!change_scene(&EnterGate[enterGateIndex], 0) ||
-                !change_scene(&GateTurn[TURN_AROUND_INDEX], 0))
+                !change_scene(&GateTurn[returnDirectionIndex], 0))
             {
                 ext_tsk();
                 return;
@@ -512,9 +523,15 @@ void main_task(intptr_t exinf)
                 static_cast<int>(nextPointColor),
                 nowEdgeIndex);
 
-            // 次の基準点方向へ90°旋回し、100mm直進してラインへ戻る。
+            // 次の進行エッジと、ゲートから戻った向きの組み合わせで
+            // 帰還後の絶対角度（-30°、30°、-150°、150°）を選ぶ。
+            const int rejoinTurnIndex =
+                nowEdgeIndex * REJOIN_TURN_VARIATIONS_PER_EDGE
+                + gateApproachEdgeIndex;
+
+            // 次の基準点方向へ斜めに旋回し、50mm直進してラインへ戻る。
             // ゲートへ向かう90°旋回は、次の目標色へ到着した後のGateTurnで行う。
-            if (!change_scene(&RejoinTurn[nowEdgeIndex], 0) ||
+            if (!change_scene(&RejoinTurn[rejoinTurnIndex], 0) ||
                 !change_scene(RejoinMove, 0))
             {
                 ext_tsk();
