@@ -104,7 +104,8 @@ SceneManager::SceneManager(
       mTargetAngleDetector(targetAngleDetector),
       mTargetColorDetector(targetColorDetector),
       mSceneId(0),
-      mEventDetector(nullptr)
+      mEventDetector(nullptr),
+      mHeadingAverage(0.0f)
 {
 }
 
@@ -156,7 +157,6 @@ bool SceneManager::SceneExecute()
     if (mActionType == ActionType::LineTrace && lineTraceScenes[mSceneId].captureHeading == true)
     {
         mGyroTraceRunner.setTargetAngle(0);
-        mImu.resetHeading();
     }
 
     int controlCycleCount = 0;
@@ -206,7 +206,7 @@ bool SceneManager::SceneExecute()
         controlCycleCount++;
     }
 
-    if (mActionType == ActionType::LineTrace && lineTraceScenes[mSceneId].captureHeading == true)
+    if (SumCount > 30)
     {
         SumCount -= 30;
         mHeadingAverage = (HeadingSum / SumCount) + 0.5;
@@ -309,9 +309,8 @@ void SceneManager::setParameter()
         
         if (turnscene.targetAngle != 0)
         {
-            mGyroTraceRunner.setTargetAngle(turnscene.targetAngle);
-            mTargetAngleDetector.setTargetAngle(turnscene.targetAngle);
-            mGyroTraceRunner.setHeadingAverage(mHeadingAverage);
+            mGyroTraceRunner.setTargetAngle(turnscene.targetAngle + mHeadingAverage);
+            mTargetAngleDetector.setTargetAngle(turnscene.targetAngle + mHeadingAverage);
             mEventDetector = &mTargetAngleDetector;
         }
 

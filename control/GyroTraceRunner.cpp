@@ -34,7 +34,8 @@ GyroTraceRunner::GyroTraceRunner(
       mPIDCalculator(pidCalculate),
       mTrapezoidCalculator(trapezoidCalculate),
       mBaseSpeed(60),
-      mHeadingAverage(0.0f)
+      mTargetAngle(0.0f),
+      mDirection(Direction::front)
 {
 }
 
@@ -53,11 +54,6 @@ void GyroTraceRunner::setTargetAngle(float targetAngle)
     mTargetAngle = targetAngle;
 }
 
-void GyroTraceRunner::setHeadingAverage(int headingAverage)
-{
-    mHeadingAverage = headingAverage;
-}
-
 void GyroTraceRunner::move()
 {
     // 毎周期、台形加減速で算出した正の速度から設定し直す
@@ -73,7 +69,7 @@ void GyroTraceRunner::move()
     float heading = mImu.getHeading();
     
     // 目標角度は0°
-    float error = (mTargetAngle + mHeadingAverage) - heading;
+    float error = mTargetAngle - heading;
     float correction = mPIDCalculator.calculate(error);
 
     int leftPower = 0;
@@ -92,7 +88,7 @@ void GyroTraceRunner::turn()
 {
     float currentHeading = mImu.getHeading();
 
-    float error = normalizeAngle((mTargetAngle + mHeadingAverage) - currentHeading);
+    float error = normalizeAngle(mTargetAngle - currentHeading);
 
     /*
     // パルス制御
