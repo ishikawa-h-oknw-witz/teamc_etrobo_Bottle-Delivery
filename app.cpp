@@ -311,18 +311,18 @@ void main_task(intptr_t exinf)
     change_scene(EnterBule, 1);
 
     //周回カウント
-    for (int LoopCount = 0; LoopCount < 3; LoopCount++)
+    for (int LoopIndex = 0; LoopIndex < 3; LoopIndex++)
     {
         //ゲート通過カウント
-        for (int GatePass = 0; GatePass < 3; GatePass++)
+        for (int GateIndex = 0; GateIndex < 3; GateIndex++)
         {
             //青ゲート
-            if (GatePosition[GatePass] > 20)
+            if (GatePosition[GateIndex] > 20)
             {
                 //エリアに向く
                 change_scene(&Trun[1], 0);
                 //青ゲートのある行に移動
-                change_scene(&EnterGate[GatePosition[GatePass] % 20], 0);
+                change_scene(&EnterGate[GatePosition[GateIndex] % 20], 0);
                 //ゲートの方を向く
                 change_scene(&Trun[3], 0);
                 //ゲート通過
@@ -330,20 +330,20 @@ void main_task(intptr_t exinf)
                 //線の方へ向く
                 change_scene(&Trun[2], 0);
                 //線の方へ進む
-                change_scene(&EnterGate[GatePosition[GatePass] % 20], 0);
+                change_scene(&EnterGate[GatePosition[GateIndex] % 20], 0);
                 //青線の方へ向く
                 change_scene(&Trun[2], 0);
             }
             //赤,黄ゲート
             else {
                 //ゲートのある列まで向かう
-                change_scene(&MoveLine[(GatePosition[GatePass] - 1) / 5], 0);
+                change_scene(&MoveLine[(GatePosition[GateIndex] - 1) / 5], 0);
                 //ゲートの方を向く
                 change_scene(&Trun[0], 0);
                 //ゲート通過
-                change_scene(&EnterGate[(GatePosition[GatePass] % 5)], 0);
+                change_scene(&EnterGate[(GatePosition[GateIndex] % 5)], 0);
                 //バックでゲートから帰還
-                change_scene(&ReturnGate[(GatePosition[GatePass] % 5)], 0);
+                change_scene(&ReturnGate[(GatePosition[GateIndex] % 5)], 0);
                 //青線の方を向く
                 change_scene(&Trun[0], 0);
             }
