@@ -50,7 +50,7 @@ Logger logger(colorSensor, leftWheel, rightWheel);
 Battery battery;
 /* インスタンス生成ここまで */
 
-const int GatePosition[3] = {7, 22, 4};
+const int GatePosition[3] = {3, 22, 19};
 
 struct SceneOrder
 {
@@ -171,6 +171,24 @@ const SceneOrder ReturnGate[] =
     {2, 10, ActionType::Move}, // Rly帰還5n+2
     {3, 11, ActionType::Move}, // Rly帰還5n+3
     {4, 12, ActionType::Move}, // Rly帰還5n+4
+};
+
+const SceneOrder Enter[] =
+{
+    {0, 15, ActionType::Move},
+    {1, 16, ActionType::Move},
+    {2, 17, ActionType::Move},
+    {3, 18, ActionType::Move}, 
+    {4, 19, ActionType::Move},
+};
+
+const SceneOrder Retrun[] =
+{
+    {0, 20, ActionType::Move},
+    {1, 21, ActionType::Move},
+    {2, 22, ActionType::Move},
+    {3, 23, ActionType::Move}, 
+    {4, 24, ActionType::Move},
 };
 
 /* ログタスク */
@@ -322,15 +340,15 @@ void main_task(intptr_t exinf)
                 //エリアに向く
                 change_scene(&Trun[1], 0);
                 //青ゲートのある行に移動
-                change_scene(&EnterGate[GatePosition[GateIndex] % 20], 0);
+                change_scene(&Enter[GatePosition[GateIndex] % 21], 0);
                 //ゲートの方を向く
-                change_scene(&Trun[3], 0);
+                change_scene(&Trun[2], 0);
                 //ゲート通過
                 change_scene(&EnterGate[5], 0);
                 //線の方へ向く
                 change_scene(&Trun[2], 0);
                 //線の方へ進む
-                change_scene(&EnterGate[GatePosition[GateIndex] % 20], 0);
+                change_scene(&Retrun[GatePosition[GateIndex] % 21], 0);
                 //青線の方へ向く
                 change_scene(&Trun[2], 0);
             }

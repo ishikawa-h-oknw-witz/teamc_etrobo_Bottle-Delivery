@@ -36,10 +36,10 @@ const LineTraceScene lineTraceScenes[] =
     {24,  800,  70, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Dlv帰還直線 赤
     {25,  200,  30, RunnerEdge::RightEdge, {Color::None}, CalibrationData::BlackWhiteCenter, {0.6f, 0.0f, 0.4f} }, // Dlv帰還カーブ1
     {26,    0,  70, RunnerEdge::RightEdge, {Color::Blue}, CalibrationData::LineCenter,       {0.3f, 0.0f, 0.4f} }, // Dlv帰還青まで
-    {27,  200,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Rly1~5
+    {27,  220,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Rly1~5
     {28,  450,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Rly6~10
     {29,  700,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Rly11~15
-    {30,  950,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Rly16~20
+    {30,  930,  70, RunnerEdge::LeftEdge,  {Color::None}, CalibrationData::BlackWhiteCenter, {0.3f, 0.0f, 0.4f} }, // Rly16~20
 };
 
 
@@ -48,21 +48,29 @@ const MoveScene moveScenes[] =
 {
     { 0, Direction::front, {50.0f, 100.0f,  50.0f, 100.0f}, 100, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
     { 1, Direction::back,  {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlv線まで帰還
-    { 2, Direction::front, {50.0f,  70.0f,  50.0f,  10.0f},  10, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
-    { 3, Direction::front, {50.0f,  70.0f,  50.0f,  50.0f},  50, {Color::None}, {1.0f, 0.0f, 0.0f}},
-    { 4, Direction::front, {50.0f,  70.0f,  50.0f, 400.0f}, 400, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly通過5n+1
-    { 5, Direction::front, {50.0f,  70.0f,  50.0f, 650.0f}, 650, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly通過5n+2
-    { 6, Direction::front, {50.0f,  70.0f,  50.0f, 900.0f}, 900, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly通過5n+3
-    { 7, Direction::front, {50.0f,  70.0f,  50.0f,1150.0f},1150, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly通過5n+4
-    { 8, Direction::front, {50.0f,  70.0f,  50.0f,1400.0f},1400, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly通過5n
-    { 9, Direction::back,  {50.0f,  70.0f,  50.0f, 350.0f}, 350, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly帰還5n+1
-    {10, Direction::back,  {50.0f,  70.0f,  50.0f, 600.0f}, 600, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly帰還5n+2
-    {11, Direction::back,  {50.0f,  70.0f,  50.0f, 850.0f}, 850, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly帰還5n+3
-    {12, Direction::back,  {50.0f,  70.0f,  50.0f,1100.0f},1100, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly帰還5n+4
-    {13, Direction::back,  {50.0f,  70.0f,  50.0f,1350.0f},1350, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly帰還5n
-    {14, Direction::front, {50.0f,  70.0f,  50.0f,1350.0f},1350, {Color::None}, {1.0f, 0.0f, 0.0f}},
+    { 2, Direction::front, {50.0f, 100.0f,  50.0f,  10.0f},  10, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
+    { 3, Direction::front, {50.0f, 100.0f,  50.0f,  50.0f},  50, {Color::None}, {1.0f, 0.0f, 0.0f}},
+    { 4, Direction::front, {50.0f, 100.0f,  50.0f, 400.0f}, 400, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly通過5n+1
+    { 5, Direction::front, {50.0f, 100.0f,  50.0f, 650.0f}, 650, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly通過5n+2
+    { 6, Direction::front, {50.0f, 100.0f,  50.0f, 900.0f}, 900, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly通過5n+3
+    { 7, Direction::front, {50.0f, 100.0f,  50.0f,1150.0f},1150, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly通過5n+4
+    { 8, Direction::front, {50.0f, 100.0f,  50.0f,1400.0f},1400, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly通過5n
+    { 9, Direction::back,  {50.0f, 100.0f,  50.0f, 350.0f}, 380, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly帰還5n+1
+    {10, Direction::back,  {50.0f, 100.0f,  50.0f, 600.0f}, 620, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly帰還5n+2
+    {11, Direction::back,  {50.0f, 100.0f,  50.0f, 850.0f}, 870, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly帰還5n+3
+    {12, Direction::back,  {50.0f, 100.0f,  50.0f,1100.0f},1120, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly帰還5n+4
+    {13, Direction::back,  {50.0f, 100.0f,  50.0f,1350.0f},1370, {Color::None}, {1.0f, 0.0f, 0.0f}}, //Rly帰還5n
+    {14, Direction::front, {50.0f, 100.0f,  50.0f,1350.0f},1200, {Color::None}, {1.0f, 0.0f, 0.0f}},
+    {15, Direction::front, {50.0f, 100.0f,  50.0f, 350.0f}, 350, {Color::None}, {1.0f, 0.0f, 0.0f}}, 
+    {16, Direction::front, {50.0f, 100.0f,  50.0f, 600.0f}, 600, {Color::None}, {1.0f, 0.0f, 0.0f}}, 
+    {17, Direction::front, {50.0f, 100.0f,  50.0f, 850.0f}, 850, {Color::None}, {1.0f, 0.0f, 0.0f}}, 
+    {18, Direction::front, {50.0f, 100.0f,  50.0f,1100.0f},1080, {Color::None}, {1.0f, 0.0f, 0.0f}}, 
+    {19, Direction::front, {50.0f, 100.0f,  50.0f, 250.0f}, 250, {Color::None}, {1.0f, 0.0f, 1.0f}},
+    {20, Direction::front, {50.0f, 100.0f,  50.0f, 300.0f}, 300, {Color::None}, {1.0f, 0.0f, 0.0f}}, 
+    {21, Direction::front, {50.0f, 100.0f,  50.0f, 590.0f}, 590, {Color::None}, {1.0f, 0.0f, 0.0f}}, 
+    {22, Direction::front, {50.0f, 100.0f,  50.0f, 800.0f}, 800, {Color::None}, {1.0f, 0.0f, 0.0f}}, 
+    {23, Direction::front, {50.0f, 100.0f,  50.0f,1050.0f},1040, {Color::None}, {1.0f, 0.0f, 0.0f}}, 
 };
-
 
 // Turn
 const TurnScene turnScenes[] =
@@ -71,9 +79,9 @@ const TurnScene turnScenes[] =
     {1, -15, {1.0f, 0.0f, 0.0f}}, // 左に15°
     {2, -90, {1.0f, 0.0f, 0.0f}}, // 左に90°
     {3,  30, {1.0f, 0.0f, 0.0f}}, // 右に30°
-    {4, 180, {1.0f, 0.0f, 0.0f}}, // 後ろ
-    {5,-100, {1.0f, 0.0f, 0.0f}},
-    {6, 100, {1.0f, 0.0f, 0.0f}},
+    {4, 175, {1.0f, 0.0f, 0.0f}}, // 後ろ
+    {5, -85, {1.0f, 0.0f, 0.0f}},
+    {6,  96, {1.0f, 0.0f, 0.0f}},
 };
 
 
