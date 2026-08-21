@@ -309,6 +309,12 @@ void main_task(intptr_t exinf)
     for (int LoopIndex = 0; LoopIndex < 3; LoopIndex++)
     {
         int NowPosition = 0;
+        bool shouldHandleException = false;
+
+        if (((GatePosition[0] - 1) % 5 ) - ((GatePosition[2] - 1) % 5) == 1)
+        {
+            shouldHandleException = true;
+        }
         //ゲートのある列まで向かう
         change_scene(&MoveLine[(GatePosition[0] - 1) / 5], 0);
         //ゲートの方を向く
@@ -320,23 +326,26 @@ void main_task(intptr_t exinf)
             change_scene(&Rally[(GatePosition[0] - 1) % 5], 0);
         }
 
-        if ((GatePosition[1] - 21) % 4 > (GatePosition[0] - 1) % 5)
+        if ((GatePosition[1] - 21) % 4 > (GatePosition[0] - 1) % 5 &&
+            shouldHandleException == false)
         {
             change_scene(&Rally[((GatePosition[1] - 21) % 4) - ((GatePosition[0] - 1) % 5)], 0);
         }
-        else if ((GatePosition[1] - 21) % 4 < (GatePosition[0] - 1) % 5)
+        else if ((GatePosition[1] - 21) % 4 < (GatePosition[0] - 1) % 5 &&
+            shouldHandleException == false)
         {
             change_scene(&Rally[((GatePosition[0] - 1) % 5) - ((GatePosition[1] - 21) % 4) + 4], 0);
         }
 
-        if ((GatePosition[1] - 21) / 4 <= (GatePosition[0] - 1) / 5)
+        if ((GatePosition[1] - 21) / 4 <= (GatePosition[0] - 1) / 5 &&
+            shouldHandleException == false)
         {
             change_scene(&Trun[0], 0);
             change_scene(&Rally[((GatePosition[0] - 1) / 5) - ((GatePosition[1] - 21) / 4) + 1], 0);
             NowPosition = ((GatePosition[1] - 21) / 4) - 1;
             change_scene(&Trun[2], 0);
         }
-        else
+        else if (shouldHandleException == false)
         {
             change_scene(&Trun[2], 0);
             change_scene(&Rally[((GatePosition[1] - 21) / 4) - ((GatePosition[0] - 1) / 5)], 0);
