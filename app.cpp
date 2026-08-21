@@ -427,7 +427,7 @@ void main_task(intptr_t exinf)
             change_scene(&Trun[2], 0);
         }
         //黄ゲートが右
-        else if ((GatePosition[2] - 1) / 5 < NowPosition)
+        else if ((GatePosition[2] - 1) / 5 > NowPosition)
         {
             change_scene(&Trun[2], 0);
             change_scene(&Rally[((GatePosition[2] - 1) / 5) - NowPosition], 0);
@@ -435,7 +435,7 @@ void main_task(intptr_t exinf)
         }
 
         //一番下の区間まで移動
-        change_scene(&Rally[((GatePosition[2] - 1) % 5) + 4], 0);
+        change_scene(&Rally[((GatePosition[2] - 1) % 5) + 5], 0);
         //ラインに帰還
         change_scene(&Rally[9], 0);
         //青マークの方を向く
@@ -445,5 +445,6 @@ void main_task(intptr_t exinf)
         change_scene(EnterBule, 1);
     }
 
+    change_scene(&LAP[14], 0);
     ext_tsk(); 
 }
