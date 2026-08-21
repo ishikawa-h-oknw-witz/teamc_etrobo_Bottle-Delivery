@@ -50,7 +50,7 @@ Logger logger(colorSensor, leftWheel, rightWheel);
 Battery battery;
 /* インスタンス生成ここまで */
 
-const int GatePosition[3] = {3, 22, 19};
+const int GatePosition[3] = {13, 26, 4};
 
 struct SceneOrder
 {
@@ -154,41 +154,18 @@ const SceneOrder Trun[] =
     {3, 6, ActionType::Turn}, //右に100°
 };
 
-const SceneOrder EnterGate[] =
+const SceneOrder Rally[] =
 {
-    {0,  8, ActionType::Move}, // Rly行き5n
-    {1,  4, ActionType::Move}, // Rly行き5n+1
-    {2,  5, ActionType::Move}, // Rly行き5n+2
-    {3,  6, ActionType::Move}, // Rly行き5n+3
-    {4,  7, ActionType::Move}, // Rly行き5n+4
-    {5, 14, ActionType::Move}, // Rly行き5n+5
-};
-
-const SceneOrder ReturnGate[] =
-{
-    {0, 13, ActionType::Move}, // Rly帰還5n
-    {1,  9, ActionType::Move}, // Rly帰還5n+1
-    {2, 10, ActionType::Move}, // Rly帰還5n+2
-    {3, 11, ActionType::Move}, // Rly帰還5n+3
-    {4, 12, ActionType::Move}, // Rly帰還5n+4
-};
-
-const SceneOrder Enter[] =
-{
-    {0, 15, ActionType::Move},
-    {1, 16, ActionType::Move},
-    {2, 17, ActionType::Move},
-    {3, 18, ActionType::Move}, 
-    {4, 19, ActionType::Move},
-};
-
-const SceneOrder Retrun[] =
-{
-    {0, 20, ActionType::Move},
-    {1, 21, ActionType::Move},
-    {2, 22, ActionType::Move},
-    {3, 23, ActionType::Move}, 
-    {4, 24, ActionType::Move},
+    {0,  4, ActionType::Move}, // ラインから区画
+    {1,  5, ActionType::Move}, // 1区画前
+    {2,  6, ActionType::Move}, // 2区画前
+    {3,  7, ActionType::Move}, // 3区画前
+    {4,  8, ActionType::Move}, // 4区画前
+    {5,  9, ActionType::Move}, // 1区画後
+    {6, 10, ActionType::Move}, // 2区画後
+    {7, 11, ActionType::Move}, // 3区画後
+    {8, 12, ActionType::Move}, // 4区画後
+    {9, 13, ActionType::Move}, // ラインへ復帰
 };
 
 /* ログタスク */
@@ -331,43 +308,69 @@ void main_task(intptr_t exinf)
     //周回カウント
     for (int LoopIndex = 0; LoopIndex < 3; LoopIndex++)
     {
-        //ゲート通過カウント
-        for (int GateIndex = 0; GateIndex < 3; GateIndex++)
+        int NowPosition = 0;
+        //ゲートのある列まで向かう
+        change_scene(&MoveLine[(GatePosition[0] - 1) / 5], 0);
+        //ゲートの方を向く
+        change_scene(&Trun[0], 0);
+
+        if (GatePosition[0] % 5 != 1)
         {
-            //青ゲート
-            if (GatePosition[GateIndex] > 20)
-            {
-                //エリアに向く
-                change_scene(&Trun[1], 0);
-                //青ゲートのある行に移動
-                change_scene(&Enter[GatePosition[GateIndex] % 21], 0);
-                //ゲートの方を向く
-                change_scene(&Trun[2], 0);
-                //ゲート通過
-                change_scene(&EnterGate[5], 0);
-                //線の方へ向く
-                change_scene(&Trun[2], 0);
-                //線の方へ進む
-                change_scene(&Retrun[GatePosition[GateIndex] % 21], 0);
-                //青線の方へ向く
-                change_scene(&Trun[2], 0);
-            }
-            //赤,黄ゲート
-            else {
-                //ゲートのある列まで向かう
-                change_scene(&MoveLine[(GatePosition[GateIndex] - 1) / 5], 0);
-                //ゲートの方を向く
-                change_scene(&Trun[0], 0);
-                //ゲート通過
-                change_scene(&EnterGate[(GatePosition[GateIndex] % 5)], 0);
-                //バックでゲートから帰還
-                change_scene(&ReturnGate[(GatePosition[GateIndex] % 5)], 0);
-                //青線の方を向く
-                change_scene(&Trun[0], 0);
-            }
-            //青を検知して反対を向く
-            change_scene(EnterBule, 1);
+            change_scene(&Rally[(GatePosition[0] - 1) % 5], 0);
         }
+
+        if ((GatePosition[1] - 21) % 4 > (GatePosition[0] - 1) % 5)
+        {
+            change_scene(&Rally[((GatePosition[1] - 21) % 4) - ((GatePosition[0] - 1) % 5)], 0);
+        }
+        else if ((GatePosition[1] - 21) % 4 < (GatePosition[0] - 1) % 5)
+        {
+            change_scene(&Rally[((GatePosition[0] - 1) % 5) - ((GatePosition[1] - 21) % 4) + 4], 0);
+        }
+
+        if ((GatePosition[1] - 21) / 4 <= (GatePosition[0] - 1) / 5)
+        {
+            change_scene(&Trun[0], 0);
+            change_scene(&Rally[((GatePosition[0] - 1) / 5) - ((GatePosition[1] - 21) / 4) + 1], 0);
+            NowPosition = ((GatePosition[1] - 21) / 4) - 1;
+            change_scene(&Trun[2], 0);
+        }
+        else
+        {
+            change_scene(&Trun[2], 0);
+            change_scene(&Rally[((GatePosition[1] - 21) / 4) - ((GatePosition[0] - 1) / 5)], 0);
+            NowPosition = (GatePosition[1] - 21) / 4;
+            change_scene(&Trun[0], 0);
+        }
+
+        if ((GatePosition[1] - 21) % 4 < (GatePosition[2] - 1) % 5)
+        {
+            change_scene(&Rally[((GatePosition[2] - 1) % 5) - ((GatePosition[1] - 21) % 4)], 0);
+        }
+        else if ((GatePosition[1] - 21) % 4 > (GatePosition[2] - 1) % 5)
+        {
+            change_scene(&Rally[((GatePosition[1] - 21) % 4) - ((GatePosition[2] - 1) % 5) + 4], 0);
+        }
+
+        if ((GatePosition[2] - 1) / 5 < NowPosition)
+        {
+            change_scene(&Trun[0], 0);
+            change_scene(&Rally[NowPosition - ((GatePosition[2] - 1) / 5)], 0);
+            change_scene(&Trun[2], 0);
+        }
+        else if ((GatePosition[2] - 1) / 5 < NowPosition)
+        {
+            change_scene(&Trun[2], 0);
+            change_scene(&Rally[((GatePosition[2] - 1) / 5) - NowPosition], 0);
+            change_scene(&Trun[0], 0);
+        }
+
+        change_scene(&Rally[((GatePosition[2] - 1) % 5) + 4], 0);
+        change_scene(&Rally[13], 0);
+        change_scene(&Trun[0], 0);
+
+        //青を検知して反対を向く
+        change_scene(EnterBule, 1);
     }
 
     ext_tsk(); 
