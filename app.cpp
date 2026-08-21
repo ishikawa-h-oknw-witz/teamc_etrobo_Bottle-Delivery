@@ -311,63 +311,122 @@ void main_task(intptr_t exinf)
         int NowPosition = 0;
         bool shouldHandleException = false;
 
+        //例外処理が必要か確認
         if (((GatePosition[0] - 1) % 5 ) - ((GatePosition[2] - 1) % 5) == 1)
         {
             shouldHandleException = true;
         }
-        //ゲートのある列まで向かう
+
+        //赤ゲートのある列まで向かう
         change_scene(&MoveLine[(GatePosition[0] - 1) / 5], 0);
         //ゲートの方を向く
         change_scene(&Trun[0], 0);
+        //区画に入る
         change_scene(&Rally[0], 0);
 
+        //赤ゲート通過
         if (GatePosition[0] % 5 != 1)
         {
             change_scene(&Rally[(GatePosition[0] - 1) % 5], 0);
         }
 
-        if ((GatePosition[1] - 21) % 4 > (GatePosition[0] - 1) % 5 &&
-            shouldHandleException == false)
+        //例外処理
+        if (shouldHandleException == true)
+        {
+            //青ゲートの列に移動
+            //青ゲートが左
+            if ((GatePosition[1] - 21) / 4 <= (GatePosition[0] - 1) / 5)
+            {
+                change_scene(&Trun[0], 0);
+                change_scene(&Rally[((GatePosition[0] - 1) / 5) - ((GatePosition[1] - 21) / 4) + 1], 0);
+                change_scene(&Trun[2], 0);
+            }
+            //青ゲートが右
+            else
+            {
+                change_scene(&Trun[2], 0);
+                change_scene(&Rally[((GatePosition[1] - 21) / 4) - ((GatePosition[0] - 1) / 5)], 0);
+                change_scene(&Trun[0], 0);
+            }
+        }
+
+        //青ゲートの行まで移動
+        //青ゲートが上
+        if ((GatePosition[1] - 21) % 4 > (GatePosition[0] - 1) % 5)
         {
             change_scene(&Rally[((GatePosition[1] - 21) % 4) - ((GatePosition[0] - 1) % 5)], 0);
         }
-        else if ((GatePosition[1] - 21) % 4 < (GatePosition[0] - 1) % 5 &&
-            shouldHandleException == false)
+        //青ゲートが下
+        else if ((GatePosition[1] - 21) % 4 < (GatePosition[0] - 1) % 5)
         {
             change_scene(&Rally[((GatePosition[0] - 1) % 5) - ((GatePosition[1] - 21) % 4) + 4], 0);
         }
 
-        if ((GatePosition[1] - 21) / 4 <= (GatePosition[0] - 1) / 5 &&
-            shouldHandleException == false)
+        //通常処理
+        if (shouldHandleException == false)
         {
-            change_scene(&Trun[0], 0);
-            change_scene(&Rally[((GatePosition[0] - 1) / 5) - ((GatePosition[1] - 21) / 4) + 1], 0);
-            NowPosition = ((GatePosition[1] - 21) / 4) - 1;
-            change_scene(&Trun[2], 0);
-        }
-        else if (shouldHandleException == false)
-        {
-            change_scene(&Trun[2], 0);
-            change_scene(&Rally[((GatePosition[1] - 21) / 4) - ((GatePosition[0] - 1) / 5)], 0);
-            NowPosition = (GatePosition[1] - 21) / 4;
-            change_scene(&Trun[0], 0);
+            //青ゲート通過
+            //青ゲートが左
+            if ((GatePosition[1] - 21) / 4 <= (GatePosition[0] - 1) / 5 &&
+                shouldHandleException == false)
+            {
+                change_scene(&Trun[0], 0);
+                change_scene(&Rally[((GatePosition[0] - 1) / 5) - ((GatePosition[1] - 21) / 4) + 1], 0);
+                NowPosition = ((GatePosition[1] - 21) / 4) - 1;
+                change_scene(&Trun[2], 0);
+            }
+            //青ゲートが右
+            else if (shouldHandleException == false)
+            {
+                change_scene(&Trun[2], 0);
+                change_scene(&Rally[((GatePosition[1] - 21) / 4) - ((GatePosition[0] - 1) / 5)], 0);
+                NowPosition = (GatePosition[1] - 21) / 4;
+                change_scene(&Trun[0], 0);
+            }
         }
 
+        //例外処理
+        if (shouldHandleException == true)
+        {
+            //青ゲートを右に通過
+            if ((GatePosition[1] - 21) / 4 <= (GatePosition[0] - 1) / 5)
+            {
+                change_scene(&Trun[2], 0);
+                change_scene(&Rally[1], 0);
+                NowPosition = (GatePosition[1] - 21) / 4;
+                change_scene(&Trun[0], 0);
+            }
+            //青ゲートを左に通過
+            else
+            {
+                change_scene(&Trun[0], 0);
+                change_scene(&Rally[1], 0);
+                NowPosition = ((GatePosition[1] - 21) / 4) - 1;
+                change_scene(&Trun[2], 0);
+            }
+        }
+
+        //黄ゲートの行に移動
+        //黄ゲートが上
         if ((GatePosition[1] - 21) % 4 < (GatePosition[2] - 1) % 5)
         {
             change_scene(&Rally[((GatePosition[2] - 1) % 5) - ((GatePosition[1] - 21) % 4)], 0);
         }
+        //黄ゲートが下
         else if ((GatePosition[1] - 21) % 4 > (GatePosition[2] - 1) % 5)
         {
             change_scene(&Rally[((GatePosition[1] - 21) % 4) - ((GatePosition[2] - 1) % 5) + 4], 0);
         }
 
+        //黄ゲートの列に移動
+        //黄ゲートが左
         if ((GatePosition[2] - 1) / 5 < NowPosition)
         {
             change_scene(&Trun[0], 0);
             change_scene(&Rally[NowPosition - ((GatePosition[2] - 1) / 5)], 0);
             change_scene(&Trun[2], 0);
         }
+        //黄ゲートが右
         else if ((GatePosition[2] - 1) / 5 < NowPosition)
         {
             change_scene(&Trun[2], 0);
@@ -375,8 +434,11 @@ void main_task(intptr_t exinf)
             change_scene(&Trun[0], 0);
         }
 
+        //一番下の区間まで移動
         change_scene(&Rally[((GatePosition[2] - 1) % 5) + 4], 0);
+        //ラインに帰還
         change_scene(&Rally[9], 0);
+        //青マークの方を向く
         change_scene(&Trun[0], 0);
 
         //青を検知して反対を向く
