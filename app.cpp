@@ -50,7 +50,7 @@ Logger logger(colorSensor, leftWheel, rightWheel);
 Battery battery;
 /* インスタンス生成ここまで */
 
-const int GatePosition[3] = {13, 26, 4};
+const int GatePosition[3] = {15, 38, 4};
 
 struct SceneOrder
 {
@@ -313,6 +313,7 @@ void main_task(intptr_t exinf)
         change_scene(&MoveLine[(GatePosition[0] - 1) / 5], 0);
         //ゲートの方を向く
         change_scene(&Trun[0], 0);
+        change_scene(&Rally[0], 0);
 
         if (GatePosition[0] % 5 != 1)
         {
@@ -366,7 +367,7 @@ void main_task(intptr_t exinf)
         }
 
         change_scene(&Rally[((GatePosition[2] - 1) % 5) + 4], 0);
-        change_scene(&Rally[13], 0);
+        change_scene(&Rally[9], 0);
         change_scene(&Trun[0], 0);
 
         //青を検知して反対を向く

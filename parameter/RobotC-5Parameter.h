@@ -50,16 +50,16 @@ const MoveScene moveScenes[] =
     { 1, Direction::back,  {50.0f, 100.0f,  50.0f, 200.0f}, 200, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlv線まで帰還
     { 2, Direction::front, {50.0f, 100.0f,  50.0f,  10.0f},  10, {Color::None}, {1.0f, 0.0f, 0.0f}}, // Dlvエリアまで
     { 3, Direction::front, {50.0f, 100.0f,  50.0f,  50.0f},  50, {Color::None}, {1.0f, 0.0f, 0.0f}},
-    { 4, Direction::front, {70.0f, 100.0f,  70.0f, 350.0f}, 350, {Color::None}, {1.0f, 0.0f, 0.0f}}, // ラインから区画
-    { 5, Direction::front, {70.0f, 100.0f,  70.0f, 250.0f}, 250, {Color::None}, {1.0f, 0.0f, 0.0f}}, //1区画前
-    { 6, Direction::front, {70.0f, 100.0f,  70.0f, 500.0f}, 500, {Color::None}, {1.0f, 0.0f, 0.0f}}, //2区画前
-    { 7, Direction::front, {70.0f, 100.0f,  70.0f, 750.0f}, 750, {Color::None}, {1.0f, 0.0f, 0.0f}}, //3区画前
-    { 8, Direction::front, {70.0f, 100.0f,  70.0f,1000.0f},1000, {Color::None}, {1.0f, 0.0f, 0.0f}}, //4区画前
-    { 9, Direction::back,  {70.0f, 100.0f,  70.0f, 250.0f}, 250, {Color::None}, {1.0f, 0.0f, 0.0f}}, //1区画後
-    {10, Direction::back,  {70.0f, 100.0f,  70.0f, 500.0f}, 500, {Color::None}, {1.0f, 0.0f, 0.0f}}, //2区画後
-    {11, Direction::back,  {70.0f, 100.0f,  70.0f, 750.0f}, 750, {Color::None}, {1.0f, 0.0f, 0.0f}}, //3区画後
-    {12, Direction::back,  {70.0f, 100.0f,  70.0f,1000.0f},1000, {Color::None}, {1.0f, 0.0f, 0.0f}}, //4区画後
-    {13, Direction::back,  {70.0f, 100.0f,  70.0f, 350.0f}, 350, {Color::None}, {1.0f, 0.0f, 0.0f}}, //ラインへ復帰 
+    { 4, Direction::front, {70.0f, 100.0f,  70.0f, 320.0f}, 320, {Color::None}, {1.0f, 0.0f, 0.0f}}, // ラインから区画
+    { 5, Direction::front, {70.0f, 100.0f,  70.0f, 260.0f}, 260, {Color::None}, {1.0f, 0.0f, 0.0f}}, //1区画前
+    { 6, Direction::front, {70.0f, 100.0f,  70.0f, 510.0f}, 510, {Color::None}, {1.0f, 0.0f, 0.0f}}, //2区画前
+    { 7, Direction::front, {70.0f, 100.0f,  70.0f, 770.0f}, 770, {Color::None}, {1.0f, 0.0f, 0.0f}}, //3区画前
+    { 8, Direction::front, {70.0f, 100.0f,  70.0f,1020.0f},1020, {Color::None}, {1.0f, 0.0f, 0.0f}}, //4区画前
+    { 9, Direction::back,  {70.0f, 100.0f,  70.0f, 260.0f}, 260, {Color::None}, {1.0f, 0.0f, 0.0f}}, //1区画後
+    {10, Direction::back,  {70.0f, 100.0f,  70.0f, 510.0f}, 510, {Color::None}, {1.0f, 0.0f, 0.0f}}, //2区画後
+    {11, Direction::back,  {70.0f, 100.0f,  70.0f, 770.0f}, 770, {Color::None}, {1.0f, 0.0f, 0.0f}}, //3区画後
+    {12, Direction::back,  {70.0f, 100.0f,  70.0f,1020.0f},1020, {Color::None}, {1.0f, 0.0f, 0.0f}}, //4区画後
+    {13, Direction::back,  {70.0f, 100.0f,  70.0f, 300.0f}, 300, {Color::None}, {1.0f, 0.0f, 0.0f}}, //ラインへ復帰 
 };
 
 // Turn
