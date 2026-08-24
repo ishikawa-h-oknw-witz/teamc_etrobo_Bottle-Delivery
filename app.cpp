@@ -445,9 +445,10 @@ void main_task(intptr_t exinf)
         change_scene(EnterBule, 1);
     }
 
+    //Stop
     change_scene(&LAP[14], 0);
 
     Logger::printf("[app]終了");
-    
+
     ext_tsk(); 
 }
