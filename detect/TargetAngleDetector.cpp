@@ -20,7 +20,7 @@ float normalizeAngle(float angle)
 }
 
 TargetAngleDetector::TargetAngleDetector()
-    : mTargetAngle(0),
+    : mTargetAngle(0.0f),
       mAngleTolerance(0.5f)
 {
 }
@@ -37,8 +37,7 @@ void TargetAngleDetector::setAngleTolerance(float tolerance)
 
 bool TargetAngleDetector::judge()
 {
-    const float currentAngle = mIMU.getHeading();
-    const float error = normalizeAngle(currentAngle - mTargetAngle);
+    float currentAngle = mIMU.getHeading();
 
-    return std::fabs(error) <= mAngleTolerance;
+    return abs(currentAngle - mTargetAngle) <= mAngleTolerance;
 }

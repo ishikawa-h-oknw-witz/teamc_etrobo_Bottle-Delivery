@@ -3,13 +3,13 @@
 
 static constexpr ColorHSVRange mColorHSVRanges[] =
 {
-    { Color::Red,      0,29, 41,100,11,100 },
-    { Color::Red,    280,360,41,100,11,100 },
-    { Color::Blue,   160,279,41,100,11,100 },
-    { Color::Yellow,  30, 69,41,100,11,100 },
-    { Color::Green,   70,159,41,100,11,100 },
-    { Color::Gray,     0,360, 0, 40,11, 89 },
-    { Color::Black,    0,360, 0,100, 0, 10 },
+    { Color::Red,      0,29, 41,100,41,100 },
+    { Color::Red,    280,360,41,100,41,100 },
+    { Color::Blue,   160,279,41,100,41,100 },
+    { Color::Yellow,  30, 69,41,100,41,100 },
+    { Color::Green,   70,159,41,100,41,100 },
+    { Color::Gray,     0,360, 0, 40,41, 89 },
+    { Color::Black,    0,360, 0,100, 0, 40 },
     { Color::White,    0,360, 0, 40,90,100 }
 };
 
@@ -30,8 +30,9 @@ Color ColorDetector::detect()
             hsv.s >= range.sMin && hsv.s <= range.sMax &&
             hsv.v >= range.vMin && hsv.v <= range.vMax)
         {
-            mLastDetectedColor = range.color;
-            return mLastDetectedColor;
+            Logger::printf("[ColorDetector]指定色を検知しました\n");
+            Logger::printf("H:%d, S:%d, V:%d\n", hsv.h, hsv.s, hsv.v);
+            return range.color;
         }
     }
 

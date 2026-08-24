@@ -47,9 +47,5 @@ int TrapezoidCalculator::getSpeed()
 
     // 定速区間：中間の50%
     return mMaxSpeed;
-<<<<<<< HEAD
 
 }
-=======
-}
->>>>>>> origin/main

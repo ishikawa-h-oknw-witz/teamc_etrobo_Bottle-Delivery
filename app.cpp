@@ -50,67 +50,13 @@ Logger logger(colorSensor, leftWheel, rightWheel);
 Battery battery;
 /* インスタンス生成ここまで */
 
-namespace
-{
-constexpr int RIGHT_EDGE_INDEX = 0;
-constexpr int LEFT_EDGE_INDEX = 1;
-constexpr int TURN_AROUND_INDEX = 2;
-constexpr int MAX_POINT_SEARCH_COUNT = 20;
-
-int getPointOrder(Color color)
-{
-    switch (color)
-    {
-    case Color::Green:
-        return 0;
-    case Color::Yellow:
-        return 1;
-    case Color::Red:
-        return 2;
-    case Color::Blue:
-        return 3;
-    default:
-        return -1;
-    }
-}
-
-bool getNextEdgeIndex(Color currentColor, Color nextColor, int& edgeIndex)
-{
-    const int currentOrder = getPointOrder(currentColor);
-    const int nextOrder = getPointOrder(nextColor);
-
-    if (currentOrder < 0 || nextOrder < 0 || currentOrder == nextOrder)
-    {
-        return false;
-    }
-
-    // 基準点の並びは下から緑・黄・赤・青。
-    // 上方向へ進む場合は右エッジ、下方向へ進む場合は左エッジを使用する。
-    edgeIndex = nextOrder > currentOrder
-        ? RIGHT_EDGE_INDEX
-        : LEFT_EDGE_INDEX;
-    return true;
-}
-}
-
-struct GatePosition
-{
-    Color pointColor;
-    int gatePositionNum;
-};
+const int GatePosition[3] = {3, 22, 19};
 
 struct SceneOrder
 {
     int sceneNum;
     int sceneId;
     ActionType actionType;
-};
-
-const GatePosition gatePositions[] =
-{
-    {Color::Yellow,  3}, // 黄色地点にある赤ゲート
-    {Color::Red,     9}, // 赤色地点にある青ゲート
-    {Color::Green,  13}, // 緑色地点にある黄ゲート
 };
 
 const SceneOrder LAP[] =
@@ -177,18 +123,72 @@ const SceneOrder CarryZone[] =
 const SceneOrder ReturnZone[] =
 {
     {0, 22, ActionType::LineTrace},  // Dlv黄から行きゲート前まで
-    {0, 23, ActionType::LineTrace},  // Dlv青から行きゲート前まで
-    {0, 24, ActionType::LineTrace},  // Dlv黄から行きゲート前まで
+    {1, 23, ActionType::LineTrace},  // Dlv青から行きゲート前まで
+    {2, 24, ActionType::LineTrace},  // Dlv黄から行きゲート前まで
 };
 
 const SceneOrder EnterRally[] =
 {
     {0, 25, ActionType::LineTrace}, // Dlv帰還カーブ1
-    {1, 26, ActionType::LineTrace}, // Dlv帰還青まで
-    {2, 27, ActionType::LineTrace}, // Dlv青半分まで
-    {3,  0, ActionType::Turn},      // Dlv右に90°回転
-    {4,  0, ActionType::Move},      // Dlv基準線まで
-    {5,  0, ActionType::Stop}
+};
+
+const SceneOrder EnterBule[] =
+{
+    {0, 26, ActionType::LineTrace}, // 青まで
+    {1,  4, ActionType::Turn}, // 後ろを向く
+};
+
+const SceneOrder MoveLine[] =
+{
+    {0, 27, ActionType::LineTrace}, // Rly1~5
+    {1, 28, ActionType::LineTrace}, // Rly6~10
+    {2, 29, ActionType::LineTrace}, // Rly11~15
+    {3, 30, ActionType::LineTrace}, // Rly16~20
+};
+
+const SceneOrder Trun[] =
+{
+    {0, 2, ActionType::Turn}, //左に90°
+    {1, 5, ActionType::Turn}, //左に100°
+    {2, 0, ActionType::Turn}, //右に90°
+    {3, 6, ActionType::Turn}, //右に100°
+};
+
+const SceneOrder EnterGate[] =
+{
+    {0,  8, ActionType::Move}, // Rly行き5n
+    {1,  4, ActionType::Move}, // Rly行き5n+1
+    {2,  5, ActionType::Move}, // Rly行き5n+2
+    {3,  6, ActionType::Move}, // Rly行き5n+3
+    {4,  7, ActionType::Move}, // Rly行き5n+4
+    {5, 14, ActionType::Move}, // Rly行き5n+5
+};
+
+const SceneOrder ReturnGate[] =
+{
+    {0, 13, ActionType::Move}, // Rly帰還5n
+    {1,  9, ActionType::Move}, // Rly帰還5n+1
+    {2, 10, ActionType::Move}, // Rly帰還5n+2
+    {3, 11, ActionType::Move}, // Rly帰還5n+3
+    {4, 12, ActionType::Move}, // Rly帰還5n+4
+};
+
+const SceneOrder Enter[] =
+{
+    {0, 15, ActionType::Move},
+    {1, 16, ActionType::Move},
+    {2, 17, ActionType::Move},
+    {3, 18, ActionType::Move}, 
+    {4, 19, ActionType::Move},
+};
+
+const SceneOrder Retrun[] =
+{
+    {0, 20, ActionType::Move},
+    {1, 21, ActionType::Move},
+    {2, 22, ActionType::Move},
+    {3, 23, ActionType::Move}, 
+    {4, 24, ActionType::Move},
 };
 
 /* ログタスク */
@@ -209,9 +209,9 @@ bool change_scene(const SceneOrder sceneOrder[], int maxSceneNum)
     {
         const SceneOrder& sceneOrderItem = sceneOrder[sceneNum];
 
-        sceneManager.setActionType(sceneorder.actionType);
-        sceneManager.setSceneID(sceneorder.sceneId);
-        Logger::printf("[app]SceneID=%d\n", sceneorder.sceneId);
+        sceneManager.setActionType(sceneOrderItem.actionType);
+        sceneManager.setSceneID(sceneOrderItem.sceneId);
+        Logger::printf("[app]SceneID=%d\n", sceneOrderItem.sceneId);
         if(sceneManager.SceneExecute())
         {
             Logger::printf("Scene execution failed. ID=%d\r\n", sceneOrderItem.sceneId);
@@ -265,6 +265,9 @@ void main_task(intptr_t exinf)
     tslp_tsk(20 * 1000);
     while (forceSensor.isTouched());
     Logger::printf("[app]スタート\n");
+
+    /*
+    int skipCount = -1;
 
     //メインループ10msec周期
 
@@ -322,13 +325,60 @@ void main_task(intptr_t exinf)
     change_scene(&ReturnZone[skipCount], 0);
 
     //ラリーへ向かう
-    change_scene(EnterRally, 5);
+    change_scene(EnterRally, 0);
 
     int nowEdgeIndex = RIGHT_EDGE_INDEX;
     const int gatePositionCount =
         static_cast<int>(sizeof(gatePositions) / sizeof(gatePositions[0]));
 
     Logger::printf("[app]終了\n");
+    */
+
+    Logger::printf("[app]ETrally Start!\n");
+
+    change_scene(EnterBule, 1);
+
+    //周回カウント
+    for (int LoopIndex = 0; LoopIndex < 3; LoopIndex++)
+    {
+        //ゲート通過カウント
+        for (int GateIndex = 0; GateIndex < 3; GateIndex++)
+        {
+            //青ゲート
+            if (GatePosition[GateIndex] > 20)
+            {
+                //エリアに向く
+                change_scene(&Trun[1], 0);
+                //青ゲートのある行に移動
+                change_scene(&Enter[GatePosition[GateIndex] % 21], 0);
+                //ゲートの方を向く
+                change_scene(&Trun[2], 0);
+                //ゲート通過
+                change_scene(&EnterGate[5], 0);
+                //線の方へ向く
+                change_scene(&Trun[2], 0);
+                //線の方へ進む
+                change_scene(&Retrun[GatePosition[GateIndex] % 21], 0);
+                //青線の方へ向く
+                change_scene(&Trun[2], 0);
+            }
+            //赤,黄ゲート
+            else {
+                //ゲートのある列まで向かう
+                change_scene(&MoveLine[(GatePosition[GateIndex] - 1) / 5], 0);
+                //ゲートの方を向く
+                change_scene(&Trun[0], 0);
+                //ゲート通過
+                change_scene(&EnterGate[(GatePosition[GateIndex] % 5)], 0);
+                //バックでゲートから帰還
+                change_scene(&ReturnGate[(GatePosition[GateIndex] % 5)], 0);
+                //青線の方を向く
+                change_scene(&Trun[0], 0);
+            }
+            //青を検知して反対を向く
+            change_scene(EnterBule, 1);
+        }
+    }
 
     ext_tsk(); 
 }
