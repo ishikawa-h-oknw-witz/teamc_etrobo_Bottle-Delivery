@@ -305,6 +305,15 @@ void main_task(intptr_t exinf)
 
     change_scene(EnterBule, 1);
 
+    //赤ゲートのある列まで向かう
+    change_scene(&MoveLine[(GatePosition[0] - 1) / 5], 0);
+    //ゲートの方を向く
+    change_scene(&Trun[0], 0);
+    //区画に入る
+    change_scene(&Rally[0], 0);
+    //赤ゲート前まで移動
+    change_scene(&Rally[((GatePosition[0] - 1) % 5) - 1], 0);
+
     //周回カウント
     for (int LoopIndex = 0; LoopIndex < 3; LoopIndex++)
     {
@@ -317,17 +326,10 @@ void main_task(intptr_t exinf)
             shouldHandleException = true;
         }
 
-        //赤ゲートのある列まで向かう
-        change_scene(&MoveLine[(GatePosition[0] - 1) / 5], 0);
-        //ゲートの方を向く
-        change_scene(&Trun[0], 0);
-        //区画に入る
-        change_scene(&Rally[0], 0);
-
         //赤ゲート通過
         if (GatePosition[0] % 5 != 1)
         {
-            change_scene(&Rally[(GatePosition[0] - 1) % 5], 0);
+            change_scene(&Rally[0], 0);
         }
 
         //例外処理
@@ -406,18 +408,6 @@ void main_task(intptr_t exinf)
             }
         }
 
-        //黄ゲートの行に移動
-        //黄ゲートが上
-        if ((GatePosition[1] - 21) % 4 < (GatePosition[2] - 1) % 5)
-        {
-            change_scene(&Rally[((GatePosition[2] - 1) % 5) - ((GatePosition[1] - 21) % 4)], 0);
-        }
-        //黄ゲートが下
-        else if ((GatePosition[1] - 21) % 4 > (GatePosition[2] - 1) % 5)
-        {
-            change_scene(&Rally[((GatePosition[1] - 21) % 4) - ((GatePosition[2] - 1) % 5) + 4], 0);
-        }
-
         //黄ゲートの列に移動
         //黄ゲートが左
         if ((GatePosition[2] - 1) / 5 < NowPosition)
@@ -432,6 +422,18 @@ void main_task(intptr_t exinf)
             change_scene(&Trun[2], 0);
             change_scene(&Rally[((GatePosition[2] - 1) / 5) - NowPosition], 0);
             change_scene(&Trun[0], 0);
+        }
+        
+        //黄ゲートの行に移動
+        //黄ゲートが上
+        if ((GatePosition[1] - 21) % 4 < (GatePosition[2] - 1) % 5)
+        {
+            change_scene(&Rally[((GatePosition[2] - 1) % 5) - ((GatePosition[1] - 21) % 4)], 0);
+        }
+        //黄ゲートが下
+        else if ((GatePosition[1] - 21) % 4 > (GatePosition[2] - 1) % 5)
+        {
+            change_scene(&Rally[((GatePosition[1] - 21) % 4) - ((GatePosition[2] - 1) % 5) + 4], 0);
         }
 
         //一番下の区間まで移動
